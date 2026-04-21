@@ -105,7 +105,6 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
 .footer-legal a { color: rgba(255,255,255,0.35); }
 .footer-right { font-size: 12px; color: rgba(255,255,255,0.22); text-align: right; }
 @media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr;}}
-@media(max-width:768px){nav{padding:0 1rem}.nav-links{display:flex;gap:2rem;margin-left:auto;align-items:center}.wrap{padding:0 1rem}}
 
 /* === FIXES === */
 /* Mockup bar must stay dark */
@@ -156,12 +155,52 @@ footer{background:#0a1628 !important;color:rgba(255,255,255,0.75) !important;pad
 .mc-dot.active{background:#1a56db}
 .mc-label{font-size:14px;color:var(--muted);font-weight:500}
 
+
+/* ─── HAMBURGER ─── */
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;
+  cursor:pointer;background:none;border:none;padding:8px;margin-left:auto}
+.nav-burger span{width:22px;height:2px;background:rgba(255,255,255,0.9);
+  border-radius:2px;display:block;transition:all 0.2s}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  nav{padding:0 1.25rem;height:64px}
+  .nav-burger{display:flex}
+  .nav-links{
+    position:fixed;top:64px;left:0;right:0;background:#0a1628;
+    flex-direction:column;padding:0;gap:0;display:none;
+    border-top:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:98;
+    max-height:calc(100vh - 64px);overflow-y:auto
+  }
+  .nav-links.mob-open{display:flex}
+  .nav-links a{padding:15px 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);
+    font-size:16px;color:rgba(255,255,255,0.85)}
+  .nav-links a:last-child{border-bottom:none}
+  .nav-cta{font-size:13px;padding:9px 16px;white-space:nowrap}
+  section{padding:3rem 0}
+  .wrap{padding:0 1.25rem}
+  h1{letter-spacing:-1px}
+  h2{letter-spacing:-0.5px}
+  .footer-top{grid-template-columns:1fr;gap:24px;margin-bottom:24px;padding-bottom:24px}
+  footer{padding:40px 1.25rem 28px}
+  .footer-bottom{flex-direction:column;gap:12px}
+  .faq-q{font-size:16px;padding:1.1rem 1.25rem}
+  .faq-a{font-size:15px;padding:0 1.25rem 1.1rem}
+  .mc-btn{padding:9px 18px;font-size:14px}
+  .g2,.g3{gap:.75rem}
+  .card{padding:1.25rem}
+  .sg{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  section{padding:2.5rem 0}
+}
 </style>
 </head>
 <body>
 <nav>
-  <div class="nav-logo"><a href="index.html" style="color:inherit">FIN<span>KAI</span></a> <span style="font-size:11px;color:var(--dim);font-weight:400">by FINAHQ</span></div>
-  <div class="nav-links">
+  <div class="nav-logo"><a href="index.html" style="color:inherit">FIN<span>KAI</span></a></div>
+  <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button><div class="nav-links" id="nav-links">
     <a href="index.html">Home</a>
     <a href="tally.html">Tally</a>
     <a href="sap.html" class="active">SAP</a>
@@ -364,5 +403,23 @@ function mcNext(id){mcNav(id,1);}
 function mcPrev(id){mcNav(id,-1);}
 </script>
 
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-burger');
+  var links=document.getElementById('nav-links');
+  if(!btn||!links)return;
+  btn.addEventListener('click',function(){
+    var open=links.classList.toggle('mob-open');
+    btn.setAttribute('aria-expanded',String(open));
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      links.classList.remove('mob-open');
+      btn.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+</script>
 </body>
 </html>
