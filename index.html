@@ -306,6 +306,8 @@
 }
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f7f8fc;--surface:#ffffff;--surface2:#eef1f8;--border:#d4dbe8;--accent:#1a56db;--accent2:#5a3fc0;--accent-dim:rgba(26,86,219,0.08);--accent-border:rgba(26,86,219,0.25);--text:#0d1b2a;--muted:#4b5e76;--dim:#637489;--dimmer:#7e92a8;--white:#ffffff;--nav:#0a1628;--red:#d92b3a;--green:#0a7c59;--mono:'JetBrains Mono','Courier New',monospace}
@@ -686,7 +688,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Vega Industries Group · 6 entities</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Export ↗</button>
+      <button class="fink-xbtn" aria-label="Export data">Export ↗</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -731,10 +733,10 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
   <h2>Built for every ERP your group runs on.</h2>
   <p>One interface for your entire group — regardless of which ERP each entity uses.</p>
   <div class="erp-tabs">
-    <button class="erp-tab active" onclick="showERP('tally',this)">Tally / TallyPrime</button>
-    <button class="erp-tab" onclick="showERP('sap',this)">SAP S/4HANA</button>
-    <button class="erp-tab" onclick="showERP('oracle',this)">Oracle Fusion</button>
-    <button class="erp-tab" onclick="showERP('qbo',this)">QuickBooks Online</button>
+    <button class="erp-tab active" onclick="showERP('tally',this)" aria-label="Show Tally integration">Tally / TallyPrime</button>
+    <button class="erp-tab" onclick="showERP('sap',this)" aria-label="Show SAP integration">SAP S/4HANA</button>
+    <button class="erp-tab" onclick="showERP('oracle',this)" aria-label="Show Oracle integration">Oracle Fusion</button>
+    <button class="erp-tab" onclick="showERP('qbo',this)" aria-label="Show QuickBooks integration">QuickBooks Online</button>
   </div>
 
   <!-- TALLY -->
@@ -770,7 +772,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Suryapur Traders Pvt Ltd · TallyPrime</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Download ↓</button>
+      <button class="fink-xbtn" aria-label="Download data">Download ↓</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -819,7 +821,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Suryapur Traders Pvt Ltd · TallyPrime</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Export ↗</button>
+      <button class="fink-xbtn" aria-label="Export data">Export ↗</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -853,9 +855,9 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
         </div>
       </div>
       <div class="mc-nav">
-        <button class="mc-btn" onclick="mcPrev('mc-tally')">← Prev</button>
+        <button class="mc-btn" onclick="mcPrev('mc-tally')" aria-label="Previous">← Prev</button>
         <span class="mc-label">Example query</span>
-        <button class="mc-btn" onclick="mcNext('mc-tally')">Next →</button>
+        <button class="mc-btn" onclick="mcNext('mc-tally')" aria-label="Next">Next →</button>
         <div class="mc-dots"><div class="mc-dot active"></div><div class="mc-dot"></div></div>
       </div>
     </div>
@@ -905,7 +907,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Vega Industries Ltd · SAP S/4HANA · IN01</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Download ↓</button>
+      <button class="fink-xbtn" aria-label="Download data">Download ↓</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -954,7 +956,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Vega Industries Group · SAP Group Reporting</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Export ↗</button>
+      <button class="fink-xbtn" aria-label="Export data">Export ↗</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -989,9 +991,9 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
         </div>
       </div>
       <div class="mc-nav">
-        <button class="mc-btn" onclick="mcPrev('mc-sap')">← Prev</button>
+        <button class="mc-btn" onclick="mcPrev('mc-sap')" aria-label="Previous">← Prev</button>
         <span class="mc-label">Example query</span>
-        <button class="mc-btn" onclick="mcNext('mc-sap')">Next →</button>
+        <button class="mc-btn" onclick="mcNext('mc-sap')" aria-label="Next">Next →</button>
         <div class="mc-dots"><div class="mc-dot active"></div><div class="mc-dot"></div></div>
       </div>
     </div>
@@ -1041,7 +1043,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Meditec Health Sciences Ltd · Oracle Fusion Cloud</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Download ↓</button>
+      <button class="fink-xbtn" aria-label="Download data">Download ↓</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -1089,7 +1091,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Meditec Health Sciences Ltd · Oracle Fusion · Ind AS</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Download ↓</button>
+      <button class="fink-xbtn" aria-label="Download data">Download ↓</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -1126,9 +1128,9 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
         </div>
       </div>
       <div class="mc-nav">
-        <button class="mc-btn" onclick="mcPrev('mc-oracle')">← Prev</button>
+        <button class="mc-btn" onclick="mcPrev('mc-oracle')" aria-label="Previous">← Prev</button>
         <span class="mc-label">Example query</span>
-        <button class="mc-btn" onclick="mcNext('mc-oracle')">Next →</button>
+        <button class="mc-btn" onclick="mcNext('mc-oracle')" aria-label="Next">Next →</button>
         <div class="mc-dots"><div class="mc-dot active"></div><div class="mc-dot"></div></div>
       </div>
     </div>
@@ -1165,7 +1167,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Indolink Trading Pvt Ltd · QuickBooks Online</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Download ↓</button>
+      <button class="fink-xbtn" aria-label="Download data">Download ↓</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -1212,7 +1214,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
       <div class="fink-logo"><div class="fink-logo-icon">⚡</div>&nbsp;Fink <span style="color:#d97706">AI</span></div>
       <div class="fink-co">Indolink Trading Pvt Ltd · QuickBooks Online</div>
       <span class="fink-nuser">arjun@finahq.com · admin</span>
-      <button class="fink-xbtn">Export ↗</button>
+      <button class="fink-xbtn" aria-label="Export data">Export ↗</button>
     </div>
     <div class="fink-body">
       <div class="fink-sidebar">
@@ -1246,9 +1248,9 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
         </div>
       </div>
       <div class="mc-nav">
-        <button class="mc-btn" onclick="mcPrev('mc-qbo')">← Prev</button>
+        <button class="mc-btn" onclick="mcPrev('mc-qbo')" aria-label="Previous">← Prev</button>
         <span class="mc-label">Example query</span>
-        <button class="mc-btn" onclick="mcNext('mc-qbo')">Next →</button>
+        <button class="mc-btn" onclick="mcNext('mc-qbo')" aria-label="Next">Next →</button>
         <div class="mc-dots"><div class="mc-dot active"></div><div class="mc-dot"></div></div>
       </div>
     </div>
@@ -2131,9 +2133,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 
 
 <!-- ═══════ PRIVACY POLICY MODAL ═══════ -->
-<div class="fk-overlay" id="fk-privacy-overlay" onclick="fkBgClose(event,'fk-privacy-overlay')">
+<div class="fk-overlay" id="fk-privacy-overlay" role="dialog" aria-modal="true" aria-label="Privacy Policy" onclick="fkBgClose(event,'fk-privacy-overlay')">
   <div class="fk-modal" id="fk-privacy-modal">
-    <button class="fk-close" onclick="fkClose('fk-privacy-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-privacy-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Legal</div>
     <h3>Privacy Policy</h3>
     <p class="sub">FINKAI &mdash; An Ananta Group partnership &mdash; Effective: January 2024</p>
@@ -2152,9 +2154,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ TERMS OF SERVICE MODAL ═══════ -->
-<div class="fk-overlay" id="fk-terms-overlay" onclick="fkBgClose(event,'fk-terms-overlay')">
+<div class="fk-overlay" id="fk-terms-overlay" role="dialog" aria-modal="true" aria-label="Terms of Service" onclick="fkBgClose(event,'fk-terms-overlay')">
   <div class="fk-modal" id="fk-terms-modal">
-    <button class="fk-close" onclick="fkClose('fk-terms-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-terms-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Legal</div>
     <h3>Terms of Service</h3>
     <p class="sub">FINKAI &mdash; An Ananta Group partnership &mdash; Effective: January 2024</p>
@@ -2173,9 +2175,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ COOKIE POLICY MODAL ═══════ -->
-<div class="fk-overlay" id="fk-cookie-policy-overlay" onclick="fkBgClose(event,'fk-cookie-policy-overlay')">
+<div class="fk-overlay" id="fk-cookie-policy-overlay" role="dialog" aria-modal="true" aria-label="Cookie Policy" onclick="fkBgClose(event,'fk-cookie-policy-overlay')">
   <div class="fk-modal" id="fk-cookie-policy-modal">
-    <button class="fk-close" onclick="fkClose('fk-cookie-policy-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-cookie-policy-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Legal</div>
     <h3>Cookie Policy</h3>
     <p class="sub">FINKAI &mdash; An Ananta Group partnership &mdash; Effective: January 2024</p>
@@ -2197,9 +2199,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ SECURITY OVERVIEW MODAL ═══════ -->
-<div class="fk-overlay" id="fk-security-overlay" onclick="fkBgClose(event,'fk-security-overlay')">
+<div class="fk-overlay" id="fk-security-overlay" role="dialog" aria-modal="true" aria-label="Security Overview" onclick="fkBgClose(event,'fk-security-overlay')">
   <div class="fk-modal" id="fk-security-modal">
-    <button class="fk-close" onclick="fkClose('fk-security-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-security-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Security</div>
     <h3>Security Overview</h3>
     <p class="sub">How FINKAI protects your financial data.</p>
@@ -2216,9 +2218,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ ABOUT US MODAL ═══════ -->
-<div class="fk-overlay" id="fk-about-overlay" onclick="fkBgClose(event,'fk-about-overlay')">
+<div class="fk-overlay" id="fk-about-overlay" role="dialog" aria-modal="true" aria-label="About FINKAI" onclick="fkBgClose(event,'fk-about-overlay')">
   <div class="fk-modal" id="fk-about-modal">
-    <button class="fk-close" onclick="fkClose('fk-about-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-about-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">About FINKAI</div>
     <h3>We built the financial intelligence layer multi-entity finance teams were missing.</h3>
     <p class="sub">FINKAI connects directly to your ERP — SAP, Oracle, Tally, QuickBooks — and answers financial questions in plain English. No exports. No Excel. No waiting on teams. Just live, computed answers from your own data.</p>
@@ -2244,9 +2246,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ CONTACT US MODAL ═══════ -->
-<div class="fk-overlay" id="fk-contact-overlay" onclick="fkBgClose(event,'fk-contact-overlay')">
+<div class="fk-overlay" id="fk-contact-overlay" role="dialog" aria-modal="true" aria-label="Contact Us" onclick="fkBgClose(event,'fk-contact-overlay')">
   <div class="fk-modal" id="fk-contact-modal">
-    <button class="fk-close" onclick="fkClose('fk-contact-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-contact-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Contact</div>
     <h3>Get in touch</h3>
     <p class="sub">For product questions, demo requests, or general enquiries. We respond within 1 business day.</p>
@@ -2284,12 +2286,12 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ FLOATING DEMO BUTTON ═══════ -->
-<button id="fk-fab" onclick="fkOpen('fk-demo-modal')">Book a Demo</button>
+<button id="fk-fab" onclick="fkOpen('fk-demo-modal')" aria-label="Book a demo with FINKAI">Book a Demo</button>
 
 <!-- ═══════ DEMO MODAL ═══════ -->
-<div class="fk-overlay" id="fk-demo-overlay" onclick="fkBgClose(event,'fk-demo-overlay')">
+<div class="fk-overlay" id="fk-demo-overlay" role="dialog" aria-modal="true" aria-label="Book a Demo" onclick="fkBgClose(event,'fk-demo-overlay')">
   <div class="fk-modal" id="fk-demo-modal">
-    <button class="fk-close" onclick="fkClose('fk-demo-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-demo-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Book a Demo</div>
     <h3>See FINKAI live with your ERP</h3>
     <p class="sub">30-minute session. No slides. We'll show FINKAI answering real queries against a multi-entity group — live, in the product.</p>
@@ -2343,9 +2345,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ PRESS MODAL ═══════ -->
-<div class="fk-overlay" id="fk-press-overlay" onclick="fkBgClose(event,'fk-press-overlay')">
+<div class="fk-overlay" id="fk-press-overlay" role="dialog" aria-modal="true" aria-label="Press Enquiries" onclick="fkBgClose(event,'fk-press-overlay')">
   <div class="fk-modal" id="fk-press-modal">
-    <button class="fk-close" onclick="fkClose('fk-press-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-press-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Press &amp; Media</div>
     <h3>Press Enquiries</h3>
     <p class="sub">For media coverage, interviews, or product information, reach out directly to our communications team. We respond within 48 hours.</p>
@@ -2376,9 +2378,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 </div>
 
 <!-- ═══════ PARTNERSHIPS MODAL ═══════ -->
-<div class="fk-overlay" id="fk-partner-overlay" onclick="fkBgClose(event,'fk-partner-overlay')">
+<div class="fk-overlay" id="fk-partner-overlay" role="dialog" aria-modal="true" aria-label="Partnerships" onclick="fkBgClose(event,'fk-partner-overlay')">
   <div class="fk-modal" id="fk-partner-modal">
-    <button class="fk-close" onclick="fkClose('fk-partner-overlay')">&times;</button>
+    <button class="fk-close" onclick="fkClose('fk-partner-overlay')" aria-label="Close">×</button>
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:8px">Partnerships</div>
     <h3>Partner with FINKAI</h3>
     <p class="sub">We work with CA firms, ERP implementation partners, system integrators, and channel resellers serving multi-entity groups globally.</p>
