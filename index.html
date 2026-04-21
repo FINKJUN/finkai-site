@@ -623,13 +623,111 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
 #fk-fab:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(26,60,255,.55)}
 @media(max-width:600px){.fk-grid2{grid-template-columns:1fr}#fk-cookie{padding:14px 20px}.fk-modal{padding:28px 20px}}
 
+
+/* ══════════════════════════════
+   HAMBURGER (mobile only)
+══════════════════════════════ */
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:8px;margin-left:auto}
+.nav-burger span{width:22px;height:2px;background:rgba(255,255,255,0.9);border-radius:2px;display:block;transition:all 0.2s}
+
+/* ══════════════════════════════
+   ANIMATION — CSS-class approach (safe fallback: content visible by default)
+══════════════════════════════ */
+.anim-ready{opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s ease}
+.anim-ready.anim-done{opacity:1;transform:none}
+
+/* ══════════════════════════════
+   MOBILE BREAKPOINTS
+══════════════════════════════ */
+@media(max-width:768px){
+  /* Nav */
+  nav{padding:0 1.25rem;height:64px}
+  .nav-burger{display:flex}
+  .nav-links{
+    position:fixed;top:64px;left:0;right:0;background:#0a1628;
+    flex-direction:column;padding:0;gap:0;display:none;
+    border-top:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:98;max-height:calc(100vh - 64px);overflow-y:auto
+  }
+  .nav-links.mob-open{display:flex}
+  .nav-links a{padding:15px 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);font-size:16px;color:rgba(255,255,255,0.85)}
+  .nav-links a:last-child{border-bottom:none}
+  .nav-cta{font-size:13px;padding:9px 16px;white-space:nowrap}
+
+  /* Layout */
+  section{padding:3.5rem 0}
+  .wrap{padding:0 1.25rem}
+
+  /* Hero */
+  .hero{padding:3rem 0;min-height:auto}
+  .hero>p{font-size:17px}
+  .btn-row{gap:10px}
+  .btn-p,.btn-s{padding:14px 24px;font-size:16px}
+
+  /* Headings */
+  h1{letter-spacing:-1px}
+  h2{letter-spacing:-0.75px}
+
+  /* ERP tabs — horizontal scroll */
+  .erp-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+  .erp-tabs::-webkit-scrollbar{display:none}
+  .erp-tab{white-space:nowrap;padding:10px 18px;font-size:14px}
+
+  /* Mockup: hide sidebar on small screens to save space */
+  .fink-sidebar{display:none}
+  .fink-body{min-height:160px}
+
+  /* Comparison table — horizontal scroll */
+  .cmp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--border)}
+  .cmp{font-size:13px;min-width:500px;margin-top:0;border-radius:0}
+  .cmp th,.cmp td{padding:11px 12px}
+
+  /* Stats */
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .stat-num{font-size:36px}
+
+  /* Stories grid */
+  .sg{grid-template-columns:1fr}
+
+  /* CTA section */
+  .cta-section{padding:60px 1.25rem}
+
+  /* Footer */
+  .footer-top{grid-template-columns:1fr;gap:24px;margin-bottom:24px;padding-bottom:24px}
+  footer{padding:48px 1.25rem 32px}
+  .footer-bottom{flex-direction:column;gap:12px}
+  .footer-right{text-align:left}
+
+  /* FAQ */
+  .faq-q{font-size:16px;padding:1.1rem 1.25rem}
+  .faq-a{font-size:15px;padding:0 1.25rem 1.1rem}
+
+  /* Floating FAB — move up to avoid cookie banner overlap */
+  #fk-fab{bottom:80px;right:16px;font-size:13px;padding:11px 18px}
+
+  /* Cards */
+  .g2,.g3{gap:1rem}
+  .card{padding:1.5rem}
+}
+
+@media(max-width:480px){
+  nav{height:60px}
+  .nav-links{top:60px}
+  .hero{padding:2.5rem 0}
+  section{padding:2.75rem 0}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .dim-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-logo">FIN<span>KAI</span></div>
-  <div class="nav-links">
+  <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="tally.html">Tally</a>
     <a href="sap.html">SAP</a>
     <a href="oracle.html">Oracle</a>
@@ -1800,7 +1898,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
 <div class="wrap"><section>
   <div class="eyebrow">Why FINKAI</div>
   <h2>Built for finance — not adapted for it.</h2>
-  <table class="cmp">
+  <div class="cmp-scroll"><table class="cmp">
     <tr><th>Capability</th><th>FINKAI</th><th>ChatGPT / Copilot</th><th>SAP Analytics / Oracle BI</th></tr>
     <tr><td>Connected to live ERP data</td><td class="y">✓ Always live</td><td class="no">✗ Manual upload</td><td class="y">✓ Single ERP only</td></tr>
     <tr><td>Deterministic computation</td><td class="y">✓ Arithmetic</td><td class="no">✗ Probabilistic</td><td class="y">✓ Yes</td></tr>
@@ -1810,7 +1908,7 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
     <tr><td>Plain English queries</td><td class="y">✓ Natural language</td><td class="y">✓ Yes</td><td class="no">✗ Requires training</td></tr>
     <tr><td>Audit trail per query</td><td class="y">✓ Full logging</td><td class="no">✗ None</td><td class="y">✓ Yes</td></tr>
     <tr><td>Implementation time</td><td class="y">✓ Days–weeks</td><td>Immediate</td><td class="no">✗ Months</td></tr>
-  </table>
+  </table></div>
 </section></div>
 
 <hr>
@@ -2104,8 +2202,15 @@ document.querySelectorAll('.fade-in').forEach(function(el){obs2.observe(el);});
 ('requestIdleCallback' in window)?requestIdleCallback(_initObs2):window.addEventListener('load',_initObs2);
 function showERP(n,b){document.querySelectorAll('.erp-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.erp-tab').forEach(t=>t.classList.remove('active'));document.getElementById('erp-'+n).classList.add('active');b.classList.add('active')}
 function _initAnim(){
-const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.style.opacity='1';el.target.style.transform='translateY(0)'}})},{threshold:0.06});
-document.querySelectorAll('section,.aeo-text').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(18px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';obs.observe(el)});
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(el){
+      if(el.isIntersecting){el.target.classList.add('anim-done');obs.unobserve(el.target);}
+    });
+  },{threshold:0.05});
+  document.querySelectorAll('section,.aeo-text').forEach(function(el){
+    el.classList.add('anim-ready');
+    obs.observe(el);
+  });
 }
 ('requestIdleCallback' in window)?requestIdleCallback(_initAnim):window.addEventListener('load',_initAnim);
 
@@ -2126,6 +2231,24 @@ function mcNav(id, dir){
 function mcNext(id){mcNav(id,1);}
 function mcPrev(id){mcNav(id,-1);}
 
+
+/* ── Mobile nav toggle ── */
+(function(){
+  var btn=document.getElementById('nav-burger');
+  var links=document.getElementById('nav-links');
+  if(!btn||!links)return;
+  btn.addEventListener('click',function(){
+    var open=links.classList.toggle('mob-open');
+    btn.setAttribute('aria-expanded',open);
+  });
+  // Close nav when a link is clicked
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      links.classList.remove('mob-open');
+      btn.setAttribute('aria-expanded','false');
+    });
+  });
+})();
 /* FAQ accordion */
 document.querySelectorAll('.faq-q').forEach(function(q){
   q.addEventListener('click',function(){
