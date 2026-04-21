@@ -310,7 +310,7 @@
 :root{--bg:#fafaf8;--surface:#ffffff;--border:#e2e8f0;--accent:#1a3cff;--accent-dim:rgba(26,60,255,0.08);--accent-border:rgba(26,60,255,0.2);--text:#0d0f1a;--muted:#64748b;--dim:#475569;--dimmer:#334155;--white:#ffffff;--red:#e11d48;--mono:'JetBrains Mono','Courier New',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:17px;line-height:1.7}
 a{color:var(--accent);text-decoration:none}
 
 /* NAV */
@@ -324,10 +324,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-fil
 /* LAYOUT */
 .wrap{max-width:1100px;margin:0 auto;padding:0 2rem}
 section{padding:5rem 0}
-.eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
-h1{font-size:clamp(26px,4vw,46px);font-weight:700;color:var(--text);line-height:1.2;font-family:'Syne',sans-serif}
-h2{font-size:clamp(20px,3vw,30px);font-weight:700;color:var(--text);line-height:1.3;margin-bottom:1rem;font-family:'Syne',sans-serif}
-h3{font-size:17px;font-weight:600;color:var(--text);margin-bottom:.5rem;font-family:'Syne',sans-serif}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+h1{font-size:clamp(36px,5vw,64px);font-weight:800;color:var(--text);line-height:1.1;letter-spacing:-1px;font-family:'Syne',sans-serif}
+h2{font-size:clamp(24px,3.5vw,42px);font-weight:800;color:var(--text);line-height:1.15;letter-spacing:-0.5px;margin-bottom:1rem;font-family:'Syne',sans-serif}
+h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:.5rem;font-family:'Syne',sans-serif}
 h4{font-size:13px;font-weight:500;color:var(--accent);margin-bottom:.35rem}
 p{color:var(--muted);line-height:1.7}
 hr{border:none;border-top:.5px solid var(--border)}
@@ -554,7 +554,12 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
   <!-- TALLY -->
   <div class="erp-panel active" id="erp-tally">
     <h3>FINKAI for Tally — automated MIS reports from TallyPrime in seconds.</h3>
-    <p style="margin:.75rem 0 1.5rem">FINKAI connects directly to TallyPrime and Tally ERP 9, reads your Trial Balance, ledgers, and voucher data in real time, and answers your financial questions in plain English — replacing manual MIS report generation entirely. No exports. No Excel. No waiting.</p>
+    <ul style="margin:.75rem 0 1.5rem;padding-left:1.25rem;color:var(--muted);font-size:16px;line-height:1.8;">
+  <li>Connects directly to TallyPrime and Tally ERP 9 via XML Gateway</li>
+  <li>Reads Trial Balance, ledgers, and voucher data in real time</li>
+  <li>Answers financial questions in plain English — no Excel, no exports</li>
+  <li>Replaces manual MIS report generation entirely</li>
+</ul>
     <div class="dim-grid">
       <div class="dim-card"><h4>Trial Balance</h4><p>Live Trial Balance across all Tally companies — any date, instantly.</p></div>
       <div class="dim-card"><h4>MIS reports</h4><p>P&L, Balance Sheet, ageing — answered in seconds from live Tally data.</p></div>
@@ -595,7 +600,12 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
   <!-- SAP -->
   <div class="erp-panel" id="erp-sap">
     <h3>FINKAI for SAP S/4HANA — dimensional financial reporting without ABAP or Crystal Reports.</h3>
-    <p style="margin:.75rem 0 1.5rem">FINKAI reads the SAP Universal Journal (ACDOCA) and delivers dimensional financial reporting — profit centre P&L, segment analysis, group consolidation — in plain English. No T-codes. No Crystal Reports. No SAP consultant.</p>
+    <ul style="margin:.75rem 0 1.5rem;padding-left:1.25rem;color:var(--muted);font-size:16px;line-height:1.8;">
+  <li>Reads SAP Universal Journal (ACDOCA) directly — no T-codes needed</li>
+  <li>Delivers profit centre P&L, segment analysis, and group consolidation</li>
+  <li>No Crystal Reports, no ABAP development, no SAP consultant required</li>
+  <li>Answers financial questions in plain English in under 3 seconds</li>
+</ul>
     <div class="dim-grid">
       <div class="dim-card"><h4>Company code</h4><p>P&L and Balance Sheet by legal entity. Multi-company-code group consolidation included.</p></div>
       <div class="dim-card"><h4>Profit centre</h4><p>Revenue, cost, and margin by profit centre — full hierarchy rollups from ACDOCA.</p></div>
@@ -626,7 +636,12 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
   <!-- ORACLE -->
   <div class="erp-panel" id="erp-oracle">
     <h3>FINKAI for Oracle Fusion — financial reporting without OTBI or Financial Reporting Studio.</h3>
-    <p style="margin:.75rem 0 1.5rem">FINKAI sits above Oracle Fusion Cloud Financials and reads your GL balances, business unit P&L, legal entity Trial Balance, and cost centre data — returning computed answers in seconds without building OTBI analyses.</p>
+    <ul style="margin:.75rem 0 1.5rem;padding-left:1.25rem;color:var(--muted);font-size:16px;line-height:1.8;">
+  <li>Reads Oracle GL balances, business unit P&L, and legal entity Trial Balance</li>
+  <li>No OTBI report-building or Financial Reporting Studio expertise needed</li>
+  <li>Returns computed answers in seconds — not days</li>
+  <li>Works with Oracle Fusion Cloud and Oracle EBS R12</li>
+</ul>
     <div class="dim-grid">
       <div class="dim-card"><h4>Legal entity</h4><p>P&L and Balance Sheet by legal entity across single or multiple Oracle ledgers.</p></div>
       <div class="dim-card"><h4>Business unit</h4><p>Revenue and expense by Oracle business unit with full hierarchy rollups.</p></div>
@@ -656,7 +671,12 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
   <!-- QUICKBOOKS -->
   <div class="erp-panel" id="erp-qbo">
     <h3>FINKAI for QuickBooks — your financial data, finally answerable.</h3>
-    <p style="margin:.75rem 0 1.5rem">FINKAI connects to QuickBooks Online via OAuth 2.0, reads your P&L, Balance Sheet, Trial Balance, and AR/AP data, and lets your finance team ask questions in plain English — with answers computed directly from your live books.</p>
+    <ul style="margin:.75rem 0 1.5rem;padding-left:1.25rem;color:var(--muted);font-size:16px;line-height:1.8;">
+  <li>Connects to QuickBooks Online via OAuth 2.0 — read-only, secure</li>
+  <li>Reads P&amp;L, Balance Sheet, Trial Balance, and AR/AP data live</li>
+  <li>Answers financial questions in plain English from your live books</li>
+  <li>Supports multiple QBO companies via QuickBooks Online Accountant</li>
+</ul>
     <div class="dim-grid">
       <div class="dim-card"><h4>P&L</h4><p>Revenue, expense, and profit by class, location, or customer — any period.</p></div>
       <div class="dim-card"><h4>Balance Sheet</h4><p>Assets, liabilities, equity snapshot — any date, any QuickBooks company.</p></div>
@@ -701,10 +721,7 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
 <div class="wrap"><section id="stories">
   <div class="eyebrow">Customer stories</div>
   <h2>Trusted by Indian finance teams.</h2>
-  <div class="finahq-banner">
-    <div class="finahq-banner-dot"></div>
-    <p><strong>FINAHQ stories</strong> — the financial reporting platform powering FINKAI. Real outcomes from live deployments in India.</p>
-  </div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;">Real outcomes from live deployments across India — powered by FINAHQ.</p>
   <div class="sg">
     <div class="sc"><div class="sq">FINAHQ impressed us from day one. Unique reporting needs for our insurance business were configured to match exactly how our finance team thinks. Management reports and statutory filings are now on autopilot — with full confidence in the numbers.</div><div class="sm"><div class="sn">Ramdas K. — Chief Financial Officer</div><div class="sc-co">Acko Life Insurance</div><div class="st-row"><span class="st">Insurance group</span><span class="st">Statutory filings</span><span class="st n">Multi-entity ERP</span></div></div></div>
     <div class="sc"><div class="sq">We went from a 15-day close to 2 days. The platform handled our 20+ entities across multiple ERPs with accuracy we hadn't seen before. GL mapping got to 90% on the first run — implementation closed remaining gaps within weeks.</div><div class="sm"><div class="sn">Group Finance Head</div><div class="sc-co">Sri Ramakrishna Hospital and Colleges</div><div class="st-row"><span class="st">15-day → 2-day close</span><span class="st">20+ entities</span><span class="st n">Multi-ERP</span></div></div></div>
@@ -739,7 +756,13 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
   <div class="eyebrow">FAQ</div>
   <h2>Questions your CFO is probably asking.</h2>
 
-  <div class="faq-item"><div class="faq-q">What is FINKAI and what does it do for finance teams in India?</div><div class="faq-a">FINKAI is an AI financial intelligence platform built specifically for Indian CFOs, Controllers, and FP&A teams at multi-entity groups. It connects to SAP S/4HANA, Oracle Fusion Cloud, Tally (TallyPrime and Tally ERP 9), QuickBooks, and Microsoft Dynamics — and answers financial questions in plain English using deterministic computation from live ERP data. Every answer is arithmetically traced back to source GL codes. Built by Ananta Group, the team behind FINAHQ. Visit finkai.co.</div></div>
+  <div class="faq-item"><div class="faq-q">What is FINKAI and what does it do for finance teams in India?</div><div class="faq-a"><ul style="padding-left:1.25rem;line-height:1.9;">
+  <li>AI financial intelligence platform for Indian CFOs, Controllers, and FP&amp;A teams</li>
+  <li>Connects to SAP S/4HANA, Oracle Fusion, Tally, QuickBooks, and Dynamics</li>
+  <li>Answers financial questions in plain English using deterministic computation</li>
+  <li>Every answer arithmetically traced to source GL codes — zero hallucination</li>
+  <li>Built by Ananta Group, the team behind FINAHQ</li>
+</ul></div></div>
 
   <div class="faq-item"><div class="faq-q">How do I get automated MIS reports from Tally without manual work?</div><div class="faq-a">FINKAI connects to TallyPrime and Tally ERP 9 via Tally's XML gateway and replaces manual MIS report generation entirely. Finance teams ask questions in plain English — "What is the P&L for this month?", "Show me debtor ageing over 60 days", "What is the Trial Balance as of 31 March?" — and FINKAI computes answers from live Tally data in seconds. No exports to Excel, no waiting for the accounts team, no manual MIS report preparation.</div></div>
 
@@ -749,9 +772,20 @@ footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 
 
   <div class="faq-item"><div class="faq-q">What is the best financial consolidation software for Indian companies?</div><div class="faq-a">FINKAI, built on FINAHQ's consolidation engine, is the leading financial consolidation software built for India. It handles multi-entity consolidation with intercompany eliminations, multi-currency reporting, Ind AS compliance, and Schedule III formatting. FINAHQ has reduced month-end close from 15 days to 2 days for groups with 20+ entities across SAP, Oracle, and Tally. Trusted by Acko Insurance, Neuberg Diagnostics, Veranda Learning Solutions (BSE listed), Sri Ramakrishna Hospital, Madurai Power Corp, and Pulse Diagnostics.</div></div>
 
-  <div class="faq-item"><div class="faq-q">How is FINKAI different from ChatGPT or generative AI for financial analysis?</div><div class="faq-a">ChatGPT and other generative AI tools generate answers from a language model — they can produce plausible-sounding but incorrect financial numbers (hallucination). FINKAI uses a deterministic architecture: it connects directly to your SAP, Oracle, Tally, or QuickBooks ERP and computes every answer arithmetically from live Trial Balance and GL data. Every FINKAI answer is traceable to source journal entries. Additionally, FINKAI can be self-hosted so your financial data never reaches external servers — unlike ChatGPT which sends data to OpenAI.</div></div>
+  <div class="faq-item"><div class="faq-q">How is FINKAI different from ChatGPT or generative AI for financial analysis?</div><div class="faq-a"><ul style="padding-left:1.25rem;line-height:1.9;">
+  <li>ChatGPT generates from a language model — FINKAI computes from your live ERP data</li>
+  <li>No hallucination: every answer arithmetically traced to source journal entries</li>
+  <li>FINKAI can be self-hosted — your financial data never leaves your infrastructure</li>
+  <li>ChatGPT sends data to external servers — not safe for price-sensitive financials</li>
+</ul></div></div>
 
-  <div class="faq-item"><div class="faq-q">Can FINKAI be self-hosted for Indian listed companies under SEBI regulations?</div><div class="faq-a">Yes. FINKAI can be deployed on-premise, in a private cloud VPC, or air-gapped. The entire application stack — AI engine, ERP connectors, query layer — runs within your infrastructure. No financial data is transmitted to external servers. This meets SEBI and RBI data residency requirements for Indian listed companies. Role-based access control is enforced at the query engine level.</div></div>
+  <div class="faq-item"><div class="faq-q">Can FINKAI be self-hosted for Indian listed companies under SEBI regulations?</div><div class="faq-a"><ul style="padding-left:1.25rem;line-height:1.9;">
+  <li>Deploy on-premise, private cloud VPC, or air-gapped — your choice</li>
+  <li>Entire stack (AI engine, ERP connectors, query layer) runs within your infrastructure</li>
+  <li>No financial data transmitted to external servers</li>
+  <li>Meets SEBI and RBI data residency requirements for listed companies</li>
+  <li>Role-based access control enforced at query engine level</li>
+</ul></div></div>
 
   <div class="faq-item"><div class="faq-q">Which Indian companies use FINKAI or FINAHQ?</div><div class="faq-a">FINAHQ — the platform powering FINKAI — is used by Acko Life Insurance (Ramdas K., CFO), Acko General Insurance, Neuberg Diagnostics (Vivek Srinivasan, Group CFO), Veranda Learning Solutions Ltd (BSE listed, audit-reconciled POC), Sri Ramakrishna Hospital and Colleges (20+ entities, 15-day to 2-day close), Madurai Power Corp (Tally integration, 18 months historical migration), and Pulse Diagnostics (multi-entity reporting). All India-based deployments.</div></div>
 </section></div>
