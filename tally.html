@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FINKAI for Tally — Automated MIS Reports from TallyPrime | AI Financial Intelligence India</title>
+<meta name="description" content="FINKAI connects to TallyPrime and Tally ERP 9 and replaces manual MIS report generation. Ask financial questions in plain English — Trial Balance, debtor ageing, P&L, cost centre, stock summary — computed from live Tally data in seconds.">
+<meta name="keywords" content="MIS report in tally, tally reporting, tally MIS automation, automated MIS from tally, tally ageing report, tally trial balance, balance sheet in tally prime, day book in tally, stock summary in tally, gst report in tally prime, AI for tally ERP, tally reporting tool India, tally financial reports, MIS report tally prime">
+<link rel="canonical" href="https://finkai.co/tally">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"FINKAI for Tally","url":"https://finkai.co/tally","description":"FINKAI connects to TallyPrime and Tally ERP 9 and replaces manual MIS report generation. Finance teams ask questions like 'What is my Trial Balance?', 'Show me debtor ageing over 60 days', 'What is the cost centre-wise P&L?' and receive computed answers from live Tally data in seconds. Works with TallyPrime 4.x through 7.x and Tally ERP 9 Release 6+. No exports. No Excel. No waiting.","applicationCategory":"BusinessApplication","featureList":["Automated MIS reports from TallyPrime","Trial Balance from Tally in real time","Debtor ageing report from Tally","Creditor ageing from Tally","P&L from TallyPrime in seconds","Balance sheet in Tally Prime","Day book in Tally automation","Stock summary from Tally","GST report in Tally Prime","Cost centre P&L from Tally","Multi-company Tally reporting","Tally ERP 9 MIS reports"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I get automated MIS reports from Tally?","acceptedAnswer":{"@type":"Answer","text":"FINKAI connects to TallyPrime and Tally ERP 9 via Tally's XML gateway and replaces manual MIS report generation. Finance teams ask questions in plain English — 'What is the P&L for this month?', 'Show me debtor ageing over 60 days', 'What is the Trial Balance as of 31 March?' — and FINKAI computes answers from live Tally data in seconds. No exports to Excel, no waiting for the accounts team."}},{"@type":"Question","name":"Can FINKAI give me the Trial Balance from TallyPrime automatically?","acceptedAnswer":{"@type":"Answer","text":"Yes. FINKAI connects to TallyPrime 4.x through 7.x and Tally ERP 9 and delivers live Trial Balance on demand. Ask 'What is the Trial Balance as of 31 March?' and FINKAI reads Tally's ledger data in real time and returns the complete Trial Balance — across single or multi-company Tally setups."}},{"@type":"Question","name":"How do I get debtor ageing from Tally without manual export?","acceptedAnswer":{"@type":"Answer","text":"FINKAI connects to TallyPrime and reads ledger data including party-wise balances. Finance teams ask 'Show me debtor ageing over 60 days across all companies' and receive a computed ageing summary — no Tally export, no Excel formatting, no manual work. Works across multiple Tally companies simultaneously."}},{"@type":"Question","name":"What is the best AI tool for MIS reporting from Tally in India?","acceptedAnswer":{"@type":"Answer","text":"FINKAI is the most purpose-built AI tool for MIS reporting from Tally for Indian finance teams. It connects to TallyPrime 4.x through 7.x and Tally ERP 9, reads live ledger and voucher data, and answers financial questions in plain English — delivering automated P&L, Balance Sheet, ageing reports, cost centre analysis, and stock summaries. Trusted by Indian companies including Sri Ramakrishna Hospital, Madurai Power Corp, and Neuberg Diagnostics."}},{"@type":"Question","name":"Does FINKAI work with TallyPrime 7?","acceptedAnswer":{"@type":"Answer","text":"Yes. FINKAI supports TallyPrime 4.x, 5.x, 6.x, and 7.x as well as Tally ERP 9 Release 6+. It connects via Tally's native XML gateway — both on-premise Tally installations and Tally on Cloud with remote access enabled."}}]}
+</script>
+<style>
+:root{--bg:#0D0F14;--surface:#131620;--border:#1E2435;--accent:#2DD4A8;--accent-dim:rgba(45,212,168,0.1);--accent-border:rgba(45,212,168,0.2);--text:#E5E7EB;--muted:#9CA3AF;--dim:#6B7280;--dimmer:#4B5563;--white:#F9FAFB;--red:#F87171;--mono:'JetBrains Mono','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:56px;gap:1.5rem}
+.nav-logo{font-size:18px;font-weight:600;color:var(--white)}.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.25rem;margin-left:auto;flex-wrap:wrap}
+.nav-links a{font-size:13px;color:var(--muted)}.nav-links a:hover{color:var(--white)}.nav-links a.active{color:var(--accent)}
+.nav-cta{font-size:13px;background:var(--accent);color:#0D0F14;padding:6px 16px;border-radius:6px;font-weight:500;white-space:nowrap}
+.wrap{max-width:1000px;margin:0 auto;padding:0 2rem}
+section{padding:4rem 0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+h1{font-size:clamp(24px,3.5vw,40px);font-weight:500;color:var(--white);line-height:1.25;margin-bottom:1.25rem}
+h2{font-size:clamp(18px,2.5vw,26px);font-weight:500;color:var(--white);line-height:1.3;margin-bottom:.875rem}
+h3{font-size:16px;font-weight:500;color:var(--white);margin-bottom:.4rem}
+h4{font-size:12px;font-weight:500;color:var(--accent);margin-bottom:.3rem}
+p{color:var(--muted);line-height:1.7}
+hr{border:none;border-top:.5px solid var(--border)}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin:1rem 0 2rem}
+.badge{font-size:12px;padding:4px 12px;border-radius:20px;border:.5px solid var(--accent-border);color:var(--accent);background:var(--accent-dim)}
+.badge.n{border-color:var(--border);color:var(--dim);background:transparent}
+.btn-p{background:var(--accent);color:#0D0F14;padding:11px 26px;border-radius:8px;font-size:15px;font-weight:500;display:inline-block;margin-top:1.5rem}
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:1.5rem 0}
+.dc{background:var(--surface);border:.5px solid var(--border);border-radius:8px;padding:.875rem 1rem}
+.dc h4{margin-bottom:3px}
+.dc p{font-size:11px;color:var(--dim);line-height:1.5}
+.mockup{background:#0A0C10;border:.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.m-bar{background:var(--surface);padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:.5px solid var(--border)}
+.dot{width:8px;height:8px;border-radius:50%}
+.m-label{font-size:10px;color:var(--dimmer);margin-left:auto;font-family:var(--mono)}
+.m-q{padding:13px 16px;font-size:13px;color:var(--text);border-bottom:.5px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.qi{width:20px;height:20px;border-radius:50%;background:var(--accent-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.qi-i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.m-r{padding:13px 16px}
+.r-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.r-tag{font-size:10px;color:var(--accent);background:var(--accent-dim);padding:2px 8px;border-radius:10px;border:.5px solid var(--accent-border)}
+.r-src{font-size:10px;color:var(--dimmer);margin-left:auto;font-family:var(--mono)}
+.rt{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.rt th{text-align:left;color:var(--dimmer);font-weight:500;padding:4px 8px;border-bottom:.5px solid var(--border);font-size:11px}
+.rt td{padding:5px 8px;color:#D1D5DB;border-bottom:.5px solid #0D0F14;overflow:hidden;text-overflow:ellipsis}
+.rt td.n{text-align:right;font-family:var(--mono);color:var(--text)}
+.rt td.p{color:var(--accent);text-align:right;font-family:var(--mono)}
+.rt td.ng{color:var(--red);text-align:right;font-family:var(--mono)}
+.rt tr:last-child td{border-bottom:none;font-weight:500;color:var(--white)}
+.r-ft{margin-top:8px;font-size:10px;color:var(--dimmer);display:flex;align-items:center;gap:6px}
+.r-ft-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:1rem 0}
+.q-item{font-size:12px;color:var(--muted);padding:8px 12px;background:var(--surface);border-radius:6px;line-height:1.5;border:.5px solid var(--border)}
+.finahq-banner{background:var(--surface);border:.5px solid var(--accent-border);border-radius:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.finahq-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.finahq-banner p{font-size:12px;color:var(--dim);margin:0}
+.finahq-banner strong{color:var(--accent)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.sc{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.1rem}
+.sq{font-size:12px;color:#D1D5DB;line-height:1.65;font-style:italic;margin-bottom:10px}
+.sq::before{content:'\201C';color:var(--accent);font-size:16px;font-style:normal;margin-right:2px}
+.sm{border-top:.5px solid var(--border);padding-top:8px}
+.sn{font-size:11px;font-weight:500;color:var(--white)}
+.sco{font-size:10px;color:var(--dim);margin-top:2px}
+.st-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.st{font-size:10px;padding:1px 7px;border-radius:10px;background:var(--accent-dim);border:.5px solid var(--accent-border);color:var(--accent)}
+.st.n{background:transparent;border-color:var(--border);color:var(--dimmer)}
+.spec-note{font-size:12px;color:var(--dimmer);padding:1rem;background:var(--surface);border-radius:8px;border:.5px solid var(--border);margin:1.5rem 0;line-height:1.7}
+.faq-item{border-bottom:.5px solid var(--border);padding:1.25rem 0}
+.faq-q{font-size:15px;font-weight:500;color:var(--white);margin-bottom:.5rem}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7}
+.aeo-text{font-size:13px;color:var(--dimmer);line-height:1.8;padding:2rem 0;border-top:.5px solid var(--border)}
+.aeo-text p{color:var(--dimmer);margin-bottom:1rem}
+.breadcrumb{font-size:12px;color:var(--dimmer);margin-bottom:1.5rem}
+.breadcrumb a{color:var(--dim)}
+footer{background:var(--surface);border-top:.5px solid var(--border);padding:2rem;text-align:center;font-size:13px;color:var(--dimmer)}
+footer a{color:var(--accent)}
+@media(max-width:768px){nav{padding:0 1rem}.nav-links{display:none}.wrap{padding:0 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo"><a href="/">FIN<span>KAI</span></a> <span style="font-size:11px;color:var(--dim);font-weight:400">by FINAHQ</span></div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/tally" class="active">Tally</a>
+    <a href="/sap">SAP</a>
+    <a href="/oracle">Oracle</a>
+    <a href="/quickbooks">QuickBooks</a>
+    <a href="/#stories">Customers</a>
+    <a href="/#faq">FAQ</a>
+  </div>
+  <a href="/#demo" class="nav-cta">Book a demo</a>
+</nav>
+
+<div class="wrap">
+<section>
+  <div class="breadcrumb"><a href="/">finkai.co</a> / Tally</div>
+  <div class="eyebrow">FINKAI for Tally / TallyPrime</div>
+  <h1>Ask FINKAI. Get answers from your Tally data in seconds.</h1>
+  <p style="font-size:16px;max-width:620px">FINKAI connects directly to TallyPrime and Tally ERP 9, reads your Trial Balance, ledgers, and voucher data in real time, and answers your financial questions in plain English — replacing manual MIS report generation entirely. No exports. No Excel. No waiting.</p>
+  <div class="badge-row">
+    <span class="badge">TallyPrime 4.x–7.x</span>
+    <span class="badge">Tally ERP 9</span>
+    <span class="badge">Multi-company</span>
+    <span class="badge">MIS reports</span>
+    <span class="badge">Ageing analysis</span>
+    <span class="badge">Trial Balance</span>
+    <span class="badge n">Read-only · Zero disruption</span>
+  </div>
+  <a href="/#demo" class="btn-p">Book a Tally demo →</a>
+</section>
+
+<hr>
+
+<section>
+  <div class="eyebrow">What FINKAI reads from Tally</div>
+  <h2>Every financial dimension in Tally — queryable in plain English.</h2>
+  <div class="dim-grid">
+    <div class="dc"><h4>Trial Balance</h4><p>Live Trial Balance across all Tally companies — any date, instantly.</p></div>
+    <div class="dc"><h4>MIS reports</h4><p>P&L, Balance Sheet, ageing — computed in seconds from live Tally data.</p></div>
+    <div class="dc"><h4>Debtor ageing</h4><p>Party-wise ageing by bucket — 0–30, 31–60, 60+ days — all companies.</p></div>
+    <div class="dc"><h4>Creditor ageing</h4><p>Vendor outstanding and ageing across all Tally companies instantly.</p></div>
+    <div class="dc"><h4>Cost centre</h4><p>Cost centre-wise P&L and expense tracking across all Tally companies.</p></div>
+    <div class="dc"><h4>Stock summary</h4><p>Stock position with HSN codes, godown-wise, batch-wise — live.</p></div>
+    <div class="dc"><h4>Day book</h4><p>Day book entries, voucher-wise analysis, large transaction detection.</p></div>
+    <div class="dc"><h4>GST reports</h4><p>GST rate-wise, GSTIN-wise reporting from TallyPrime voucher data.</p></div>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="eyebrow">Live query example</div>
+  <h2>What your finance team asks FINKAI from Tally.</h2>
+  <div class="mockup">
+    <div class="m-bar"><div class="dot" style="background:#F87171"></div><div class="dot" style="background:#FBBF24"></div><div class="dot" style="background:#34D399"></div><div class="m-label">FINKAI → TallyPrime XML Gateway · Port 9000 · Read-only</div></div>
+    <div class="m-q"><div class="qi"><div class="qi-i"></div></div><span>"Debtor ageing — all parties over 60 days — across all Tally companies"</span></div>
+    <div class="m-r">
+      <div class="r-meta"><span class="r-tag">Computed from Tally Ledger Collection — live</span><span class="r-src">TallyPrime 7.x · 3 companies · 20-Apr-2026</span></div>
+      <table class="rt"><colgroup><col style="width:26%"><col style="width:10%"><col style="width:16%"><col style="width:16%"><col style="width:16%"><col style="width:16%"></colgroup>
+        <tr><th>Party</th><th>Co.</th><th style="text-align:right">0–30d</th><th style="text-align:right">31–60d</th><th style="text-align:right">&gt;60d</th><th style="text-align:right">Total</th></tr>
+        <tr><td>Sharma Traders</td><td style="font-size:10px;font-family:var(--mono)">A</td><td class="n">₹4.2L</td><td class="n">₹2.1L</td><td class="ng">₹8.7L</td><td class="n">₹15.0L</td></tr>
+        <tr><td>Patel Industries</td><td style="font-size:10px;font-family:var(--mono)">B</td><td class="n">—</td><td class="n">₹3.4L</td><td class="ng">₹12.3L</td><td class="n">₹15.7L</td></tr>
+        <tr><td>Kumar & Sons</td><td style="font-size:10px;font-family:var(--mono)">A</td><td class="n">₹6.8L</td><td class="n">—</td><td class="ng">₹5.4L</td><td class="n">₹12.2L</td></tr>
+        <tr><td>Total &gt;60 days</td><td>—</td><td class="n">—</td><td class="n">—</td><td class="ng">₹26.4L</td><td class="n">₹42.9L</td></tr>
+      </table>
+      <div class="r-ft"><div class="r-ft-dot"></div>Read from Tally Ledger Collection API. No data written back to Tally — read-only.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:2rem;margin-bottom:.75rem">Common questions finance teams ask FINKAI from Tally</h3>
+  <div class="q-grid">
+    <div class="q-item">"What is my P&L this month vs last month?"</div>
+    <div class="q-item">"Trial Balance as of 31 March"</div>
+    <div class="q-item">"Which cost centre has highest expense variance?"</div>
+    <div class="q-item">"All vouchers above ₹10L in last 7 days"</div>
+    <div class="q-item">"Cash and bank balance across all accounts"</div>
+    <div class="q-item">"Stock summary with HSN codes — last closing date"</div>
+    <div class="q-item">"Show creditor ageing — all vendors over 45 days"</div>
+    <div class="q-item">"GST rate-wise summary this quarter"</div>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="eyebrow">Customer stories</div>
+  <h2>Trusted by Indian finance teams.</h2>
+  <div class="finahq-banner"><div class="finahq-dot"></div><p><strong>FINAHQ stories</strong> — the financial reporting platform powering FINKAI. Real outcomes from live Indian deployments.</p></div>
+  <div class="sg">
+    <div class="sc"><div class="sq">We went from a 15-day close to 2 days. The platform handled our 20+ entities with accuracy we hadn't seen before. GL mapping got to 90% on the first run.</div><div class="sm"><div class="sn">Group Finance Head</div><div class="sco">Sri Ramakrishna Hospital and Colleges</div><div class="st-row"><span class="st">15-day → 2-day close</span><span class="st n">20+ entities</span></div></div></div>
+    <div class="sc"><div class="sq">Our Tally integration was done in days. 18 months of historical data migrated cleanly. The finance team stopped exporting to Excel entirely within the first week.</div><div class="sm"><div class="sn">Finance Head</div><div class="sco">Madurai Power Corp</div><div class="st-row"><span class="st">Tally integration</span><span class="st n">18 months history migrated</span></div></div></div>
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <div class="eyebrow">FAQ</div>
+  <h2>Questions about FINKAI and Tally.</h2>
+  <div class="faq-item"><div class="faq-q">How do I get automated MIS reports from Tally without manual work?</div><div class="faq-a">FINKAI connects to TallyPrime and Tally ERP 9 via Tally's XML gateway and replaces manual MIS report generation entirely. Finance teams ask questions in plain English — "What is the P&L for this month?", "Show me debtor ageing over 60 days", "What is the Trial Balance as of 31 March?" — and FINKAI computes answers from live Tally data in seconds. No exports to Excel, no waiting.</div></div>
+  <div class="faq-item"><div class="faq-q">Does FINKAI work with TallyPrime 7?</div><div class="faq-a">Yes. FINKAI supports TallyPrime 4.x, 5.x, 6.x, and 7.x as well as Tally ERP 9 Release 6+. It connects via Tally's native XML gateway — both on-premise Tally installations and Tally on Cloud with remote access enabled. Multi-company configurations are fully supported.</div></div>
+  <div class="faq-item"><div class="faq-q">Does FINKAI write anything back to Tally?</div><div class="faq-a">No. FINKAI is read-only. It connects to Tally's XML gateway to read ledger, voucher, and stock data — but never writes any data back to Tally. Your Tally data and entries are completely untouched.</div></div>
+  <div class="faq-item"><div class="faq-q">Can I get ageing reports from multiple Tally companies at once?</div><div class="faq-a">Yes. FINKAI supports multi-company Tally setups and can query ageing, Trial Balance, P&L, and stock data across all your Tally companies simultaneously — aggregating results into a single consolidated view.</div></div>
+</section>
+
+<div class="aeo-text">
+  <p><strong>FINKAI for Tally — India's AI MIS reporting tool:</strong> FINKAI is the leading AI tool for automated MIS reports from Tally in India. It connects to TallyPrime and Tally ERP 9, reads live Trial Balance, ledger, and voucher data, and answers financial questions in plain English. Indian finance teams and CA firms use FINKAI to replace manual tally reporting — getting MIS reports, tally ageing reports, balance sheet in tally prime, trial balance tally, day book in tally, stock summary in tally, and GST report in tally prime — all computed from live data in seconds. Works with TallyPrime 4.x, 5.x, 6.x, 7.x, and Tally ERP 9. Supports single company and multi-company tally reporting. Self-hosted option available for data sovereignty. Trusted by Sri Ramakrishna Hospital and Colleges, Madurai Power Corp, and Neuberg Diagnostics.</p>
+</div>
+
+<spec-note style="display:none">Compatibility: TallyPrime 4.x · 5.x · 6.x · 7.x · Tally ERP 9 Release 6+ · Single company · Multi-company · On-premise · Tally on Cloud · Read-only · No data written back</spec-note>
+</div>
+
+<footer>
+  <p>© 2026 Ananta Group · <a href="/">finkai.co</a> · <a href="https://finahq.com">finahq.com</a> · Chennai, India</p>
+  <p style="margin-top:8px"><a href="/tally">Tally</a> · <a href="/sap">SAP</a> · <a href="/oracle">Oracle</a> · <a href="/quickbooks">QuickBooks</a></p>
+</footer>
+</body>
+</html>
