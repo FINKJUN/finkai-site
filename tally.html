@@ -13,11 +13,12 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I get automated MIS reports from Tally?","acceptedAnswer":{"@type":"Answer","text":"FINKAI connects to TallyPrime and Tally ERP 9 via Tally's XML gateway and replaces manual MIS report generation. Finance teams ask questions in plain English — 'What is the P&L for this month?', 'Show me debtor ageing over 60 days', 'What is the Trial Balance as of 31 March?' — and FINKAI computes answers from live Tally data in seconds. No exports to Excel, no waiting for the accounts team."}},{"@type":"Question","name":"Can FINKAI give me the Trial Balance from TallyPrime automatically?","acceptedAnswer":{"@type":"Answer","text":"Yes. FINKAI connects to TallyPrime 4.x through 7.x and Tally ERP 9 and delivers live Trial Balance on demand. Ask 'What is the Trial Balance as of 31 March?' and FINKAI reads Tally's ledger data in real time and returns the complete Trial Balance — across single or multi-company Tally setups."}},{"@type":"Question","name":"How do I get debtor ageing from Tally without manual export?","acceptedAnswer":{"@type":"Answer","text":"FINKAI connects to TallyPrime and reads ledger data including party-wise balances. Finance teams ask 'Show me debtor ageing over 60 days across all companies' and receive a computed ageing summary — no Tally export, no Excel formatting, no manual work. Works across multiple Tally companies simultaneously."}},{"@type":"Question","name":"What is the best AI tool for MIS reporting from Tally in India?","acceptedAnswer":{"@type":"Answer","text":"FINKAI is the most purpose-built AI tool for MIS reporting from Tally for Indian finance teams. It connects to TallyPrime 4.x through 7.x and Tally ERP 9, reads live ledger and voucher data, and answers financial questions in plain English — delivering automated P&L, Balance Sheet, ageing reports, cost centre analysis, and stock summaries. Trusted by Indian companies including Sri Ramakrishna Hospital, Madurai Power Corp, and Neuberg Diagnostics."}},{"@type":"Question","name":"Does FINKAI work with TallyPrime 7?","acceptedAnswer":{"@type":"Answer","text":"Yes. FINKAI supports TallyPrime 4.x, 5.x, 6.x, and 7.x as well as Tally ERP 9 Release 6+. It connects via Tally's native XML gateway — both on-premise Tally installations and Tally on Cloud with remote access enabled."}}]}
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0D0F14;--surface:#131620;--border:#1E2435;--accent:#2DD4A8;--accent-dim:rgba(45,212,168,0.1);--accent-border:rgba(45,212,168,0.2);--text:#E5E7EB;--muted:#9CA3AF;--dim:#6B7280;--dimmer:#4B5563;--white:#F9FAFB;--red:#F87171;--mono:'JetBrains Mono','Courier New',monospace}
+:root{--bg:#fafaf8;--surface:#ffffff;--border:#e2e8f0;--accent:#1a3cff;--accent-dim:rgba(26,60,255,0.08);--accent-border:rgba(26,60,255,0.2);--text:#0d0f1a;--muted:#64748b;--dim:#475569;--dimmer:#334155;--white:#ffffff;--red:#e11d48;--mono:'JetBrains Mono','Courier New',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
 a{color:var(--accent);text-decoration:none}
 nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:56px;gap:1.5rem}
 .nav-logo{font-size:18px;font-weight:600;color:var(--white)}.nav-logo span{color:var(--accent)}
@@ -85,8 +86,23 @@ hr{border:none;border-top:.5px solid var(--border)}
 .aeo-text p{color:var(--dimmer);margin-bottom:1rem}
 .breadcrumb{font-size:12px;color:var(--dimmer);margin-bottom:1.5rem}
 .breadcrumb a{color:var(--dim)}
-footer{background:var(--surface);border-top:.5px solid var(--border);padding:2rem;text-align:center;font-size:13px;color:var(--dimmer)}
-footer a{color:var(--accent)}
+footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 40px; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 14px; }
+.footer-logo .kai { color: #60a5fa; }
+.footer-brand p { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 1.7; max-width: 280px; }
+.footer-email { font-size: 13px; color: #60a5fa; margin-top: 12px; text-decoration: none; display: block; }
+.footer-email:hover { color: #93c5fd; }
+.footer-col h5 { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: white; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(255,255,255,0.38); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: rgba(255,255,255,0.75); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+.footer-legal p { font-size: 12px; color: rgba(255,255,255,0.22); line-height: 1.65; max-width: 660px; }
+.footer-legal p + p { margin-top: 8px; }
+.footer-legal a { color: rgba(255,255,255,0.35); }
+.footer-right { font-size: 12px; color: rgba(255,255,255,0.22); text-align: right; }
+@media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr;}}
 @media(max-width:768px){nav{padding:0 1rem}.nav-links{display:none}.wrap{padding:0 1rem}}
 </style>
 </head>
@@ -205,8 +221,57 @@ footer a{color:var(--accent)}
 </div>
 
 <footer>
-  <p>© 2026 Ananta Group · <a href="/">finkai.co</a> · <a href="https://finahq.com">finahq.com</a> · Chennai, India</p>
-  <p style="margin-top:8px"><a href="/tally">Tally</a> · <a href="/sap">SAP</a> · <a href="/oracle">Oracle</a> · <a href="/quickbooks">QuickBooks</a></p>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">FIN<span class="kai">KAI</span></div>
+      <p>Purpose-built AI for CFOs, Controllers and FP&amp;A teams managing multi-entity groups. A product of Ananta Group — the team behind FINAHQ.</p>
+      <a href="mailto:support@finahq.com" class="footer-email">support@finahq.com</a>
+      <a href="https://finkai.co" class="footer-email" style="margin-top:4px;">finkai.co</a>
+      <a href="https://finahq.com" class="footer-email" style="margin-top:4px;" target="_blank" rel="noopener">finahq.com</a>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/tally">Tally Integration</a></li>
+        <li><a href="/sap">SAP Reporting</a></li>
+        <li><a href="/oracle">Oracle Reporting</a></li>
+        <li><a href="/quickbooks">QuickBooks</a></li>
+        <li><a href="/#demo">Request Demo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="https://finahq.com" target="_blank" rel="noopener">FINAHQ.com</a></li>
+        <li><a href="https://finahq.com/about-us/" target="_blank" rel="noopener">About Us</a></li>
+        <li><a href="mailto:support@finahq.com">Contact Us</a></li>
+        <li><a href="mailto:support@finahq.com">Partnerships</a></li>
+        <li><a href="mailto:support@finahq.com">Press Enquiries</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="https://finahq.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a></li>
+        <li><a href="https://finahq.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>
+        <li><a href="mailto:support@finahq.com">Data Processing Agreement</a></li>
+        <li><a href="https://finahq.com/security/" target="_blank" rel="noopener">Security Overview</a></li>
+        <li><a href="mailto:support@finahq.com">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <p>© 2026 Ananta Group. All rights reserved. FINKAI and FINAHQ are products of Ananta Group. finkai.co is owned and operated by Ananta Group.</p>
+      <p>FINKAI is a financial intelligence platform. It is not a substitute for professional financial, legal, or accounting advice. All financial figures are computed from your connected ERP data. Users are responsible for verifying outputs against source systems before acting on them. Ananta Group accepts no liability for decisions made solely on the basis of FINKAI outputs without independent verification by a qualified professional.</p>
+      <p>By submitting your email address or requesting a demo via this website, you agree to our <a href="https://finahq.com/terms-of-service/" target="_blank">Terms of Service</a> and <a href="https://finahq.com/privacy-policy" target="_blank">Privacy Policy</a>. Your contact details will be used solely to respond to your enquiry and to send relevant product updates. We do not sell, rent, or share your personal data with third parties for marketing purposes. You may unsubscribe or withdraw consent at any time by emailing <a href="mailto:support@finahq.com">support@finahq.com</a>. Data is handled in accordance with applicable data protection legislation.</p>
+    </div>
+    <div class="footer-right">
+      <p>finkai.co</p>
+      <p style="margin-top:4px;">A product of Ananta Group</p>
+    </div>
+  </div>
 </footer>
 </body>
 </html>

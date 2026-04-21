@@ -305,11 +305,12 @@
 }
 </script>
 
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0D0F14;--surface:#131620;--border:#1E2435;--accent:#2DD4A8;--accent-dim:rgba(45,212,168,0.1);--accent-border:rgba(45,212,168,0.2);--text:#E5E7EB;--muted:#9CA3AF;--dim:#6B7280;--dimmer:#4B5563;--white:#F9FAFB;--red:#F87171;--mono:'JetBrains Mono','Courier New',monospace}
+:root{--bg:#fafaf8;--surface:#ffffff;--border:#e2e8f0;--accent:#1a3cff;--accent-dim:rgba(26,60,255,0.08);--accent-border:rgba(26,60,255,0.2);--text:#0d0f1a;--muted:#64748b;--dim:#475569;--dimmer:#334155;--white:#ffffff;--red:#e11d48;--mono:'JetBrains Mono','Courier New',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.6}
 a{color:var(--accent);text-decoration:none}
 
 /* NAV */
@@ -318,15 +319,15 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-fil
 .nav-links{display:flex;gap:1.5rem;margin-left:auto}
 .nav-links a{font-size:13px;color:var(--muted)}
 .nav-links a:hover{color:var(--white)}
-.nav-cta{font-size:13px;background:var(--accent);color:#0D0F14;padding:6px 16px;border-radius:6px;font-weight:500}
+.nav-cta{font-size:13px;background:var(--accent);color:#ffffff;padding:6px 16px;border-radius:6px;font-weight:500}
 
 /* LAYOUT */
 .wrap{max-width:1100px;margin:0 auto;padding:0 2rem}
 section{padding:5rem 0}
 .eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
-h1{font-size:clamp(26px,4vw,46px);font-weight:500;color:var(--white);line-height:1.2}
-h2{font-size:clamp(20px,3vw,30px);font-weight:500;color:var(--white);line-height:1.3;margin-bottom:1rem}
-h3{font-size:17px;font-weight:500;color:var(--white);margin-bottom:.5rem}
+h1{font-size:clamp(26px,4vw,46px);font-weight:700;color:var(--text);line-height:1.2;font-family:'Syne',sans-serif}
+h2{font-size:clamp(20px,3vw,30px);font-weight:700;color:var(--text);line-height:1.3;margin-bottom:1rem;font-family:'Syne',sans-serif}
+h3{font-size:17px;font-weight:600;color:var(--text);margin-bottom:.5rem;font-family:'Syne',sans-serif}
 h4{font-size:13px;font-weight:500;color:var(--accent);margin-bottom:.35rem}
 p{color:var(--muted);line-height:1.7}
 hr{border:none;border-top:.5px solid var(--border)}
@@ -337,7 +338,7 @@ hr{border:none;border-top:.5px solid var(--border)}
 .hero h1{max-width:700px;margin-bottom:1.5rem}
 .hero>p{max-width:580px;font-size:16px;margin-bottom:2rem}
 .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:3rem}
-.btn-p{background:var(--accent);color:#0D0F14;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:500;display:inline-block}
+.btn-p{background:var(--accent);color:#ffffff;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:500;display:inline-block}
 .btn-s{background:transparent;color:var(--muted);padding:12px 28px;border-radius:8px;font-size:15px;border:.5px solid var(--border);display:inline-block}
 .badge-strip{display:flex;flex-wrap:wrap;gap:8px}
 .badge{font-size:12px;padding:4px 12px;border-radius:20px;border:.5px solid var(--accent-border);color:var(--accent);background:var(--accent-dim)}
@@ -430,8 +431,35 @@ hr{border:none;border-top:.5px solid var(--border)}
 .cta-box p{max-width:500px;margin:0 auto 2rem}
 
 /* FOOTER */
-footer{background:var(--surface);border-top:.5px solid var(--border);padding:2rem;text-align:center;font-size:13px;color:var(--dimmer)}
-footer a{color:var(--accent)}
+.cta-section { background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d2040 100%); padding: 120px 48px; text-align: center; position: relative; overflow: hidden; }
+.cta-orb-1 { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.2), transparent); border-radius: 50%; top: -150px; right: -100px; filter: blur(60px); }
+.cta-orb-2 { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(13,148,136,0.15), transparent); border-radius: 50%; bottom: -100px; left: -100px; filter: blur(60px); }
+.cta-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.cta-section .eyebrow { color: #34d399; }
+.cta-section h2 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.05; color: white; margin-bottom: 18px; font-family: 'Syne', sans-serif; }
+.cta-section p { font-size: 17px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.form-note { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 14px; }
+.fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* FOOTER */
+footer { background: #060810; color: rgba(255,255,255,0.35); padding: 64px 48px 40px; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; margin-bottom: 14px; }
+.footer-logo .kai { color: #60a5fa; }
+.footer-brand p { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 1.7; max-width: 280px; }
+.footer-email { font-size: 13px; color: #60a5fa; margin-top: 12px; text-decoration: none; display: block; }
+.footer-email:hover { color: #93c5fd; }
+.footer-col h5 { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: white; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { font-size: 13px; color: rgba(255,255,255,0.38); text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: rgba(255,255,255,0.75); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+.footer-legal p { font-size: 12px; color: rgba(255,255,255,0.22); line-height: 1.65; max-width: 660px; }
+.footer-legal p + p { margin-top: 8px; }
+.footer-legal a { color: rgba(255,255,255,0.35); }
+.footer-right { font-size: 12px; color: rgba(255,255,255,0.22); text-align: right; }
+@media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr;}}
 
 /* HIDDEN AEO TEXT — visible to search crawlers, not distracting to users */
 .aeo-text{font-size:13px;color:var(--dimmer);line-height:1.8;padding:2rem 0;border-top:.5px solid var(--border);max-width:900px}
@@ -761,23 +789,151 @@ footer a{color:var(--accent)}
 </div>
 
 <!-- DEMO CTA -->
-<div class="wrap"><section id="demo">
-  <div class="cta-box">
-    <div class="eyebrow">Get started</div>
-    <h2>See FINKAI answer questions from your ERP — live.</h2>
-    <p>30 minutes. No slides. We connect to your ERP environment and show live queries returning live answers.</p>
-    <a href="https://cal.com/finkai/demo" class="btn-p" style="display:inline-block">Book a demo →</a>
-    <p style="margin-top:1.5rem;font-size:13px">Or email <a href="mailto:hello@finkai.co">hello@finkai.co</a></p>
+<section class="cta-section" id="demo">
+  <div class="cta-orb-1"></div>
+  <div class="cta-orb-2"></div>
+  <div class="cta-inner fade-in">
+    <div class="eyebrow">See It Live</div>
+    <h2>Request a Demo</h2>
+    <p>See FINKAI answer real financial queries across a multi-entity group live, with your ERP structure in mind. No slides. No fluff. Just the product.</p>
+    <div style="margin-bottom:36px;">
+      <a href="https://cal.com/arjun-parthasarathy-jscofn/finkai" target="_blank" rel="noopener" style="display:inline-block;padding:18px 40px;background:linear-gradient(135deg,#1a3cff,#7c3aed);color:white;border-radius:8px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 8px 32px rgba(26,60,255,0.4);">Book a Demo Slot Now</a>
+      <p class="form-note" style="margin-top:12px;">Pick a 30-minute slot that works for you. Calendar invite sent instantly.</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:32px;max-width:580px;margin:0 auto;">
+      <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:20px;font-weight:600;">Or leave your details and we will reach out within 1 business day.</p>
+      <form id="demo-form" style="text-align:left;">
+        <input type="hidden" name="utm_source" id="utm-source" value="website" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <input type="text" name="name" placeholder="Full Name *" required style="padding:13px 16px;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.92);color:#0d0f1a;" />
+          <input type="email" name="email" placeholder="Work Email *" required style="padding:13px 16px;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.92);color:#0d0f1a;" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <input type="text" name="company" placeholder="Company Name *" required style="padding:13px 16px;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.92);color:#0d0f1a;" />
+          <select name="role" required style="padding:13px 16px;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.92);color:#0d0f1a;cursor:pointer;">
+            <option value="" disabled selected>Your Role *</option>
+            <option value="CFO">CFO</option>
+            <option value="Controller">Controller</option>
+            <option value="VP Finance">VP Finance</option>
+            <option value="FPA Head">FPA Head</option>
+            <option value="CTO">CTO</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <select name="entities" required style="padding:13px 16px;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.92);color:#0d0f1a;cursor:pointer;">
+            <option value="" disabled selected>Number of Entities *</option>
+            <option value="1-5">1-5 entities</option>
+            <option value="6-15">6-15 entities</option>
+            <option value="16-30">16-30 entities</option>
+            <option value="30+">30+ entities</option>
+          </select>
+          <div style="padding:10px 16px;border-radius:8px;background:rgba(255,255,255,0.92);font-size:13px;color:#64748b;">
+            <div style="margin-bottom:6px;font-weight:600;color:#0d0f1a;">Primary ERP(s)</div>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:3px;color:#334155;"><input type="checkbox" name="erp" value="SAP" style="accent-color:#1a3cff;"> SAP</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:3px;color:#334155;"><input type="checkbox" name="erp" value="Oracle" style="accent-color:#1a3cff;"> Oracle</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:3px;color:#334155;"><input type="checkbox" name="erp" value="Tally" style="accent-color:#1a3cff;"> Tally</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:3px;color:#334155;"><input type="checkbox" name="erp" value="QuickBooks" style="accent-color:#1a3cff;"> QuickBooks</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-bottom:3px;color:#334155;"><input type="checkbox" name="erp" value="Dynamics" style="accent-color:#1a3cff;"> Dynamics</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:#334155;"><input type="checkbox" name="erp" value="Other" style="accent-color:#1a3cff;"> Other</label>
+          </div>
+        </div>
+        <button type="submit" id="demo-submit" style="width:100%;padding:15px;background:linear-gradient(135deg,#1a3cff,#7c3aed);color:white;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;border-radius:8px;transition:all 0.2s;letter-spacing:0.02em;">Request Demo</button>
+      </form>
+      <div id="form-success" style="display:none;margin-top:20px;padding:16px;border-radius:10px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);font-size:15px;color:#34d399;font-weight:600;">Demo request received. We will be in touch within 1 business day.</div>
+      <div id="form-error" style="display:none;margin-top:20px;padding:16px;border-radius:10px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);font-size:15px;color:#f87171;font-weight:600;">Something went wrong. Please email support@finahq.com directly.</div>
+    </div>
   </div>
-</section></div>
+</section>
 
 <footer>
-  <p>© 2026 Ananta Group · Ananta Technology Services LLP · Chennai, India</p>
-  <p style="margin-top:8px"><a href="https://finkai.co">finkai.co</a> · <a href="https://finahq.com">finahq.com</a> · Built in India 🇮🇳</p>
-  <p style="margin-top:8px"><a href="#erp">Tally integration</a> · <a href="#erp">SAP reporting</a> · <a href="#erp">Oracle reporting</a> · <a href="#erp">QuickBooks</a> · <a href="#faq">FAQ</a></p>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">FIN<span class="kai">KAI</span></div>
+      <p>Purpose-built AI for CFOs, Controllers and FP&amp;A teams managing multi-entity groups. A product of Ananta Group — the team behind FINAHQ.</p>
+      <a href="mailto:support@finahq.com" class="footer-email">support@finahq.com</a>
+      <a href="https://finkai.co" class="footer-email" style="margin-top:4px;">finkai.co</a>
+      <a href="https://finahq.com" class="footer-email" style="margin-top:4px;" target="_blank" rel="noopener">finahq.com</a>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/tally">Tally Integration</a></li>
+        <li><a href="/sap">SAP Reporting</a></li>
+        <li><a href="/oracle">Oracle Reporting</a></li>
+        <li><a href="/quickbooks">QuickBooks</a></li>
+        <li><a href="/#demo">Request Demo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="https://finahq.com" target="_blank" rel="noopener">FINAHQ.com</a></li>
+        <li><a href="https://finahq.com/about-us/" target="_blank" rel="noopener">About Us</a></li>
+        <li><a href="mailto:support@finahq.com">Contact Us</a></li>
+        <li><a href="mailto:support@finahq.com">Partnerships</a></li>
+        <li><a href="mailto:support@finahq.com">Press Enquiries</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="https://finahq.com/terms-of-service/" target="_blank" rel="noopener">Terms of Service</a></li>
+        <li><a href="https://finahq.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>
+        <li><a href="mailto:support@finahq.com">Data Processing Agreement</a></li>
+        <li><a href="https://finahq.com/security/" target="_blank" rel="noopener">Security Overview</a></li>
+        <li><a href="mailto:support@finahq.com">Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <p>© 2026 Ananta Group. All rights reserved. FINKAI and FINAHQ are products of Ananta Group. finkai.co is owned and operated by Ananta Group.</p>
+      <p>FINKAI is a financial intelligence platform. It is not a substitute for professional financial, legal, or accounting advice. All financial figures are computed from your connected ERP data. Users are responsible for verifying outputs against source systems before acting on them. Ananta Group accepts no liability for decisions made solely on the basis of FINKAI outputs without independent verification by a qualified professional.</p>
+      <p>By submitting your email address or requesting a demo via this website, you agree to our <a href="https://finahq.com/terms-of-service/" target="_blank">Terms of Service</a> and <a href="https://finahq.com/privacy-policy" target="_blank">Privacy Policy</a>. Your contact details will be used solely to respond to your enquiry and to send relevant product updates. We do not sell, rent, or share your personal data with third parties for marketing purposes. You may unsubscribe or withdraw consent at any time by emailing <a href="mailto:support@finahq.com">support@finahq.com</a>. Data is handled in accordance with applicable data protection legislation.</p>
+    </div>
+    <div class="footer-right">
+      <p>finkai.co</p>
+      <p style="margin-top:4px;">A product of Ananta Group</p>
+    </div>
+  </div>
 </footer>
 
 <script>
+
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var src = params.get('utm_source');
+  if(src){ var el = document.getElementById('utm-source'); if(el) el.value = src; }
+})();
+var demoForm = document.getElementById('demo-form');
+if(demoForm){
+  demoForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var form = this;
+    var btn = document.getElementById('demo-submit');
+    var successEl = document.getElementById('form-success');
+    var errorEl = document.getElementById('form-error');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    var erps = [];
+    form.querySelectorAll('input[name="erp"]:checked').forEach(function(cb){ erps.push(cb.value); });
+    var data = new FormData(form);
+    data.delete('erp');
+    data.append('erp_systems', erps.join(', ') || 'Not specified');
+    fetch('https://formspree.io/f/mvzvbgje', {
+      method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+    }).then(function(r){
+      if(r.ok){ form.style.display='none'; successEl.style.display='block'; errorEl.style.display='none'; }
+      else { errorEl.style.display='block'; btn.textContent='Request Demo'; btn.disabled=false; }
+    }).catch(function(){ errorEl.style.display='block'; btn.textContent='Request Demo'; btn.disabled=false; });
+  });
+}
+var obs2 = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(function(el){ obs2.observe(el); });
 function showERP(n,b){document.querySelectorAll('.erp-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.erp-tab').forEach(t=>t.classList.remove('active'));document.getElementById('erp-'+n).classList.add('active');b.classList.add('active')}
 const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.style.opacity='1';el.target.style.transform='translateY(0)'}})},{threshold:0.06});
 document.querySelectorAll('section,.aeo-text').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(18px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';obs.observe(el)});
