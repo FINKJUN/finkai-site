@@ -49,6 +49,9 @@ FINKAI-V3/
 ├── sap.html            # SAP S/4HANA reporting page
 ├── oracle.html         # Oracle Fusion reporting page
 ├── quickbooks.html     # QuickBooks Online reporting page
+├── thank-you.html      # Post-booking/form confirmation + conversion tracking page
+├── sitemap.xml         # All 5 main pages listed
+├── robots.txt          # Allow all, points to sitemap
 ├── CLAUDE.md           # This file
 ```
 
@@ -60,15 +63,23 @@ All changes are made directly to HTML files. There is no build step, no framewor
 
 ## 4. Design System
 
-### Colours
+### Colours (actual current CSS variables)
 ```css
---bg: #f5f7fa          /* page background */
---accent: #1a56db      /* primary blue */
---accent2: #7c3aed     /* secondary purple */
---red: #d93a3a
---border: #e2e8f0
---muted: #64748b
---dimmer: #94a3b8
+--bg: #f7f8fc
+--surface: #ffffff
+--surface2: #eef1f8
+--border: #d4dbe8
+--accent: #1a56db       /* primary blue */
+--accent2: #5a3fc0      /* secondary purple */
+--accent-dim: rgba(26,86,219,0.08)
+--accent-border: rgba(26,86,219,0.25)
+--text: #0d1b2a
+--muted: #4b5e76
+--dim: #9ca3af          /* updated for WCAG AA contrast */
+--dimmer: #b0bec5       /* updated for WCAG AA contrast */
+--nav: #0a1628
+--red: #d92b3a
+--green: #0a7c59
 ```
 
 ### Fink UI (mockup screens) — critical for consistency
@@ -85,7 +96,7 @@ chrome bar: #2a2a2a
 - `.fink-chrome` — dark top bar with traffic light dots
 - `.fink-app` — flex row container (sidebar + content)
 - `.fink-nav` — top nav bar inside app
-- `.fink-sidebar` — left nav with `.fink-si` items, `.fink-si.act` for active
+- `.fink-sidebar` — left nav with `.fink-si` items, `.fink-si.act` for active (hidden on mobile)
 - `.fink-content` — main content area
 - `.ft` — Fink table (white bg, `#f9f4ed` header)
 - `.fbadge.sap` / `.fbadge.ora` / `.fbadge.tal` / `.fbadge.qbo` — ERP colour badges
@@ -111,7 +122,26 @@ fkClose('fk-[name]-overlay') // closes overlay
 fkBgClose(event, 'fk-[name]-overlay') // close on background click
 ```
 Modal HTML: `.fk-overlay#fk-[name]-overlay > .fk-modal#fk-[name]-modal`
+All overlays have `role="dialog" aria-modal="true" aria-label="[name]"`.
 ESC key closes all open modals automatically.
+
+### Mobile nav (hamburger)
+All 6 pages have a hamburger nav for mobile (≤768px).
+```html
+<button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-links" id="nav-links">...</div>
+```
+JS toggles `.mob-open` on `#nav-links`. Closes on any link click.
+Nav links are hidden on mobile by default; burger is hidden on desktop.
+
+### Fade-in animation (CSS-class based — not inline style)
+Sections animate in on scroll via IntersectionObserver. Content is **visible by default** — JS adds `.anim-ready` (opacity:0) then `.anim-done` (opacity:1) on scroll. If JS fails, content stays visible.
+```css
+.anim-ready { opacity:0; transform:translateY(16px); transition: ... }
+.anim-ready.anim-done { opacity:1; transform:none }
+```
 
 ---
 
@@ -141,11 +171,11 @@ Always say:
 - ✅ "Uses AI to understand the question, then computes the answer from live ERP data"
 
 ### Banned names / content
-- ❌ **Madurai Power Corp** — must never appear anywhere
+- ❌ **Madurai Power Corp** — must never appear anywhere (removed from tally.html testimonial, AEO text, and schema)
 - ❌ **SPI** or **SPI Group** — must never appear anywhere
 - ❌ **RJ Narayanan** — not part of FINKAI
 - ❌ "Series A", funding stage, valuation — not confirmed, do not include
-- ❌ "by FINAHQ" next to FINKAI name
+- ❌ "by FINAHQ" next to FINKAI name (was on all sub-pages, now removed)
 
 ---
 
@@ -186,66 +216,158 @@ When adding new mockup data, always verify arithmetic before committing.
 
 ## 7. Forms & Email Routing
 
-All forms use **Netlify Forms** (`data-netlify="true"`). No backend required.
+**Two separate form systems are in use — do not confuse them.**
 
-| Form | `name` attribute | Email notification |
+### Demo request form (CTA section in index.html)
+- Submits via `fetch()` POST to **Formspree** (`https://formspree.io/f/mvzvbgje`)
+- On success: redirects to `/thank-you` (triggers Google Ads conversion)
+- On error: shows inline `#form-error` div
+- Email notification goes to arjun@finahq.com via Formspree dashboard
+
+### Modal forms (press, partnership, contact, demo modal)
+- Use `fkSubmitForm(formId, successId)` helper function
+- Submit to **Netlify Forms** via fetch POST to `/`
+- On success: shows inline success div (no redirect — these are not conversion events)
+- Email routing configured in Netlify dashboard → Site → Forms → Form notifications
+
+| Form | System | Redirect |
 |---|---|---|
-| Demo request | `demo-request` | arjun@finahq.com (via Netlify dashboard) |
-| Press enquiry | `press-enquiry` | arjun@finahq.com |
-| Partnership enquiry | `partnership-enquiry` | arjun@finahq.com |
-| Contact | `contact` | arjun@finahq.com |
-
-**Email routing is configured in Netlify dashboard** (not in code):
-Netlify → Site → Forms → [form name] → Form notifications → Email notification
-
-Forms submit via `fetch()` POST to `/`. The hidden `form-name` field is required by Netlify.
+| Main demo form (`#demo-form`) | Formspree `mvzvbgje` | `/thank-you` |
+| Demo modal form (`fk-demo-form`) | Netlify Forms | Inline success |
+| Press enquiry (`fk-press-form`) | Netlify Forms | Inline success |
+| Partnership (`fk-partner-form`) | Netlify Forms | Inline success |
+| Contact (`fk-contact-form`) | Netlify Forms | Inline success |
 
 ---
 
-## 8. Modals on the Site
+## 8. Cal.com Integration
+
+Cal.com booking link: `https://cal.com/arjun-parthasarathy-jscofn/finkai`
+
+**Both Cal.com buttons use popup embed (NOT direct links):**
+```javascript
+function openCalPopup(){
+  Cal("modal", {calLink: "arjun-parthasarathy-jscofn/finkai", config: {layout:"month_view"}});
+}
+```
+The Cal.com embed JS is loaded at the bottom of `</body>` in index.html.
+`bookingSuccessful` event fires → `window.location.href = "/thank-you"`.
+
+**Why popup not link:** Cal.com's redirect-on-booking is a paid feature. The embed's `bookingSuccessful` JS callback achieves the same result for free.
+
+---
+
+## 9. Modals on the Site
 
 | Modal ID | Trigger | Purpose |
 |---|---|---|
-| `fk-demo-modal` | Nav CTA, hero button, floating FAB | Book a demo form |
+| `fk-demo-modal` | Nav CTA, hero button, floating FAB | Book a demo form (Netlify) |
 | `fk-about-modal` | Footer "About Us" | About FINKAI + legal entity notice |
-| `fk-contact-modal` | Footer "Contact Us" | General contact form |
-| `fk-press-modal` | Footer "Press Enquiries" | Press/media contact |
-| `fk-partner-modal` | Footer "Partnerships" | Partnership enquiry |
+| `fk-contact-modal` | Footer "Contact Us" | General contact form (Netlify) |
+| `fk-press-modal` | Footer "Press Enquiries" | Press/media contact (Netlify) |
+| `fk-partner-modal` | Footer "Partnerships" | Partnership enquiry (Netlify) |
 | `fk-privacy-modal` | Footer + cookie banner | Privacy Policy |
 | `fk-terms-modal` | Footer | Terms of Service |
 | `fk-cookie-policy-modal` | Footer + cookie banner | Cookie Policy |
 | `fk-security-modal` | Footer | Security Overview |
 
-Cookie consent banner: `#fk-cookie` — slides up after 1.2s on first visit, state saved to `localStorage('fk_cookie')`.
+Cookie consent banner: `#fk-cookie` — slides up after 1.2s on first visit.
+State saved to `localStorage('fk_cookie')` — value is `'accepted'` or `'declined'`.
 
 ---
 
-## 9. Sections in index.html (in order)
+## 10. Google Ads & Conversion Tracking
 
-1. `<head>` — meta, schema JSON-LD, Google Fonts, all CSS
-2. `<nav>` — logo + nav links + "Book a demo" CTA
-3. Hero — headline, subtext, badges, hero mockup carousel
-4. Logo strip — Ananta Group customer logos + disclaimer
-5. ERP tabs — Tally / SAP / Oracle / QBO carousels with mockups
-6. `#how` — How it works (4 steps: Connect, Structure, Ask, Automate)
-7. Stats row — 15→2 days, 50+ entities, 90% GL mapping, <3s, 18 mo
-8. `#roles` — CFO / Controller / FP&A / CTO role cards
-9. Platform capabilities — 7-slide carousel (common size P&L, data availability, entity dashboard, COA mapping, alerts, saved queries, KPI store)
-10. `<!-- DETERMINISM -->` — 3 determinism cards
-11. `#stories` — customer testimonials carousel
-12. Comparison table — FINKAI vs ChatGPT vs Excel
-13. AEO content — crawlable keyword-rich prose (subtle styling)
-14. `#demo` CTA section — cal.com link + demo form
-15. `<footer>` — logo, nav links, legal disclaimer, entity notice
-16. Modals — all modal HTML (injected before `</body>`)
-17. Scripts — carousel JS, modal JS, form submission JS, cookie JS
+### Tag installed on all 6 pages
+- **Tag ID:** `AW-16517553915`
+- Loaded with **Consent Mode v2** — all consent signals default to `denied`
+- Consent updated to `granted` when user clicks Accept on cookie banner
+- Returning visitors who previously accepted have consent restored on page load
+
+### Head structure (order matters)
+```html
+<!-- 1. GCLID capture — must be first -->
+<script>(function(){ var g=new URLSearchParams(location.search).get('gclid'); if(g) localStorage.setItem('fk_gclid',g); })()</script>
+
+<!-- 2. Consent default — before gtag.js loads -->
+<script>
+  window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
+</script>
+
+<!-- 3. gtag.js -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16517553915"></script>
+<script>gtag('js',new Date()); gtag('config','AW-16517553915');</script>
+```
+
+### Conversion tracking flow
+1. User books via Cal.com popup → `bookingSuccessful` → redirect `/thank-you`
+2. User submits Formspree form → fetch success → redirect `/thank-you`
+3. `/thank-you` loads → Google Ads tag fires
+4. **Conversion event snippet placeholder** is in `thank-you.html` `<head>` — paste the `gtag('event','conversion',{send_to:'AW-16517553915/XXXXXXXXXX'})` snippet there once created in Google Ads
+
+### GCLID storage
+- All pages capture `?gclid=` from URL → `localStorage.fk_gclid`
+- To verify: visit `finkai.co/thank-you?gclid=TEST123` → DevTools → Application → Local Storage → `fk_gclid = TEST123`
 
 ---
 
-## 10. How to Make Incremental Changes
+## 11. Sections in index.html (in order)
+
+1. `<head>` — GCLID capture, consent default, Google tag, meta, schema JSON-LD, Google Fonts (non-blocking, media=print), all CSS
+2. `<nav>` — logo + hamburger (mobile) + nav links + "Book a demo" CTA
+3. `<main>` — wraps everything below nav and above footer (accessibility landmark)
+4. Hero — headline, subtext, badges, hero mockup carousel
+5. Logo strip — Ananta Group customer logos + disclaimer
+6. ERP tabs — Tally / SAP / Oracle / QBO carousels with mockups
+7. `#how` — How it works (4 steps: Connect, Structure, Ask, Automate)
+8. Stats row — 15→2 days, 50+ entities, 90% GL mapping, <3s, 18 mo
+9. `#roles` — CFO / Controller / FP&A / CTO role cards
+10. Platform capabilities — 7-slide carousel
+11. Determinism cards — 3 cards
+12. `#stories` — customer testimonials carousel
+13. Comparison table — wrapped in `.cmp-scroll` div for mobile horizontal scroll
+14. AEO content — crawlable keyword-rich prose
+15. `#demo` — Cal.com popup button + Formspree form (both redirect to /thank-you)
+16. `</main>`
+17. `<footer>` — logo, nav links, legal disclaimer, entity notice
+18. Modals — all modal HTML before `</body>`
+19. Scripts — carousel JS, modal JS, form JS, cookie JS, hamburger JS, Cal.com embed JS
+
+---
+
+## 12. Performance & Accessibility State
+
+### Google Fonts (all pages)
+Non-blocking pattern — prevents render-blocking on mobile:
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="[fonts url]&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="[fonts url]" rel="stylesheet"></noscript>
+```
+
+### Mobile breakpoints (all pages)
+- `@media(max-width:768px)` — hamburger nav, section padding 3-3.5rem, single-col footer, ERP tabs scroll
+- `@media(max-width:480px)` — further padding reduction
+- `.fink-sidebar` hidden on mobile (mockup sidebar takes too much space)
+
+### Accessibility (Lighthouse target 95+)
+- All close buttons: `aria-label="Close"`
+- All modal overlays: `role="dialog" aria-modal="true" aria-label="[name]"`
+- All carousel prev/next: `aria-label="Previous"` / `aria-label="Next"`
+- FAB: `aria-label="Book a demo with FINKAI"`
+- ERP tabs: `aria-label="Show [ERP] integration"`
+- `<main>` landmark on all pages
+- Contrast: `--dim:#9ca3af`, `--dimmer:#b0bec5` (WCAG AA compliant)
+- Links: `a:hover{text-decoration:underline}` + `a:focus-visible{outline:2px solid var(--accent)}`
+
+---
+
+## 13. How to Make Incremental Changes
 
 ### Adding a new section
-Find the right insertion point using the section order above. Use Python scripts for large injections to avoid Edit tool character limits.
+Find the right insertion point using the section order in §11. Use Python scripts for large injections to avoid editor character limits.
 
 ### Replacing a mockup
 Use the `replace_mockup(content, label, new_html)` pattern:
@@ -269,23 +391,23 @@ def replace_mockup(content, label, new_html):
 python script.py   # NOT python3
 ```
 
-### Checking for broken links before committing
+### Checking for banned content before committing
 ```bash
-grep -oh 'href="[^"]*"' index.html | sort -u
+grep -ri "madurai\|SPI Group\|by FINAHQ\|RJ Narayanan\|Series A" *.html
 ```
 
 ### Committing
 ```bash
-git add index.html  # stage specific files, not git add -A
+git add index.html          # stage specific files, not git add -A
 git commit -m "Description"
 git push origin master
 ```
 
 ---
 
-## 11. What to Always Verify Before Committing
+## 14. What to Always Verify Before Committing
 
-- [ ] No "Madurai Power Corp" anywhere
+- [ ] No "Madurai Power Corp" anywhere (`grep -ri "madurai" *.html`)
 - [ ] No "SPI" or "SPI Group" anywhere
 - [ ] No "by FINAHQ" next to FINKAI name
 - [ ] No "Not a language model" — use accurate AI framing
@@ -295,12 +417,17 @@ git push origin master
 - [ ] All mockup arithmetic is correct
 - [ ] All new modal IDs have matching overlay IDs
 - [ ] All fkOpen() calls reference an existing modal ID
+- [ ] Google tag present in `<head>` of any new page added
+- [ ] GCLID capture script present in `<head>` of any new page added
+- [ ] New pages have hamburger nav + mobile CSS
 
 ---
 
-## 12. Pending / Future Work
+## 15. Pending / Future Work
 
-- [ ] ERP sub-pages (tally.html, sap.html, oracle.html, quickbooks.html) — need same Fink-style mockup redesign and language cleanup as index.html
-- [ ] Budget builder section — deliberately excluded this session, revisit when ready
-- [ ] Analytics — no analytics currently installed; consider adding when ready
-- [ ] Data Processing Agreement — currently routes to email, may need own modal
+- [ ] **Google Ads conversion snippet** — create conversion action in Google Ads → paste `gtag('event','conversion',{send_to:'AW-16517553915/XXXXXXXXXX'})` into the placeholder comment in `thank-you.html`
+- [ ] **ERP sub-pages** (tally.html, sap.html, oracle.html, quickbooks.html) — need same Fink-style mockup redesign and deeper content as index.html
+- [ ] **Budget builder section** — deliberately excluded, revisit when ready
+- [ ] **Analytics** — no analytics (GA4 etc.) currently installed; add when ready, gate behind cookie consent
+- [ ] **Data Processing Agreement** — currently routes to email, may need own modal
+- [ ] **sitemap.xml** — add `thank-you.html`? No — it's noindex, leave it out
