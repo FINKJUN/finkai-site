@@ -719,6 +719,26 @@ footer { background: #0a1628; color: rgba(255,255,255,0.8); padding: 72px 48px 4
   .dim-grid{grid-template-columns:1fr 1fr}
 }
 </style>
+
+<!-- Google tag (gtag.js) — Consent Mode v2: denied by default, granted on Accept -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16517553915"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16517553915');
+</script>
 </head>
 <body>
 
@@ -2615,14 +2635,31 @@ fkSubmitForm('fk-press-form',   'fk-press-success');
 fkSubmitForm('fk-partner-form', 'fk-partner-success');
 fkSubmitForm('fk-contact-form', 'fk-contact-success');
 
-// Cookie banner
+// Cookie banner + Google Consent Mode v2
 function fkCookieSet(val){
   try{localStorage.setItem('fk_cookie',val);}catch(e){}
   document.getElementById('fk-cookie').classList.remove('show');
+  if(typeof gtag==='function'){
+    var granted=val==='accepted'?'granted':'denied';
+    gtag('consent','update',{
+      'ad_storage':granted,
+      'ad_user_data':granted,
+      'ad_personalization':granted,
+      'analytics_storage':granted
+    });
+  }
 }
 (function(){
   var v;
   try{v=localStorage.getItem('fk_cookie');}catch(e){}
+  if(v==='accepted'&&typeof gtag==='function'){
+    gtag('consent','update',{
+      'ad_storage':'granted',
+      'ad_user_data':'granted',
+      'ad_personalization':'granted',
+      'analytics_storage':'granted'
+    });
+  }
   if(!v){setTimeout(function(){document.getElementById('fk-cookie').classList.add('show');},1200);}
 })();
 </script>
