@@ -2218,7 +2218,7 @@ if(demoForm){
     fetch('https://formspree.io/f/mvzvbgje', {
       method: 'POST', body: data, headers: { 'Accept': 'application/json' }
     }).then(function(r){
-      if(r.ok){ form.style.display='none'; successEl.style.display='block'; errorEl.style.display='none'; }
+      if(r.ok){ window.location.href = '/thank-you'; }
       else { errorEl.style.display='block'; btn.textContent='Request Demo'; btn.disabled=false; }
     }).catch(function(){ errorEl.style.display='block'; btn.textContent='Request Demo'; btn.disabled=false; });
   });
