@@ -506,5 +506,18 @@ function mcPrev(id){mcNav(id,-1);}
   });
 })();
 </script>
+<script>
+(function(){
+  var slug=(location.pathname.replace(/^\/|\.html?$|\/$/g,'').split('/').pop()||'home');
+  var erp=slug==='quickbooks'?'qbo':slug;
+  document.querySelectorAll('a[href*="index.html#demo"]').forEach(function(a){
+    a.addEventListener('click',function(){
+      if(typeof gtag==='function'){
+        gtag('event','cta_book_demo_clicked',{event_category:'demo_booking',erp_source:erp});
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>

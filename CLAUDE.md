@@ -317,6 +317,28 @@ State saved to `localStorage('fk_cookie')` — value is `'accepted'` or `'declin
 - All pages capture `?gclid=` from URL → `localStorage.fk_gclid`
 - To verify: visit `finkai.co/thank-you?gclid=TEST123` → DevTools → Application → Local Storage → `fk_gclid = TEST123`
 
+### GA4 custom events fired by the site
+
+All events are guarded with `if(typeof gtag==='function')` so they fail silently if gtag isn't loaded.
+
+| Event name | Where it fires | File:line | Parameters |
+|---|---|---|---|
+| `cal_booking_completed` | Cal.com popup `bookingSuccessful` callback (before redirect to `/thank-you`) | `index.html` ~2697 | `event_category:demo_booking, event_label:cal.com` |
+| `demo_form_submitted` | Inline Formspree demo form success (before redirect) | `index.html` ~2222 | `event_category:demo_booking, event_label:formspree, erp_systems:<csv of selected ERPs>` |
+| `netlify_form_submitted` | Any modal Netlify form success (demo modal, press, partner, contact) | `index.html` `fkSubmitForm` | `event_category:engagement, form_id:<form id>` |
+| `erp_tab_clicked` | ERP tab click on homepage carousel | `index.html` `showERP` | `event_category:engagement, erp_system:<tally\|sap\|oracle\|qbo>` |
+| `cta_book_demo_clicked` | Click on any "Book a demo" link on an ERP sub-page (links to `index.html#demo`) | `tally.html` / `sap.html` / `oracle.html` / `quickbooks.html` end-of-body | `event_category:demo_booking, erp_source:<tally\|sap\|oracle\|qbo>` |
+| `modal_opened` | Any `fkOpen()` call (demo, about, contact, press, partner, privacy, terms, cookie, security) | `index.html` `fkOpen` | `event_category:engagement, modal_id:<overlay id>` |
+| `cookie_accepted` / `cookie_declined` | User clicks Accept or Decline on cookie banner | `index.html` `fkCookieSet` | `event_category:consent` |
+
+**Convention:** `erp_system` (homepage tabs) and `erp_source` (sub-page CTAs) both use the same value set: `tally`, `sap`, `oracle`, `qbo`. The quickbooks.html page normalizes its slug from `quickbooks` → `qbo` so reports can group across both.
+
+**To mark an event as a key event (conversion) in GA4:**
+GA4 Admin → Events → toggle "Mark as key event" on `cal_booking_completed` and `demo_form_submitted`.
+
+**To verify events fire:**
+GA4 → Reports → Realtime → "Event count by event name" — interact with the live site and confirm events appear within ~30s.
+
 ---
 
 ## 11. Sections in index.html (in order)
