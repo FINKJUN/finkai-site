@@ -278,11 +278,14 @@ State saved to `localStorage('fk_cookie')` — value is `'accepted'` or `'declin
 
 ## 10. Google Ads & Conversion Tracking
 
-### Tag installed on all 6 pages
-- **Tag ID:** `AW-16517553915`
+### Tags installed on all 6 pages
+- **Google Ads Tag ID:** `AW-16517553915`
+- **GA4 Measurement ID:** `G-4M411B9D1H` (Stream ID `14602254139`, stream name "finkai")
+- Both configured via the same `gtag.js` library (single script load, two `gtag('config', ...)` calls)
 - Loaded with **Consent Mode v2** — all consent signals default to `denied`
 - Consent updated to `granted` when user clicks Accept on cookie banner
 - Returning visitors who previously accepted have consent restored on page load
+- GA4 Enhanced Measurement is ON (auto-tracks page views, scrolls, outbound clicks, site search, video engagement, file downloads, form interactions)
 
 ### Head structure (order matters)
 ```html
@@ -297,7 +300,11 @@ State saved to `localStorage('fk_cookie')` — value is `'accepted'` or `'declin
 
 <!-- 3. gtag.js -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16517553915"></script>
-<script>gtag('js',new Date()); gtag('config','AW-16517553915');</script>
+<script>
+  gtag('js',new Date());
+  gtag('config','AW-16517553915');
+  gtag('config','G-4M411B9D1H');
+</script>
 ```
 
 ### Conversion tracking flow
@@ -428,6 +435,6 @@ git push origin master
 - [ ] **Google Ads conversion snippet** — create conversion action in Google Ads → paste `gtag('event','conversion',{send_to:'AW-16517553915/XXXXXXXXXX'})` into the placeholder comment in `thank-you.html`
 - [ ] **ERP sub-pages** (tally.html, sap.html, oracle.html, quickbooks.html) — need same Fink-style mockup redesign and deeper content as index.html
 - [ ] **Budget builder section** — deliberately excluded, revisit when ready
-- [ ] **Analytics** — no analytics (GA4 etc.) currently installed; add when ready, gate behind cookie consent
+- [x] **Analytics** — GA4 (`G-4M411B9D1H`) installed on all 6 pages on 2026-04-28, gated behind Consent Mode v2 (analytics_storage denied by default, granted on cookie Accept)
 - [ ] **Data Processing Agreement** — currently routes to email, may need own modal
 - [ ] **sitemap.xml** — add `thank-you.html`? No — it's noindex, leave it out
