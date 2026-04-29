@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Ask FINK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-card: #fbf8f0;
+  --bg-elev: #ffffff;
+  --ink: #1a1612;
+  --ink-2: #4a4036;
+  --ink-3: #8a7f6e;
+  --rule: #d9cfb8;
+  --rule-soft: #e8dfc9;
+  --accent: #7a1f1f;
+  --gold: #b8862b;
+  --positive: #0e4429;
+  --negative: #7a1f1f;
+  --warn: #8a5a00;
+  --ai-bg: #1a1612;
+  --ai-ink: #f5f1e8;
+  --ai-accent: #d4a94a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  grid-template-rows: 56px 1fr;
+}
+/* TOPBAR */
+.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg-card);
+  gap: 28px;
+}
+.brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.brand .dot { color: var(--accent); }
+.brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  padding-left: 12px;
+  margin-left: 4px;
+  border-left: 1px solid var(--rule);
+}
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tab {
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--ink-2);
+  border-radius: 2px;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: none;
+}
+.tab:hover { background: var(--rule-soft); }
+.tab.active { background: var(--ink); color: var(--bg); }
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 10px 5px 5px;
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  background: var(--bg-elev);
+  font-size: 11px;
+}
+.avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: white;
+  display: grid; place-items: center;
+  font-weight: 600;
+  font-size: 10px;
+}
+
+/* SIDEBAR — left */
+.sidebar {
+  border-right: 1px solid var(--rule);
+  background: var(--bg-card);
+  overflow-y: auto;
+  padding: 16px 0;
+}
+.side-section { padding: 0 16px 14px; }
+.side-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.side-title .add {
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--ink-3);
+}
+.side-title .add:hover { color: var(--accent); }
+.conv-item {
+  padding: 7px 10px;
+  font-size: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--ink-2);
+  margin-bottom: 1px;
+}
+.conv-item:hover { background: var(--rule-soft); }
+.conv-item.active {
+  background: var(--ink);
+  color: var(--bg);
+}
+.conv-item .ago {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  margin-left: 8px;
+}
+.conv-item.active .ago { color: rgba(245,241,232,0.6); }
+
+.entity-pill-list { display: flex; flex-direction: column; gap: 4px; }
+.epill {
+  padding: 7px 10px;
+  font-size: 11px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.epill input { margin: 0; accent-color: var(--accent); }
+.epill .flag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  margin-left: auto;
+}
+
+/* MAIN — chat */
+.main {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.main-head {
+  padding: 18px 28px 14px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.main-head h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.main-head .badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+.main-head .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-left: auto;
+  letter-spacing: 0.04em;
+}
+.live-dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--positive);
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: live 2.2s ease-in-out infinite;
+}
+@keyframes live {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.chat-stream {
+  flex: 1;
+  padding: 24px 28px 12px;
+  overflow-y: auto;
+}
+.msg { margin-bottom: 22px; max-width: 760px; }
+.msg-user { margin-left: auto; }
+.msg-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  margin-bottom: 5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.msg-user .msg-meta { justify-content: flex-end; }
+.msg-bubble {
+  padding: 14px 18px;
+  border-radius: 2px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+}
+.msg-user .msg-bubble {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.msg-ai .msg-bubble {
+  background: var(--bg-elev);
+}
+.msg-bubble p { margin-bottom: 10px; }
+.msg-bubble p:last-child { margin-bottom: 0; }
+
+.tool-call {
+  margin: 10px 0;
+  padding: 10px 14px;
+  background: rgba(26,22,18,0.04);
+  border: 1px dashed var(--rule);
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tool-call .tool-icon {
+  width: 16px; height: 16px;
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid; place-items: center;
+  font-weight: 700;
+  font-size: 10px;
+}
+.tool-call .tool-name { font-weight: 600; color: var(--ink); }
+.tool-call .tool-time { margin-left: auto; color: var(--ink-3); font-size: 10px; }
+.tool-call.done .tool-icon { background: var(--positive); }
+
+.result-table {
+  margin: 12px 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+}
+.result-table th, .result-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.result-table th {
+  background: var(--bg-card);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.result-table td.num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  text-align: right;
+}
+.result-table tr.tot { background: var(--rule-soft); font-weight: 700; }
+.result-table tr.tot td { border-bottom-color: var(--ink); }
+.result-table tr.subtot { background: rgba(184,134,43,0.08); font-weight: 600; }
+.result-table .pos { color: var(--positive); }
+.result-table .neg { color: var(--negative); }
+
+/* Waterfall (EBITDA bridge) */
+.waterfall {
+  margin: 14px 0;
+  padding: 18px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.wf-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+.wf-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  align-items: end;
+  height: 180px;
+}
+.wf-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.wf-fill {
+  width: 100%;
+  border-radius: 1px;
+  position: relative;
+}
+.wf-bar .label {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10px;
+  text-align: center;
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-weight: 500;
+  line-height: 1.25;
+}
+.wf-bar .val {
+  position: absolute;
+  top: -18px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.wf-bar.start .wf-fill { background: var(--ink); }
+.wf-bar.add .wf-fill { background: var(--positive); }
+.wf-bar.sub .wf-fill { background: var(--negative); }
+.wf-bar.total .wf-fill { background: var(--gold); }
+
+.cite {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  background: var(--rule-soft);
+  color: var(--ink-2);
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-left: 4px;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  font-weight: 600;
+}
+.cite:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.suggested {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.suggested .chip {
+  padding: 7px 12px;
+  border: 1px solid var(--rule);
+  background: var(--bg-elev);
+  border-radius: 100px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+.suggested .chip:hover { border-color: var(--ink-2); color: var(--ink); }
+
+.composer {
+  border-top: 1px solid var(--rule);
+  padding: 16px 28px 22px;
+  background: var(--bg-card);
+}
+.composer-bar {
+  background: var(--ai-bg);
+  border-radius: 2px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--ai-accent);
+}
+.composer-bar .orb {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--ai-accent);
+  box-shadow: 0 0 0 4px rgba(212,169,74,0.2);
+  flex-shrink: 0;
+}
+.composer-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--ai-ink);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+.composer-bar input::placeholder { color: rgba(245,241,232,0.5); }
+.composer-bar .send {
+  background: var(--ai-accent);
+  color: var(--ai-bg);
+  border: none;
+  border-radius: 2px;
+  padding: 7px 12px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.composer-foot {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  margin-top: 8px;
+  display: flex;
+  gap: 16px;
+}
+
+/* RIGHT PANEL — context */
+.context {
+  border-left: 1px solid var(--rule);
+  background: var(--bg-card);
+  padding: 18px 18px;
+  overflow-y: auto;
+}
+.ctx-section { margin-bottom: 22px; }
+.ctx-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.ctx-row {
+  font-size: 12px;
+  padding: 6px 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.ctx-row:last-child { border-bottom: none; }
+.ctx-row .k { color: var(--ink-3); }
+.ctx-row .v { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--ink); }
+.activity-item {
+  font-size: 11px;
+  padding: 7px 0;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-item .t {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+  width: 38px;
+  flex-shrink: 0;
+}
+.activity-item.tool .ico { color: var(--gold); }
+.activity-item.user .ico { color: var(--accent); }
+
+.tag-mini {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  color: var(--ink-2);
+}
+
+@media (max-width: 1100px) {
+  body { grid-template-columns: 200px 1fr; }
+  .context { display: none; }
+}
+@media (max-width: 760px) {
+  body { grid-template-columns: 1fr; grid-template-rows: 56px auto 1fr; }
+  .sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">FINK<span class="dot">.</span></div>
+  <div class="brand-sub">Sundaram Steels Group</div>
+  <nav class="tabs">
+    <a class="tab" href="dashboard.html">Dashboard</a>
+    <a class="tab active" href="chat.html">Ask FINK</a>
+    <a class="tab" href="variance.html">Variance</a>
+    <a class="tab" href="pnl.html">Reports</a>
+    <a class="tab" href="consolidation.html">Consolidation</a>
+    <a class="tab" href="admin.html">Admin</a>
+  </nav>
+  <div class="user-chip"><span class="avatar">RP</span><span>Rohan Parthasarathy</span></div>
+</header>
+
+<aside class="sidebar">
+  <div class="side-section">
+    <div class="side-title">Conversations<span class="add">+</span></div>
+    <div class="conv-item active">EBITDA Q1 FY26<span class="ago">now</span></div>
+    <div class="conv-item">Receivables aging by entity<span class="ago">2h</span></div>
+    <div class="conv-item">FX exposure — UAE FZE<span class="ago">yest</span></div>
+    <div class="conv-item">Why did opex jump in Aug?<span class="ago">3d</span></div>
+    <div class="conv-item">Quarterly board pack<span class="ago">5d</span></div>
+    <div class="conv-item">GST input credit reconciliation<span class="ago">1w</span></div>
+  </div>
+
+  <div class="side-section">
+    <div class="side-title">Entities in scope</div>
+    <div class="entity-pill-list">
+      <label class="epill"><input type="checkbox" checked /> Sundaram Steels<span class="flag">IN</span></label>
+      <label class="epill"><input type="checkbox" checked /> Sundaram Alloys<span class="flag">IN</span></label>
+      <label class="epill"><input type="checkbox" checked /> Sundaram Logistics<span class="flag">IN</span></label>
+      <label class="epill"><input type="checkbox" checked /> Sundaram Trading FZE<span class="flag">AE</span></label>
+    </div>
+  </div>
+
+  <div class="side-section">
+    <div class="side-title">Period</div>
+    <div class="ctx-row" style="border:none;padding:4px 0"><span class="k">FY</span><span class="v">2025-26</span></div>
+    <div class="ctx-row" style="border:none;padding:4px 0"><span class="k">Quarter</span><span class="v">Q1 (Apr–Jun)</span></div>
+    <div class="ctx-row" style="border:none;padding:4px 0"><span class="k">Currency</span><span class="v">INR</span></div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="main-head">
+    <h1>EBITDA Q1 FY26</h1>
+    <span class="badge">Live · Tally + QBO</span>
+    <span class="meta"><span class="live-dot"></span>4 entities · 1,28,492 vouchers indexed</span>
+  </div>
+
+  <div class="chat-stream" id="stream">
+
+    <div class="msg msg-user">
+      <div class="msg-meta">Rohan · 09:42 IST</div>
+      <div class="msg-bubble">What's our EBITDA for Q1 FY26 across the group? Show me the bridge from PAT.</div>
+    </div>
+
+    <div class="msg msg-ai">
+      <div class="msg-meta">FINK · understanding</div>
+      <div class="msg-bubble">
+        <p>I'll pull Q1 FY26 P&amp;L for all four group entities and reconstruct EBITDA from PAT by adding back tax, finance costs, and depreciation.</p>
+
+        <div class="tool-call done"><span class="tool-icon">✓</span><span class="tool-name">get_profit_and_loss</span><span style="color:var(--ink-3)">period=Q1 FY26 · entities=all_4 · level=l3</span><span class="tool-time">320ms</span></div>
+        <div class="tool-call done"><span class="tool-icon">✓</span><span class="tool-name">compute_expressions</span><span style="color:var(--ink-3)">EBITDA = PAT + Tax + Interest + D&amp;A</span><span class="tool-time">12ms</span></div>
+
+        <p style="margin-top:14px"><strong>Q1 FY26 EBITDA: ₹14.62 Cr</strong> (margin 24.4%)<a class="cite" title="Click to inspect tool call">▦ tool</a></p>
+
+        <div class="waterfall">
+          <div class="wf-title"><span>EBITDA bridge — Q1 FY26 (₹ Cr, group consolidated)</span><span>Source: 4 entity TBs</span></div>
+          <div class="wf-bars">
+            <div class="wf-bar start"><div class="val">8.21</div><div class="wf-fill" style="height:60%"></div><div class="label">PAT</div></div>
+            <div class="wf-bar add"><div class="val">+2.46</div><div class="wf-fill" style="height:18%"></div><div class="label">+ Tax</div></div>
+            <div class="wf-bar add"><div class="val">+1.18</div><div class="wf-fill" style="height:9%"></div><div class="label">+ Finance cost</div></div>
+            <div class="wf-bar add"><div class="val">+2.77</div><div class="wf-fill" style="height:20%"></div><div class="label">+ D&amp;A</div></div>
+            <div class="wf-bar total"><div class="val">14.62</div><div class="wf-fill" style="height:100%"></div><div class="label">EBITDA</div></div>
+            <div class="wf-bar sub"><div class="val">−4.50</div><div class="wf-fill" style="height:32%"></div><div class="label">(prev Q4)</div></div>
+            <div class="wf-bar add"><div class="val">+10.12</div><div class="wf-fill" style="height:74%"></div><div class="label">Δ vs Q4</div></div>
+          </div>
+        </div>
+
+        <p style="margin-top:14px"><strong>What's driving the growth:</strong></p>
+        <table class="result-table">
+          <thead><tr><th>Line</th><th style="text-align:right">Q1 FY26</th><th style="text-align:right">Q4 FY25</th><th style="text-align:right">Δ</th><th>Trace</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue from operations</td><td class="num">59.84</td><td class="num">52.10</td><td class="num pos">+14.9%</td><td><a class="cite">▦ vouchers</a></td></tr>
+            <tr><td>Cost of materials</td><td class="num">(28.41)</td><td class="num">(26.20)</td><td class="num neg">+8.4%</td><td><a class="cite">▦ vouchers</a></td></tr>
+            <tr><td>Employee benefits</td><td class="num">(9.12)</td><td class="num">(8.85)</td><td class="num neg">+3.0%</td><td><a class="cite">▦ vouchers</a></td></tr>
+            <tr><td>Other operating expenses</td><td class="num">(7.69)</td><td class="num">(8.92)</td><td class="num pos">−13.8%</td><td><a class="cite">▦ vouchers</a></td></tr>
+            <tr class="tot"><td>EBITDA</td><td class="num">14.62</td><td class="num">8.13</td><td class="num pos">+79.8%</td><td></td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:14px">Q1 EBITDA is up <strong>79.8% QoQ</strong>, driven primarily by revenue growth (14.9%) outpacing material cost growth (8.4%) — a 350 bps gross margin expansion. Other operating expenses also fell 13.8% QoQ as the seasonal logistics surcharge from Q4 normalised.</p>
+
+        <p style="margin-top:8px;color:var(--ink-3);font-size:12px"><em>Caveat: The Sundaram Trading FZE (AED) numbers are translated at the closing-rate of ₹22.84/AED for Q1, vs ₹22.61/AED in Q4. FX impact on EBITDA: ~₹0.18 Cr favourable.</em></p>
+
+        <div class="suggested">
+          <div class="chip">→ Break this down by entity</div>
+          <div class="chip">→ Compare to budget</div>
+          <div class="chip">→ Show YoY Q1 trend</div>
+          <div class="chip">→ Drill into "Other operating expenses"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg msg-user">
+      <div class="msg-meta">Rohan · 09:43 IST</div>
+      <div class="msg-bubble">Compare to budget. Where are we ahead and where are we behind?</div>
+    </div>
+
+    <div class="msg msg-ai">
+      <div class="msg-meta">FINK · understanding</div>
+      <div class="msg-bubble">
+        <div class="tool-call done"><span class="tool-icon">✓</span><span class="tool-name">compare_periods</span><span style="color:var(--ink-3)">actual vs budget Q1 FY26 · level=l3</span><span class="tool-time">240ms</span></div>
+
+        <p style="margin-top:14px">EBITDA is <strong>+₹2.34 Cr ahead of budget</strong> (₹14.62 Cr actual vs ₹12.28 Cr budget). Three positive drivers, two negative.</p>
+
+        <table class="result-table">
+          <thead><tr><th>Line</th><th style="text-align:right">Actual</th><th style="text-align:right">Budget</th><th style="text-align:right">Variance</th><th>Direction</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue from operations</td><td class="num">59.84</td><td class="num">54.20</td><td class="num pos">+5.64</td><td class="pos">▲ Ahead</td></tr>
+            <tr><td>Cost of materials</td><td class="num">(28.41)</td><td class="num">(25.10)</td><td class="num neg">−3.31</td><td class="neg">▼ Behind</td></tr>
+            <tr><td>Employee benefits</td><td class="num">(9.12)</td><td class="num">(9.40)</td><td class="num pos">+0.28</td><td class="pos">▲ Ahead</td></tr>
+            <tr><td>Other operating</td><td class="num">(7.69)</td><td class="num">(7.42)</td><td class="num neg">−0.27</td><td class="neg">▼ Behind</td></tr>
+            <tr class="tot"><td>EBITDA</td><td class="num">14.62</td><td class="num">12.28</td><td class="num pos">+2.34</td><td class="pos">▲ Ahead</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:14px"><strong>Read:</strong> revenue beat is real (+₹5.64 Cr), but ₹3.31 Cr of it was given back in higher-than-expected raw material costs — coking coal price moved 11% above budget assumption. Net win of ₹2.34 Cr.</p>
+
+        <p style="margin-top:10px"><a class="cite">▦ open variance screen for full drill-down →</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="composer">
+    <div class="composer-bar">
+      <div class="orb"></div>
+      <input placeholder="Ask anything about your books — variances, trends, ratios, vouchers..." />
+      <button class="send">Ask FINK →</button>
+    </div>
+    <div class="composer-foot">
+      <span>Shift+Enter for newline</span>
+      <span>↑ to recall last</span>
+      <span>4 entities in scope · period: Q1 FY26</span>
+      <span style="margin-left:auto">Retrieval-grounded · Reduced hallucination risk</span>
+    </div>
+  </div>
+</main>
+
+<aside class="context">
+  <div class="ctx-section">
+    <div class="ctx-title">This conversation</div>
+    <div class="ctx-row"><span class="k">Started</span><span class="v">09:42 IST</span></div>
+    <div class="ctx-row"><span class="k">Tools called</span><span class="v">3</span></div>
+    <div class="ctx-row"><span class="k">Vouchers traced</span><span class="v">128</span></div>
+    <div class="ctx-row"><span class="k">Tokens</span><span class="v">4,820 in · 1,140 out</span></div>
+  </div>
+
+  <div class="ctx-section">
+    <div class="ctx-title">Activity timeline</div>
+    <div class="activity-item user"><span class="t">09:42</span><span class="ico">▶</span><span>Rohan asked about EBITDA Q1</span></div>
+    <div class="activity-item tool"><span class="t">09:42</span><span class="ico">▦</span><span>get_profit_and_loss · 320ms</span></div>
+    <div class="activity-item tool"><span class="t">09:42</span><span class="ico">▦</span><span>compute_expressions · 12ms</span></div>
+    <div class="activity-item user"><span class="t">09:43</span><span class="ico">▶</span><span>Compare vs budget</span></div>
+    <div class="activity-item tool"><span class="t">09:43</span><span class="ico">▦</span><span>compare_periods · 240ms</span></div>
+  </div>
+
+  <div class="ctx-section">
+    <div class="ctx-title">Data freshness</div>
+    <div class="ctx-row"><span class="k">Tally · Sundaram Steels</span><span class="v" style="color:var(--positive)">2 min</span></div>
+    <div class="ctx-row"><span class="k">Tally · Sundaram Alloys</span><span class="v" style="color:var(--positive)">2 min</span></div>
+    <div class="ctx-row"><span class="k">Tally · Sundaram Logistics</span><span class="v" style="color:var(--warn)">14 min</span></div>
+    <div class="ctx-row"><span class="k">QBO · Sundaram Trading</span><span class="v" style="color:var(--positive)">5 min</span></div>
+  </div>
+
+  <div class="ctx-section">
+    <div class="ctx-title">Suggested follow-ups</div>
+    <div class="tag-mini">Drill into materials cost</div>
+    <div class="tag-mini">Show entity-wise EBITDA</div>
+    <div class="tag-mini">YoY Q1 history</div>
+    <div class="tag-mini">Coking coal exposure</div>
+    <div class="tag-mini">Working capital impact</div>
+  </div>
+</aside>
+
+<!-- GA4 -->
+<script>
+if(typeof gtag==='function'){
+  gtag('event','demo_screen_viewed',{event_category:'demo',screen_name:'chat'});
+}
+// Demo: clicking the suggested follow-up scrolls to bottom
+document.querySelectorAll('.suggested .chip').forEach(function(c){
+  c.addEventListener('click', function(){
+    var input = document.querySelector('.composer-bar input');
+    input.value = c.textContent.replace(/^→ /, '');
+    input.focus();
+  });
+});
+</script>
+
+</body>
+</html>

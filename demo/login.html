@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-card: #fbf8f0;
+  --bg-elev: #ffffff;
+  --ink: #1a1612;
+  --ink-2: #4a4036;
+  --ink-3: #8a7f6e;
+  --rule: #d9cfb8;
+  --rule-soft: #e8dfc9;
+  --accent: #7a1f1f;
+  --gold: #b8862b;
+  --positive: #0e4429;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-image:
+    radial-gradient(at 12% 4%, rgba(184,134,43,0.06) 0, transparent 45%),
+    radial-gradient(at 88% 96%, rgba(122,31,31,0.05) 0, transparent 50%);
+}
+.left {
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--rule);
+}
+.brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+.brand .dot { color: var(--accent); }
+.left-content { max-width: 480px; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  margin-bottom: 18px;
+}
+.left h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+.left h1 em { font-style: italic; color: var(--ink-3); font-weight: 400; }
+.left p {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.65;
+}
+.attrib {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.attrib a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.attrib a:hover { color: var(--accent); border-color: var(--accent); }
+
+.right {
+  padding: 60px;
+  display: grid;
+  place-items: center;
+}
+.signin-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 44px 40px;
+  box-shadow: 0 30px 60px rgba(26,22,18,0.06);
+}
+.signin-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.signin-card h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.signin-card .sub {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-bottom: 28px;
+}
+.field { margin-bottom: 14px; }
+.field label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--bg-elev);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--ink-2);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 22px;
+  font-size: 12px;
+}
+.row label { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.row a { color: var(--accent); text-decoration: none; }
+.row a:hover { text-decoration: underline; }
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 2px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--accent); }
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.btn-sso {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+.btn-sso:hover { border-color: var(--ink-2); }
+.signin-foot {
+  margin-top: 22px;
+  font-size: 12px;
+  color: var(--ink-3);
+  text-align: center;
+}
+.signin-foot a { color: var(--accent); text-decoration: none; }
+.signin-foot a:hover { text-decoration: underline; }
+.demo-banner {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 10px 14px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.demo-banner .pulse {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@media (max-width: 920px) {
+  body { grid-template-columns: 1fr; }
+  .left { padding: 40px 32px; border-right: none; border-bottom: 1px solid var(--rule); }
+  .left h1 { font-size: 32px; }
+  .right { padding: 32px; }
+  .signin-card { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<section class="left">
+  <div class="brand">FINK<span class="dot">.</span></div>
+  <div class="left-content">
+    <div class="eyebrow">Financial Intelligence · Multi-Entity</div>
+    <h1>Your numbers. <em>Traceable to the voucher.</em></h1>
+    <p>FINK answers natural-language questions about your books, surfaces variances with explanations, and produces statutory-grade reports. Every figure on every screen drills back to its source journal voucher in Tally or QuickBooks.</p>
+  </div>
+  <div class="attrib">FINK · An Ananta Group partnership · <a href="../">finkai.co</a></div>
+</section>
+
+<section class="right">
+  <div class="signin-card">
+    <div class="demo-banner"><span class="pulse"></span>Live demo · Click sign in</div>
+    <div class="signin-eyebrow">Welcome back</div>
+    <h2>Sign in to FINK</h2>
+    <div class="sub">Sundaram Steels Group workspace</div>
+
+    <form onsubmit="event.preventDefault();window.location.href='dashboard.html'">
+      <div class="field">
+        <label>Work email</label>
+        <input type="email" value="rohan@sundaramsteels.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" value="••••••••••" />
+      </div>
+      <div class="row">
+        <label><input type="checkbox" checked /> Remember this device</label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn-primary">Sign in →</button>
+    </form>
+
+    <div class="divider">Or continue with</div>
+    <button class="btn-sso" onclick="window.location.href='dashboard.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="signin-foot">Need access? <a href="../#demo">Request a demo →</a></div>
+  </div>
+</section>
+
+<!-- GA4 -->
+<script>
+if(typeof gtag==='function'){
+  gtag('event','demo_screen_viewed',{event_category:'demo',screen_name:'login'});
+}
+</script>
+
+</body>
+</html>

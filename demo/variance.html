@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Variance Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f1e8;
+    --bg-card: #fbf8f0;
+    --bg-elev: #ffffff;
+    --ink: #1a1612;
+    --ink-2: #4a4036;
+    --ink-3: #8a7f6e;
+    --rule: #d9cfb8;
+    --rule-soft: #e8dfc9;
+    --accent: #7a1f1f;      /* oxblood */
+    --accent-2: #0e4429;    /* deep green */
+    --gold: #b8862b;
+    --positive: #0e4429;
+    --negative: #7a1f1f;
+    --warn: #8a5a00;
+    --ai-bg: #1a1612;
+    --ai-ink: #f5f1e8;
+    --ai-accent: #d4a94a;
+    --shadow-sm: 0 1px 0 rgba(26,22,18,0.04), 0 1px 2px rgba(26,22,18,0.04);
+    --shadow-md: 0 2px 4px rgba(26,22,18,0.06), 0 8px 24px rgba(26,22,18,0.08);
+    --shadow-lg: 0 12px 48px rgba(26,22,18,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter Tight', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(at 12% 4%, rgba(184,134,43,0.05) 0, transparent 45%),
+      radial-gradient(at 88% 96%, rgba(122,31,31,0.04) 0, transparent 50%);
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    display: flex;
+    align-items: center;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-card);
+    gap: 32px;
+  }
+  .brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .brand .dot { color: var(--accent); }
+  .brand .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-left: 14px;
+    margin-left: 6px;
+    border-left: 1px solid var(--rule);
+    align-self: center;
+  }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-left: auto;
+  }
+  .tab {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .tab:hover { background: var(--rule-soft); }
+  .tab.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 6px;
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    background: var(--bg-elev);
+  }
+  .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: white;
+    display: grid; place-items: center;
+    font-weight: 600;
+    font-size: 11px;
+  }
+
+  /* ============ CONTROL STRIP ============ */
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding: 24px 28px 18px;
+    gap: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .title-block h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .title-block h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-3);
+  }
+  .title-block p {
+    color: var(--ink-3);
+    font-size: 12px;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .filter {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .filter label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .select-box {
+    background: var(--bg-elev);
+    border: 1px solid var(--rule);
+    padding: 7px 28px 7px 11px;
+    font-size: 12px;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 500;
+    color: var(--ink);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    min-width: 130px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%234a4036' stroke-width='1.2' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  .select-box:hover { border-color: var(--ink-2); }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    align-self: end;
+  }
+  .btn-primary:hover { background: var(--accent); }
+
+  /* ============ MODE TOGGLE ============ */
+  .mode-toggle {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: var(--bg-elev);
+    padding: 2px;
+    margin: 18px 28px 0;
+  }
+  .mode-toggle button {
+    background: transparent;
+    border: none;
+    padding: 7px 16px;
+    font-size: 11px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+  .mode-toggle button.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ============ KPI STRIP ============ */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 20px 28px 0;
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .kpi {
+    padding: 16px 20px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .kpi:last-child { border-right: none; }
+  .kpi-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .kpi-delta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-top: 6px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .kpi-delta.pos { color: var(--positive); }
+  .kpi-delta.neg { color: var(--negative); }
+  .kpi-delta .arrow { font-size: 10px; }
+  .kpi-spark {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    opacity: 0.4;
+  }
+
+  /* ============ MAIN LAYOUT ============ */
+  .main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 20px;
+    padding: 20px 28px 40px;
+    align-items: start;
+  }
+
+  /* ============ VARIANCE TABLE ============ */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .card-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-elev);
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .card-title .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-left: 8px;
+    padding-left: 10px;
+    border-left: 1px solid var(--rule);
+  }
+  .legend {
+    display: flex;
+    gap: 14px;
+    font-size: 10px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  table.variance {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.variance thead th {
+    padding: 10px 12px;
+    background: var(--bg-card);
+    text-align: right;
+    font-weight: 600;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  table.variance thead th:first-child { text-align: left; }
+  table.variance tbody td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--rule-soft);
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  table.variance tbody td:first-child {
+    text-align: left;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 500;
+  }
+  table.variance tbody tr.section td {
+    background: var(--rule-soft);
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 7px 12px;
+  }
+  table.variance tbody tr.total td {
+    border-top: 1px solid var(--ink);
+    border-bottom: 2px double var(--ink);
+    font-weight: 700;
+    background: var(--bg-card);
+  }
+  table.variance tbody tr.drillable {
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  table.variance tbody tr.drillable:hover {
+    background: rgba(184,134,43,0.08);
+  }
+  table.variance tbody tr.selected {
+    background: rgba(184,134,43,0.14);
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+  .line-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chev {
+    width: 12px;
+    color: var(--ink-3);
+    transition: transform 0.15s;
+    font-size: 10px;
+  }
+  .drillable .chev::before { content: "›"; }
+  .drillable.open .chev { transform: rotate(90deg); }
+  .ai-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 6px;
+    background: var(--ink);
+    color: var(--ai-accent);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ai-flag .pulse {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--ai-accent);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  .delta-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .delta-pos { color: var(--positive); }
+  .delta-neg { color: var(--negative); }
+  .bar-cell {
+    position: relative;
+    min-width: 90px;
+  }
+  .bar-wrap {
+    position: relative;
+    height: 14px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bar-axis {
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .bar-fill {
+    position: absolute;
+    top: 2px; bottom: 2px;
+    border-radius: 1px;
+  }
+  .bar-fill.pos {
+    left: 50%;
+    background: linear-gradient(90deg, var(--positive) 0%, rgba(14,68,41,0.7) 100%);
+  }
+  .bar-fill.neg {
+    right: 50%;
+    background: linear-gradient(270deg, var(--negative) 0%, rgba(122,31,31,0.7) 100%);
+  }
+
+  /* ============ SUB-ROWS (drilldown) ============ */
+  tr.subrow { display: none; }
+  tr.subrow.visible { display: table-row; }
+  tr.subrow td {
+    background: #fdfaf1;
+    padding: 8px 12px 8px 12px;
+    font-size: 11px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  tr.subrow td:first-child {
+    padding-left: 32px;
+    font-weight: 400;
+    color: var(--ink-2);
+    position: relative;
+  }
+  tr.subrow td:first-child::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background: var(--ink-3);
+  }
+  tr.subrow.voucher-row td {
+    background: #f9f3e3;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+  }
+  tr.subrow.voucher-row td:hover { background: #f3ebd5; }
+  tr.subrow.voucher-row td:first-child {
+    color: var(--accent);
+    font-weight: 500;
+    padding-left: 48px;
+  }
+  tr.subrow.voucher-row td:first-child::before {
+    left: 36px;
+    background: var(--accent);
+  }
+
+  /* ============ AI PANEL ============ */
+  .ai-panel {
+    background: var(--ai-bg);
+    color: var(--ai-ink);
+    border-radius: 2px;
+    overflow: hidden;
+    position: sticky;
+    top: 20px;
+    border: 1px solid var(--ink);
+  }
+  .ai-head {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid rgba(245,241,232,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ai-orb {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--ai-accent), #6b4d1a 60%, #1a1612 100%);
+    box-shadow: 0 0 16px rgba(212,169,74,0.3), inset 0 0 4px rgba(255,255,255,0.2);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .ai-orb::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,169,74,0.3);
+    animation: ring 2.8s ease-in-out infinite;
+  }
+  @keyframes ring {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.15); opacity: 0; }
+  }
+  .ai-title {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .ai-title .sub {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ai-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .ai-body { padding: 18px 20px 4px; }
+  .ai-context {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ai-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ai-context .tag {
+    padding: 2px 7px;
+    border: 1px solid rgba(212,169,74,0.4);
+    border-radius: 2px;
+    font-size: 9px;
+  }
+  .ai-explanation {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ai-ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+  }
+  .ai-explanation .hl {
+    background: rgba(212,169,74,0.18);
+    padding: 0 3px;
+    border-bottom: 1px dashed var(--ai-accent);
+    color: var(--ai-accent);
+  }
+  .ai-breakdown {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(245,241,232,0.1);
+  }
+  .ai-breakdown-title {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .driver {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px dotted rgba(245,241,232,0.08);
+    align-items: center;
+    cursor: pointer;
+    transition: padding-left 0.15s;
+  }
+  .driver:hover { padding-left: 4px; }
+  .driver:last-child { border-bottom: none; }
+  .driver-name {
+    font-size: 12px;
+    color: var(--ai-ink);
+  }
+  .driver-name .party {
+    font-size: 10px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+    display: block;
+    margin-top: 2px;
+  }
+  .driver-amt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ai-accent);
+  }
+  .ai-source {
+    margin: 18px 20px 20px;
+    padding: 10px 12px;
+    background: rgba(245,241,232,0.05);
+    border: 1px dashed rgba(212,169,74,0.25);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,241,232,0.7);
+    line-height: 1.5;
+  }
+  .ai-source strong { color: var(--ai-accent); font-weight: 500; }
+  .ai-actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 20px;
+  }
+  .ai-btn {
+    flex: 1;
+    background: rgba(245,241,232,0.08);
+    color: var(--ai-ink);
+    border: 1px solid rgba(245,241,232,0.15);
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .ai-btn:hover {
+    background: rgba(212,169,74,0.12);
+    border-color: var(--ai-accent);
+    color: var(--ai-accent);
+  }
+  .ai-btn.primary {
+    background: var(--ai-accent);
+    color: var(--ai-bg);
+    border-color: var(--ai-accent);
+    font-weight: 600;
+  }
+  .ai-btn.primary:hover { background: #e6c166; }
+
+  .ai-empty {
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 12px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+  }
+
+  /* ============ VOUCHER MODAL ============ */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,18,0.55);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 40px 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    border-radius: 2px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--rule);
+  }
+  .modal-head {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: var(--bg-elev);
+  }
+  .modal-head h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .modal-head p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+  .tally-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background: var(--ink);
+    color: var(--ai-accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    margin-top: 6px;
+  }
+  .modal-close {
+    background: none;
+    border: 1px solid var(--rule);
+    width: 30px; height: 30px;
+    border-radius: 2px;
+    cursor: pointer;
+    color: var(--ink-2);
+    font-size: 16px;
+    font-family: inherit;
+  }
+  .modal-close:hover { border-color: var(--ink); }
+
+  .voucher-doc {
+    padding: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--bg-elev);
+  }
+  .voucher-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+    padding: 16px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 18px;
+  }
+  .voucher-meta-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+  .voucher-meta-item .k {
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 9px;
+    padding-top: 2px;
+  }
+  .voucher-meta-item .v {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .voucher-type {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+  .voucher-no {
+    text-align: center;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+  table.ledger {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  table.ledger th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--ink);
+    font-weight: 600;
+  }
+  table.ledger th:nth-child(2), table.ledger th:nth-child(3) { text-align: right; }
+  table.ledger td {
+    padding: 10px;
+    font-size: 11px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  table.ledger td:nth-child(2), table.ledger td:nth-child(3) { text-align: right; }
+  table.ledger tr.dr td { color: var(--negative); }
+  table.ledger tr.cr td:first-child { padding-left: 28px; color: var(--positive); }
+  table.ledger tfoot td {
+    border-top: 1px solid var(--ink);
+    border-bottom: 2px double var(--ink);
+    font-weight: 700;
+    padding-top: 10px;
+  }
+  .narration {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--bg-card);
+    border-left: 3px solid var(--gold);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .narration .lbl {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .attachments {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .attach {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+    border-radius: 2px;
+    font-size: 10.5px;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .attach:hover { border-color: var(--ink); }
+  .attach-ic {
+    width: 14px; height: 14px;
+    background: var(--accent);
+    color: white;
+    display: grid; place-items: center;
+    font-size: 8px;
+    border-radius: 1px;
+    font-weight: 700;
+  }
+
+  /* ============ CASH FLOW WATERFALL ============ */
+  .waterfall {
+    padding: 24px 20px;
+    display: none;
+  }
+  .waterfall.active { display: block; }
+  .wf-chart {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 4px;
+    height: 280px;
+    align-items: end;
+    padding: 0 0 40px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .wf-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+    cursor: pointer;
+    padding: 0 2px;
+  }
+  .wf-bar {
+    width: 100%;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .wf-col:hover .wf-bar { transform: translateY(-3px); }
+  .wf-col.selected .wf-bar {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .wf-bar.start, .wf-bar.end {
+    background: var(--ink);
+  }
+  .wf-bar.pos { background: linear-gradient(180deg, var(--positive), rgba(14,68,41,0.6)); }
+  .wf-bar.neg { background: linear-gradient(180deg, var(--negative), rgba(122,31,31,0.6)); }
+  .wf-bar.connector {
+    position: absolute;
+    height: 1px;
+    border-top: 1px dashed var(--ink-3);
+    background: none;
+    left: 50%;
+    width: 100%;
+    z-index: 0;
+  }
+  .wf-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 0;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .wf-label {
+    font-size: 10px;
+    color: var(--ink-2);
+    text-align: center;
+    padding-top: 8px;
+    line-height: 1.25;
+    font-weight: 500;
+    position: absolute;
+    bottom: 10px;
+    left: 0; right: 0;
+  }
+  .wf-label .ai-ind {
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-left: 3px;
+    vertical-align: middle;
+  }
+  .wf-subcat {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .wf-panel {
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    background: var(--bg-elev);
+  }
+  .wf-panel h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .wf-panel h4 span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .wf-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 11px;
+    border-bottom: 1px dotted var(--rule-soft);
+    align-items: center;
+    cursor: pointer;
+  }
+  .wf-row:hover { background: rgba(184,134,43,0.05); }
+  .wf-row:last-child { border-bottom: none; }
+  .wf-row .amt {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .wf-row .chg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 52px;
+    text-align: right;
+  }
+
+  /* ============ SCROLLBAR ============ */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+
+  /* ============ HELPERS ============ */
+  .visually-hidden { display: none; }
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 16px 28px 0;
+  }
+  .breadcrumb .sep { padding: 0 8px; color: var(--rule); }
+  .breadcrumb .cur { color: var(--ink); }
+
+  @media (max-width: 1100px) {
+    .main { grid-template-columns: 1fr; }
+    .ai-panel { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== TOP BAR ========== -->
+<header class="topbar">
+  <div class="brand">FINK<span class="dot">.</span><span class="sub">Sundaram Steels Group</span></div>
+  <nav class="tabs">
+    <a class="tab" href="dashboard.html">Dashboard</a>
+    <a class="tab" href="chat.html">Ask FINK</a>
+    <a class="tab active" href="variance.html">Variance</a>
+    <a class="tab" href="pnl.html">Reports</a>
+    <a class="tab" href="consolidation.html">Consolidation</a>
+    <a class="tab" href="admin.html">Admin</a>
+  </nav>
+  <div class="user-chip">
+    <div class="avatar">SM</div>
+    <div style="font-size:11px;">
+      <div style="font-weight:600;">Shalini Menon</div>
+      <div style="color:var(--ink-3); font-size:10px;">Group Controller</div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== TITLE / CONTROLS ========== -->
+<section class="controls">
+  <div class="title-block">
+    <h1>Variance <em>Analysis</em></h1>
+    <p>Q3 FY25–26 vs Q2 FY25–26 · Tally Prime synced 24 Apr 2026, 09:14 IST</p>
+  </div>
+  <div class="filter-bar">
+    <div class="filter">
+      <label>Entity / Group</label>
+      <select class="select-box">
+        <option>⚑ Sundaram Steels Group (Consol)</option>
+        <option>Sundaram Steels Pvt Ltd — IN</option>
+        <option>Sundaram Alloys LLP — IN</option>
+        <option>Sundaram Logistics — IN</option>
+        <option>Sundaram Trading FZE — AE</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label>Source</label>
+      <select class="select-box">
+        <option>Tally Prime · All companies</option>
+        <option>QuickBooks Online</option>
+        <option>Tally + QBO (merged)</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label>Period A</label>
+      <select class="select-box">
+        <option>Q3 · Oct–Dec 2025</option>
+        <option>Q2 · Jul–Sep 2025</option>
+        <option>Q1 · Apr–Jun 2025</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label>Period B</label>
+      <select class="select-box">
+        <option>Q2 · Jul–Sep 2025</option>
+        <option>Q3 · Oct–Dec 2024 (PYQ)</option>
+        <option>Budget Q3 FY25–26</option>
+      </select>
+    </div>
+    <button class="btn-primary">Refresh</button>
+  </div>
+</section>
+
+<!-- ========== MODE TOGGLE ========== -->
+<div class="mode-toggle">
+  <button class="active" data-mode="pl">P&amp;L Variance</button>
+  <button data-mode="cf">Cash Flow Variance</button>
+</div>
+
+<!-- ========== KPI STRIP ========== -->
+<section class="kpi-strip">
+  <div class="kpi">
+    <div class="kpi-label">Revenue · Δ</div>
+    <div class="kpi-value">₹4.82 Cr</div>
+    <div class="kpi-delta pos"><span class="arrow">▲</span> +12.4% vs Q2</div>
+    <svg class="kpi-spark" width="54" height="22" viewBox="0 0 54 22">
+      <polyline fill="none" stroke="var(--positive)" stroke-width="1.4"
+        points="0,16 9,14 18,15 27,11 36,8 45,9 54,4" />
+    </svg>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Gross Margin · Δ</div>
+    <div class="kpi-value">−1.8 pp</div>
+    <div class="kpi-delta neg"><span class="arrow">▼</span> 34.2% → 32.4%</div>
+    <svg class="kpi-spark" width="54" height="22" viewBox="0 0 54 22">
+      <polyline fill="none" stroke="var(--negative)" stroke-width="1.4"
+        points="0,6 9,7 18,9 27,10 36,12 45,14 54,15" />
+    </svg>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Opex · Δ</div>
+    <div class="kpi-value">₹1.14 Cr</div>
+    <div class="kpi-delta neg"><span class="arrow">▲</span> +18.7% vs Q2</div>
+    <svg class="kpi-spark" width="54" height="22" viewBox="0 0 54 22">
+      <polyline fill="none" stroke="var(--negative)" stroke-width="1.4"
+        points="0,18 9,17 18,14 27,12 36,10 45,7 54,4" />
+    </svg>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">PBT · Δ</div>
+    <div class="kpi-value">₹24.6 L</div>
+    <div class="kpi-delta pos"><span class="arrow">▲</span> +3.1% vs Q2</div>
+    <svg class="kpi-spark" width="54" height="22" viewBox="0 0 54 22">
+      <polyline fill="none" stroke="var(--positive)" stroke-width="1.4"
+        points="0,14 9,12 18,13 27,11 36,12 45,9 54,8" />
+    </svg>
+  </div>
+</section>
+
+<div class="breadcrumb">
+  <span>Consol</span><span class="sep">/</span><span>All entities</span><span class="sep">/</span><span class="cur" id="bc-line">Select a line item to see AI explanation →</span>
+</div>
+
+<!-- ========== MAIN ========== -->
+<main class="main">
+
+  <!-- ===== P&L VARIANCE TABLE ===== -->
+  <div id="pl-view" class="card">
+    <div class="card-head">
+      <div class="card-title">Profit &amp; Loss — Variance View <span class="meta">Schedule III · INR Lakhs</span></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--positive)"></span>Favourable</span>
+        <span><span class="legend-dot" style="background:var(--negative)"></span>Adverse</span>
+        <span><span class="legend-dot" style="background:var(--gold)"></span>AI flagged</span>
+      </div>
+    </div>
+
+    <table class="variance">
+      <thead>
+        <tr>
+          <th>Particulars</th>
+          <th>Q3 FY26</th>
+          <th>Q2 FY26</th>
+          <th>Δ Absolute</th>
+          <th>Δ %</th>
+          <th>Variance</th>
+        </tr>
+      </thead>
+      <tbody id="pl-tbody">
+
+        <tr class="section"><td colspan="6">Income</td></tr>
+
+        <tr class="drillable" data-key="revenue">
+          <td><span class="line-label"><span class="chev"></span>Revenue from operations <span class="ai-flag"><span class="pulse"></span>AI</span></span></td>
+          <td>4,382.50</td><td>3,898.20</td>
+          <td class="delta-pos">+484.30</td>
+          <td class="delta-pos">+12.4%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill pos" style="width:38%"></div></div></td>
+        </tr>
+        <tr class="subrow" data-parent="revenue">
+          <td>• Domestic sales — MS Bars</td><td>2,840.10</td><td>2,404.80</td>
+          <td class="delta-pos">+435.30</td><td class="delta-pos">+18.1%</td><td></td>
+        </tr>
+        <tr class="subrow" data-parent="revenue">
+          <td>• Export sales — HR Coils (FZE)</td><td>1,184.40</td><td>1,098.60</td>
+          <td class="delta-pos">+85.80</td><td class="delta-pos">+7.8%</td><td></td>
+        </tr>
+        <tr class="subrow" data-parent="revenue">
+          <td>• Scrap sales</td><td>358.00</td><td>394.80</td>
+          <td class="delta-neg">−36.80</td><td class="delta-neg">−9.3%</td><td></td>
+        </tr>
+
+        <tr class="drillable" data-key="other-income">
+          <td><span class="line-label"><span class="chev"></span>Other income</span></td>
+          <td>48.20</td><td>52.10</td>
+          <td class="delta-neg">−3.90</td>
+          <td class="delta-neg">−7.5%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:6%"></div></div></td>
+        </tr>
+
+        <tr class="section"><td colspan="6">Expenses</td></tr>
+
+        <tr class="drillable" data-key="material">
+          <td><span class="line-label"><span class="chev"></span>Cost of materials consumed <span class="ai-flag"><span class="pulse"></span>AI</span></span></td>
+          <td>2,614.80</td><td>2,188.40</td>
+          <td class="delta-neg">+426.40</td>
+          <td class="delta-neg">+19.5%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:42%"></div></div></td>
+        </tr>
+
+        <tr class="drillable" data-key="employee">
+          <td><span class="line-label"><span class="chev"></span>Employee benefits expense</span></td>
+          <td>412.60</td><td>398.20</td>
+          <td class="delta-neg">+14.40</td>
+          <td class="delta-neg">+3.6%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:8%"></div></div></td>
+        </tr>
+
+        <tr class="drillable" data-key="finance">
+          <td><span class="line-label"><span class="chev"></span>Finance costs</span></td>
+          <td>94.20</td><td>89.80</td>
+          <td class="delta-neg">+4.40</td>
+          <td class="delta-neg">+4.9%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:4%"></div></div></td>
+        </tr>
+
+        <tr class="drillable" data-key="depreciation">
+          <td><span class="line-label"><span class="chev"></span>Depreciation &amp; amortisation</span></td>
+          <td>128.40</td><td>128.40</td>
+          <td>—</td>
+          <td>0.0%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div></div></td>
+        </tr>
+
+        <tr class="drillable" data-key="legal">
+          <td><span class="line-label"><span class="chev"></span>Legal &amp; professional fees <span class="ai-flag"><span class="pulse"></span>AI</span></span></td>
+          <td>68.40</td><td>22.10</td>
+          <td class="delta-neg">+46.30</td>
+          <td class="delta-neg">+209.5%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:68%"></div></div></td>
+        </tr>
+
+        <tr class="drillable" data-key="other-exp">
+          <td><span class="line-label"><span class="chev"></span>Other expenses</span></td>
+          <td>786.50</td><td>728.40</td>
+          <td class="delta-neg">+58.10</td>
+          <td class="delta-neg">+8.0%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:12%"></div></div></td>
+        </tr>
+
+        <tr class="total">
+          <td>Profit before tax</td>
+          <td>325.80</td><td>394.00</td>
+          <td class="delta-neg">−68.20</td>
+          <td class="delta-neg">−17.3%</td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-axis"></div><div class="bar-fill neg" style="width:18%"></div></div></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== CASH FLOW WATERFALL ===== -->
+  <div id="cf-view" class="card" style="display:none;">
+    <div class="card-head">
+      <div class="card-title">Cash Flow — Period Movement <span class="meta">Direct method · INR Lakhs</span></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--positive)"></span>Inflow</span>
+        <span><span class="legend-dot" style="background:var(--negative)"></span>Outflow</span>
+        <span><span class="legend-dot" style="background:var(--gold)"></span>AI flagged</span>
+      </div>
+    </div>
+    <div class="waterfall active">
+
+      <div class="wf-chart" id="wf-chart">
+        <!-- Opening -->
+        <div class="wf-col" data-key="cf-open">
+          <div class="wf-val">482</div>
+          <div class="wf-bar start" style="height:38%"></div>
+          <div class="wf-label">Opening Cash<br>1 Oct 25</div>
+        </div>
+        <!-- Customer collections -->
+        <div class="wf-col" data-key="cf-receipts">
+          <div class="wf-val delta-neg">−184</div>
+          <div class="wf-bar neg" style="height:14%; margin-top:46%"></div>
+          <div class="wf-label">Customer<br>Receipts<span class="ai-ind"></span></div>
+        </div>
+        <!-- Other inflows -->
+        <div class="wf-col" data-key="cf-other-in">
+          <div class="wf-val delta-pos">+42</div>
+          <div class="wf-bar pos" style="height:4%; margin-top:56%"></div>
+          <div class="wf-label">Other<br>Inflows</div>
+        </div>
+        <!-- Supplier payments -->
+        <div class="wf-col" data-key="cf-suppliers">
+          <div class="wf-val delta-neg">−218</div>
+          <div class="wf-bar neg" style="height:18%; margin-top:42%"></div>
+          <div class="wf-label">Supplier<br>Payments</div>
+        </div>
+        <!-- Payroll -->
+        <div class="wf-col" data-key="cf-payroll">
+          <div class="wf-val delta-neg">−96</div>
+          <div class="wf-bar neg" style="height:8%; margin-top:52%"></div>
+          <div class="wf-label">Payroll</div>
+        </div>
+        <!-- Legal payments -->
+        <div class="wf-col" data-key="cf-legal">
+          <div class="wf-val delta-neg">−58</div>
+          <div class="wf-bar neg" style="height:5%; margin-top:55%"></div>
+          <div class="wf-label">Legal &amp;<br>Prof.<span class="ai-ind"></span></div>
+        </div>
+        <!-- Statutory -->
+        <div class="wf-col" data-key="cf-stat">
+          <div class="wf-val delta-neg">−64</div>
+          <div class="wf-bar neg" style="height:6%; margin-top:54%"></div>
+          <div class="wf-label">GST &amp; TDS</div>
+        </div>
+        <!-- Capex -->
+        <div class="wf-col" data-key="cf-capex">
+          <div class="wf-val delta-pos">+18</div>
+          <div class="wf-bar pos" style="height:2%; margin-top:58%"></div>
+          <div class="wf-label">Capex<br>(deferred)</div>
+        </div>
+        <!-- Closing -->
+        <div class="wf-col" data-key="cf-close">
+          <div class="wf-val">−78</div>
+          <div class="wf-bar end" style="height:6%; background:var(--negative)"></div>
+          <div class="wf-label">Closing Cash<br>31 Dec 25</div>
+        </div>
+      </div>
+
+      <div class="wf-subcat">
+        <div class="wf-panel">
+          <h4>Cash Inflows · Period Δ <span class="delta-neg">−142</span></h4>
+          <div class="wf-row" data-key="cf-receipts">
+            <div>Customer receipts — domestic</div>
+            <div class="amt">2,418</div>
+            <div class="chg delta-neg">−184</div>
+          </div>
+          <div class="wf-row">
+            <div>Customer receipts — export</div>
+            <div class="amt">892</div>
+            <div class="chg delta-pos">+24</div>
+          </div>
+          <div class="wf-row">
+            <div>Interest received</div>
+            <div class="amt">12</div>
+            <div class="chg delta-pos">+3</div>
+          </div>
+          <div class="wf-row">
+            <div>Refunds (GST / IT)</div>
+            <div class="amt">30</div>
+            <div class="chg delta-pos">+15</div>
+          </div>
+        </div>
+        <div class="wf-panel">
+          <h4>Cash Outflows · Period Δ <span class="delta-neg">−418</span></h4>
+          <div class="wf-row">
+            <div>Raw material suppliers</div>
+            <div class="amt">1,984</div>
+            <div class="chg delta-neg">+218</div>
+          </div>
+          <div class="wf-row">
+            <div>Employee salaries &amp; wages</div>
+            <div class="amt">384</div>
+            <div class="chg delta-neg">+96</div>
+          </div>
+          <div class="wf-row" data-key="cf-legal">
+            <div>Legal &amp; professional fees</div>
+            <div class="amt">58</div>
+            <div class="chg delta-neg">+58</div>
+          </div>
+          <div class="wf-row">
+            <div>GST &amp; TDS remittances</div>
+            <div class="amt">284</div>
+            <div class="chg delta-neg">+64</div>
+          </div>
+          <div class="wf-row">
+            <div>Bank charges &amp; interest</div>
+            <div class="amt">38</div>
+            <div class="chg delta-neg">+4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AI PANEL ===== -->
+  <aside class="ai-panel">
+    <div class="ai-head">
+      <div class="ai-orb"></div>
+      <div class="ai-title">FINK Variance Co-pilot<span class="sub">Retrieval-grounded · Reduced hallucination risk</span></div>
+    </div>
+    <div id="ai-content">
+      <div class="ai-empty">
+        Select a line item to see why it moved.<br>Every number traces to a Tally voucher.
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<!-- ========== VOUCHER MODAL ========== -->
+<div class="modal-backdrop" id="voucherModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Journal Voucher #JV-2589</h3>
+        <p>Sundaram Steels Pvt Ltd · 18 Nov 2025</p>
+        <div class="tally-badge">◆ Synced from Tally Prime</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="voucher-doc">
+      <div class="voucher-type">Journal Voucher</div>
+      <div class="voucher-no">No. JV/2025-26/2589 · Dated 18-Nov-2025</div>
+
+      <div class="voucher-meta">
+        <div class="voucher-meta-item"><span class="k">Voucher Type</span><span class="v">Journal</span></div>
+        <div class="voucher-meta-item"><span class="k">Voucher No.</span><span class="v">JV-2589</span></div>
+        <div class="voucher-meta-item"><span class="k">Date</span><span class="v">18-Nov-2025</span></div>
+        <div class="voucher-meta-item"><span class="k">Entity</span><span class="v">Sundaram Steels Pvt Ltd</span></div>
+        <div class="voucher-meta-item"><span class="k">Reference</span><span class="v">EY/INV/2025-11-042</span></div>
+        <div class="voucher-meta-item"><span class="k">Entered By</span><span class="v">R. Krishnan (Accountant)</span></div>
+      </div>
+
+      <table class="ledger">
+        <thead>
+          <tr><th>Particulars</th><th>Debit (₹)</th><th>Credit (₹)</th></tr>
+        </thead>
+        <tbody>
+          <tr class="dr"><td><strong>Dr.</strong> Legal &amp; Professional Fees</td><td>38,40,000</td><td>—</td></tr>
+          <tr class="dr"><td style="padding-left:28px; color:var(--ink-3); font-size:10px;">&nbsp;&nbsp;— Statutory audit overrun FY24-25</td><td></td><td></td></tr>
+          <tr class="dr"><td><strong>Dr.</strong> Input CGST @ 9%</td><td>3,45,600</td><td>—</td></tr>
+          <tr class="dr"><td><strong>Dr.</strong> Input SGST @ 9%</td><td>3,45,600</td><td>—</td></tr>
+          <tr class="cr"><td>To Ernst &amp; Young LLP (Sundry Creditor)</td><td>—</td><td>45,31,200</td></tr>
+          <tr class="cr"><td>To TDS Payable u/s 194J (10%)</td><td>—</td><td>—</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Total</td><td>45,31,200</td><td>45,31,200</td></tr>
+        </tfoot>
+      </table>
+
+      <div class="narration">
+        <span class="lbl">Narration</span>
+        Being provision booked for additional audit fees payable to M/s Ernst &amp; Young LLP towards FY24-25 statutory audit scope expansion — additional work on revenue recognition (Ind AS 115) for the steel coating division and inventory valuation review at the Hosur plant. Vide their invoice EY/INV/2025-11-042 dated 14-Nov-2025 and engagement letter addendum dated 09-Oct-2025. Approved by Audit Committee vide resolution AC-2025/11/03.
+      </div>
+
+      <div class="attachments">
+        <div class="attach"><span class="attach-ic">P</span>EY_Invoice_042.pdf · 214 KB</div>
+        <div class="attach"><span class="attach-ic">P</span>Engagement_Addendum.pdf · 98 KB</div>
+        <div class="attach"><span class="attach-ic">P</span>AC_Resolution_2025-11-03.pdf · 72 KB</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============ DATA: AI EXPLANATIONS ============
+  const explanations = {
+    'revenue': {
+      context: ['P&L', 'Revenue from operations'],
+      delta: '+₹4.84 Cr (+12.4%)',
+      narrative: `Revenue rose <span class="hl">₹484 L</span> quarter-on-quarter, driven primarily by <span class="hl">domestic MS Bar volumes (+18.1%)</span>. The upside reflects Q3 infrastructure project deliveries — a Larsen &amp; Toubro order (₹1.82 Cr) and three DMRC sub-contractor orders totalling ₹2.14 Cr shipped in November. Scrap revenue declined ₹37 L as the Hosur plant retained more scrap for re-melting.`,
+      drivers: [
+        {name: 'L&T Construction — DMRC Phase 4', party: 'Inv #S-2025/11/814 · 22-Nov', amt: '+₹1.82 Cr'},
+        {name: 'KEC International — Pune project', party: 'Inv #S-2025/10/682 · 08-Oct', amt: '+₹94 L'},
+        {name: 'Export — Fujairah Steels LLC', party: 'Inv #EX-25/031 · 14-Dec', amt: '+₹86 L'},
+        {name: 'Scrap — retained for re-melt', party: 'Internal transfer 26-Nov', amt: '−₹37 L'}
+      ],
+      source: '<strong>Source:</strong> 48 sales vouchers, 12 export invoices, 3 scrap adjustment entries from Tally Sundaram Steels Pvt Ltd and Sundaram Trading FZE. Cross-verified against GSTR-1 filings for Oct–Dec 2025.',
+      openVoucher: false
+    },
+    'material': {
+      context: ['P&L', 'Cost of materials consumed'],
+      delta: '+₹4.26 Cr (+19.5%)',
+      narrative: `Material cost grew faster than revenue (<span class="hl">+19.5% vs +12.4%</span>) — the key driver behind the <span class="hl">1.8 pp gross margin compression</span>. Billet landed cost rose from ₹48,200/MT in Q2 to ₹52,400/MT in Q3 (+8.7%), reflecting the Oct 2025 JSW price revision. Volume consumed also rose 10% to service the higher order book.`,
+      drivers: [
+        {name: 'Price escalation — billets (JSW)', party: 'PO amendments Oct–Dec 2025', amt: '+₹2.14 Cr'},
+        {name: 'Volume — higher production', party: 'Production log delta: +820 MT', amt: '+₹1.68 Cr'},
+        {name: 'Ferro-alloys — INR/USD impact', party: 'FX impact on imports', amt: '+₹44 L'}
+      ],
+      source: '<strong>Source:</strong> 184 purchase vouchers, 92 stock journal entries, 11 import landed-cost computations. Rate verified against Tally item master and PO ledger.',
+      openVoucher: false
+    },
+    'legal': {
+      context: ['P&L', 'Legal & professional fees'],
+      delta: '+₹46.30 L (+209.5%)',
+      narrative: `Legal &amp; professional fees tripled this quarter. The bulk — <span class="hl">₹38.4 L</span> — is a <span class="hl">statutory audit scope overrun paid to EY</span> for FY24-25, booked via <strong>JV-2589 on 18-Nov-2025</strong>. Additional work covered revenue recognition (Ind AS 115) for the steel coating division and inventory review at Hosur. The rest comprises routine retainers and one IP filing.`,
+      drivers: [
+        {name: 'Ernst & Young — audit overrun', party: 'Invoice EY/INV/2025-11-042', amt: '+₹38.4 L', voucher: 'JV-2589'},
+        {name: 'Khaitan & Co — contract review', party: 'Inv KC/2025/1108', amt: '+₹4.8 L'},
+        {name: 'Monthly retainers (3 firms)', party: 'Recurring', amt: '+₹2.1 L'},
+        {name: 'Trademark filing — "Sundaram+"', party: 'TM Registry fees', amt: '+₹1.0 L'}
+      ],
+      source: '<strong>Source:</strong> 14 journal &amp; payment vouchers from ledger <em>Legal &amp; Professional Fees</em>. Largest single entry: <strong>JV-2589</strong> (EY audit fees). All vouchers approved by Audit Committee or CFO.',
+      openVoucher: 'JV-2589'
+    },
+    'employee': {
+      context: ['P&L', 'Employee benefits expense'],
+      delta: '+₹14.40 L (+3.6%)',
+      narrative: `Employee costs moved in line with expectations. The <span class="hl">₹14.4 L increase</span> reflects the <span class="hl">October 2025 annual increments</span> (avg 7.2% across 142 permanent staff) plus two senior lateral hires in the finance team. No variable pay cycles fell in this quarter.`,
+      drivers: [
+        {name: 'Annual increments — Oct 2025', party: 'Payroll JV Oct-Dec', amt: '+₹9.8 L'},
+        {name: 'Lateral hires — Finance', party: '2 new joiners', amt: '+₹3.6 L'},
+        {name: 'Statutory contribution uplift', party: 'EPF wage ceiling revision', amt: '+₹1.0 L'}
+      ],
+      source: '<strong>Source:</strong> 3 monthly payroll journals, 4 F&F settlements, 9 reimbursement vouchers.',
+      openVoucher: false
+    },
+    'finance': {
+      context: ['P&L', 'Finance costs'],
+      delta: '+₹4.40 L (+4.9%)',
+      narrative: `Finance costs rose modestly. Working capital drawdowns averaged <span class="hl">₹18.4 Cr vs ₹16.2 Cr</span> in Q2 as receivables stretched (see Cash Flow view). Term loan interest unchanged.`,
+      drivers: [
+        {name: 'CC limit interest (SBI)', party: 'Monthly debit', amt: '+₹3.2 L'},
+        {name: 'Bill discounting charges', party: 'HDFC Bank', amt: '+₹0.9 L'},
+        {name: 'Forex forward premium', party: 'Export hedges', amt: '+₹0.3 L'}
+      ],
+      source: '<strong>Source:</strong> 6 bank charge vouchers, 3 interest debit notes.',
+      openVoucher: false
+    },
+    'depreciation': {
+      context: ['P&L', 'Depreciation & amortisation'],
+      delta: 'No change',
+      narrative: `Depreciation held flat. No additions to the fixed asset block above materiality during Q3. The Hosur mill upgrade capex is still in CWIP and has not yet been capitalised.`,
+      drivers: [
+        {name: 'Scheduled SLM depreciation', party: 'Per fixed asset register', amt: '₹128.4 L'}
+      ],
+      source: '<strong>Source:</strong> 3 monthly depreciation journals computed per Schedule II of Companies Act 2013.',
+      openVoucher: false
+    },
+    'other-income': {
+      context: ['P&L', 'Other income'],
+      delta: '−₹3.90 L (−7.5%)',
+      narrative: `Other income dipped marginally. Interest on FDs declined as ₹2 Cr of matured deposits were deployed into working capital in October. Rental income unchanged.`,
+      drivers: [
+        {name: 'Interest on FDs — matured', party: 'SBI, HDFC', amt: '−₹4.8 L'},
+        {name: 'Rental income (godown)', party: 'Stable', amt: '—'}
+      ],
+      source: '<strong>Source:</strong> 12 interest credit entries, 3 rent receipts.',
+      openVoucher: false
+    },
+    'other-exp': {
+      context: ['P&L', 'Other expenses'],
+      delta: '+₹58.10 L (+8.0%)',
+      narrative: `Other expenses grew broadly with business volume. Biggest movers: <span class="hl">freight outward (+₹24 L)</span> from higher dispatches, and <span class="hl">power &amp; fuel (+₹18 L)</span> reflecting both TNEB tariff revision and higher plant utilisation.`,
+      drivers: [
+        {name: 'Freight outward', party: 'Transporter ledgers', amt: '+₹24 L'},
+        {name: 'Power & fuel', party: 'TNEB, diesel', amt: '+₹18 L'},
+        {name: 'Repairs & maintenance', party: 'Hosur plant', amt: '+₹9 L'},
+        {name: 'Travel & conveyance', party: 'Sales team', amt: '+₹7 L'}
+      ],
+      source: '<strong>Source:</strong> 268 expense vouchers aggregated across 22 ledger heads.',
+      openVoucher: false
+    },
+
+    // CASH FLOW
+    'cf-receipts': {
+      context: ['Cash Flow', 'Customer Receipts'],
+      delta: '−₹1.84 Cr (−7.1%)',
+      narrative: `Receipts from domestic customers fell despite revenue growth — a classic <span class="hl">working capital stretch</span>. <span class="hl">DSO rose from 62 to 74 days</span>. Two government-linked customers (DMRC sub-contractors) delayed payments by 45+ days against 30-day terms. ₹2.18 Cr in expected collections slipped into January.`,
+      drivers: [
+        {name: 'L&T / DMRC contractor — overdue', party: 'Inv aging 45-60 days', amt: '−₹1.48 Cr'},
+        {name: 'KEC International — part payment', party: '₹60 L of ₹94 L received', amt: '−₹34 L'},
+        {name: 'Normal monthly collections', party: 'On track', amt: 'Flat'}
+      ],
+      source: '<strong>Source:</strong> 386 receipt vouchers reconciled with sales ledger aging. DSO computed on rolling 90-day basis per standard formula.',
+      openVoucher: false
+    },
+    'cf-legal': {
+      context: ['Cash Flow', 'Legal & Professional Payments'],
+      delta: '+₹58 L outflow',
+      narrative: `Legal payments spiked — almost entirely the <span class="hl">EY audit overrun settlement</span>. Payment voucher <strong>PV-1184 dated 28-Nov-2025</strong> settled ₹45.31 L of the ₹38.4 L invoice + taxes. The remaining ₹12 L was routine retainers and filing fees.`,
+      drivers: [
+        {name: 'Ernst & Young — settlement', party: 'Payment via NEFT · SBI', amt: '₹45.3 L', voucher: 'PV-1184'},
+        {name: 'Khaitan & Co', party: 'RTGS', amt: '₹4.8 L'},
+        {name: 'Retainers + filing fees', party: 'Multiple', amt: '₹8.0 L'}
+      ],
+      source: '<strong>Source:</strong> 11 payment vouchers, 2 bank debit entries. Cross-tied to legal expense ledger in P&L view.',
+      openVoucher: 'JV-2589'
+    },
+    'cf-open': {
+      context: ['Cash Flow', 'Opening Balance'],
+      delta: '₹4.82 Cr',
+      narrative: `Opening cash &amp; bank balance as at 01-Oct-2025 across all group entities. Composition: <span class="hl">SBI CC accounts ₹2.14 Cr</span>, HDFC current ₹1.68 Cr, FZE AED accounts ₹84 L equivalent, petty cash ₹16 L.`,
+      drivers: [
+        {name: 'SBI — CC & Current', party: '3 accounts', amt: '₹2.14 Cr'},
+        {name: 'HDFC — Current', party: '2 accounts', amt: '₹1.68 Cr'},
+        {name: 'FZE — Mashreq AED', party: 'FX @ 22.40', amt: '₹84 L'},
+        {name: 'Petty cash (4 locations)', party: 'Physical verified', amt: '₹16 L'}
+      ],
+      source: '<strong>Source:</strong> Tally Bank Reconciliation Statement + FZE QuickBooks cash tab as at 30-Sep-2025. All accounts BRS-reconciled.',
+      openVoucher: false
+    },
+    'cf-suppliers': {
+      context: ['Cash Flow', 'Supplier Payments'],
+      delta: '+₹2.18 Cr outflow',
+      narrative: `Supplier outflows grew sharply — driven by <span class="hl">higher procurement volume</span> (see P&L Materials) and a <span class="hl">conscious DPO compression</span>. DPO fell from 58 to 51 days as FINK negotiated ₹0.8% early-payment discount with JSW and two other mills.`,
+      drivers: [
+        {name: 'JSW Steel — early pay discount', party: '4 invoices settled early', amt: '₹1.24 Cr'},
+        {name: 'Tata Steel — normal cycle', party: 'Routine', amt: '₹68 L'},
+        {name: 'Ferro-alloy imports (USD)', party: 'LC-backed', amt: '₹26 L'}
+      ],
+      source: '<strong>Source:</strong> 142 payment vouchers, 8 LC retirements. Tied to AP aging in Tally.',
+      openVoucher: false
+    }
+  };
+
+  // ============ AI PANEL RENDERER ============
+  function renderAI(key) {
+    const e = explanations[key];
+    const panel = document.getElementById('ai-content');
+    document.getElementById('bc-line').textContent = e.context.join(' / ') + ' · ' + e.delta;
+
+    const driversHTML = e.drivers.map(d => `
+      <div class="driver" ${d.voucher ? `onclick="openVoucher('${d.voucher}')"` : ''}>
+        <div class="driver-name">${d.name}<span class="party">${d.party}${d.voucher ? ' · ' + d.voucher + ' →' : ''}</span></div>
+        <div class="driver-amt">${d.amt}</div>
+      </div>
+    `).join('');
+
+    panel.innerHTML = `
+      <div class="ai-body">
+        <div class="ai-context">
+          ${e.context.map(c => `<span class="tag">${c}</span>`).join('')}
+          <span style="margin-left:auto; font-weight:600;">${e.delta}</span>
+        </div>
+        <div class="ai-explanation">${e.narrative}</div>
+
+        <div class="ai-breakdown">
+          <div class="ai-breakdown-title">Variance drivers · click to drill</div>
+          ${driversHTML}
+        </div>
+      </div>
+      <div class="ai-source">${e.source}</div>
+      <div class="ai-actions">
+        ${e.openVoucher ? `<button class="ai-btn primary" onclick="openVoucher('${e.openVoucher}')">View Voucher →</button>` : ''}
+        <button class="ai-btn">Ask follow-up</button>
+        <button class="ai-btn">Export note</button>
+      </div>
+    `;
+  }
+
+  // ============ ROW INTERACTIONS ============
+  document.querySelectorAll('tr.drillable').forEach(row => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('tr.drillable.selected').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      const key = row.dataset.key;
+      // toggle subrows
+      document.querySelectorAll(`tr.subrow`).forEach(sr => sr.classList.remove('visible'));
+      row.classList.toggle('open');
+      if (row.classList.contains('open')) {
+        document.querySelectorAll(`tr.subrow[data-parent="${key}"]`).forEach(sr => sr.classList.add('visible'));
+      }
+      if (explanations[key]) renderAI(key);
+    });
+  });
+
+  document.querySelectorAll('.wf-col, .wf-row').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.wf-col.selected').forEach(c => c.classList.remove('selected'));
+      if (el.classList.contains('wf-col')) el.classList.add('selected');
+      const key = el.dataset.key;
+      if (explanations[key]) renderAI(key);
+    });
+  });
+
+  // ============ MODE TOGGLE ============
+  document.querySelectorAll('.mode-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.dataset.mode;
+      document.getElementById('pl-view').style.display = mode === 'pl' ? 'block' : 'none';
+      document.getElementById('cf-view').style.display = mode === 'cf' ? 'block' : 'none';
+      document.getElementById('ai-content').innerHTML = `
+        <div class="ai-empty">
+          Select a ${mode === 'pl' ? 'line item' : 'cash flow bar or line'} to see why it moved.<br>Every number traces to a ${mode === 'pl' ? 'Tally' : 'bank'} voucher.
+        </div>`;
+      document.getElementById('bc-line').textContent = mode === 'pl'
+        ? 'Select a line item to see AI explanation →'
+        : 'Select a cash flow bar to see AI explanation →';
+    });
+  });
+
+  // ============ MODAL ============
+  function openVoucher(id) {
+    document.getElementById('voucherModal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('voucherModal').classList.remove('open');
+  }
+  document.getElementById('voucherModal').addEventListener('click', (e) => {
+    if (e.target.id === 'voucherModal') closeModal();
+  });
+
+  // Auto-select Legal line on load for demo impact
+  setTimeout(() => {
+    const legalRow = document.querySelector('tr.drillable[data-key="legal"]');
+    if (legalRow) legalRow.click();
+  }, 400);
+
+  // GA4 demo screen tracking
+  if(typeof gtag==='function'){
+    gtag('event','demo_screen_viewed',{event_category:'demo',screen_name:'variance'});
+  }
+</script>
+
+</body>
+</html>

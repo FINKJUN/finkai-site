@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Consolidation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-card: #fbf8f0;
+  --bg-elev: #ffffff;
+  --ink: #1a1612;
+  --ink-2: #4a4036;
+  --ink-3: #8a7f6e;
+  --rule: #d9cfb8;
+  --rule-soft: #e8dfc9;
+  --accent: #7a1f1f;
+  --gold: #b8862b;
+  --positive: #0e4429;
+  --negative: #7a1f1f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13px; line-height: 1.5;
+  background-image:
+    radial-gradient(at 12% 4%, rgba(184,134,43,0.05) 0, transparent 45%),
+    radial-gradient(at 88% 96%, rgba(122,31,31,0.04) 0, transparent 50%);
+}
+.topbar { display: flex; align-items: center; padding: 14px 28px; border-bottom: 1px solid var(--rule); background: var(--bg-card); gap: 28px; }
+.brand { font-family: 'Fraunces', serif; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+.brand .dot { color: var(--accent); }
+.brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.15em; padding-left: 14px; margin-left: 4px; border-left: 1px solid var(--rule); }
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tab { padding: 8px 14px; font-size: 12px; color: var(--ink-2); cursor: pointer; text-decoration: none; border-radius: 2px; }
+.tab:hover { background: var(--rule-soft); }
+.tab.active { background: var(--ink); color: var(--bg); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border: 1px solid var(--rule); border-radius: 24px; background: var(--bg-elev); font-size: 12px; }
+.avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--gold)); color: white; display: grid; place-items: center; font-weight: 600; font-size: 11px; }
+
+.hero {
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500; font-size: 38px;
+  letter-spacing: -0.02em; line-height: 1.05;
+}
+.hero h1 em { font-style: italic; color: var(--ink-3); font-weight: 400; }
+.hero .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--ink-3);
+  margin-top: 12px; letter-spacing: 0.04em;
+}
+
+.fx-banner {
+  background: var(--ink); color: var(--bg);
+  padding: 14px 32px;
+  display: flex; gap: 32px; align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.fx-banner .item { display: flex; gap: 8px; align-items: baseline; }
+.fx-banner .k { color: rgba(245,241,232,0.6); text-transform: uppercase; letter-spacing: 0.1em; font-size: 9px; }
+.fx-banner .v { color: var(--gold); font-weight: 600; }
+.fx-banner .source { margin-left: auto; color: rgba(245,241,232,0.5); font-size: 10px; }
+
+.body {
+  padding: 28px 32px 60px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+}
+
+.consol-table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.consol-table-head {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--ink);
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.consol-table-head .title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.consol-table-head .period {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.14em;
+}
+
+.consol-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.consol-table th, .consol-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+}
+.consol-table th:first-child, .consol-table td:first-child {
+  text-align: left;
+  padding-left: 24px;
+  min-width: 200px;
+}
+.consol-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  font-weight: 600;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.consol-table th.entity {
+  border-bottom: 2px solid var(--rule);
+}
+.consol-table th.flag {
+  font-size: 9px;
+  color: var(--ink-3);
+  font-weight: 500;
+  padding-bottom: 4px;
+  padding-top: 12px;
+  border-bottom: none;
+}
+.consol-table th.elim { background: var(--rule-soft); }
+.consol-table th.consol { background: var(--ink); color: var(--bg); }
+.consol-table td {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+}
+.consol-table td.elim { background: rgba(184,134,43,0.06); color: var(--accent); }
+.consol-table td.consol { background: var(--bg-card); font-weight: 700; border-left: 1px solid var(--rule); }
+.consol-table tr.section td {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  font-weight: 700;
+  padding-top: 16px;
+  background: transparent;
+  border-bottom: 1px solid var(--ink);
+}
+.consol-table tr.subtotal { background: var(--rule-soft); }
+.consol-table tr.subtotal td { font-weight: 700; }
+.consol-table tr.total { background: var(--ink); }
+.consol-table tr.total td { color: var(--bg); font-weight: 700; font-size: 13px; padding: 12px 10px; border-bottom: none; }
+.consol-table tr.total td.consol { background: var(--ink); }
+.consol-table tbody tr:hover:not(.section):not(.total):not(.subtotal) { background: rgba(184,134,43,0.06); cursor: pointer; }
+
+.consol-table .row-l3 td:first-child { font-family: 'Inter Tight', sans-serif; font-size: 12px; color: var(--ink); font-weight: 500; }
+.consol-table .row-l4 td:first-child { padding-left: 40px; font-family: 'Inter Tight', sans-serif; font-size: 11px; color: var(--ink-2); }
+.consol-table .row-l4 td { color: var(--ink-2); font-size: 11px; }
+
+.flag-pill {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 9px;
+  margin-left: 4px;
+  color: var(--ink-3);
+}
+
+/* RIGHT side panels */
+.side { display: flex; flex-direction: column; gap: 18px; }
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 18px 20px;
+}
+.panel-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.panel h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.elim-list { font-size: 12px; }
+.elim-list .item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.elim-list .item:last-child { border-bottom: none; }
+.elim-list .item .desc { color: var(--ink-2); margin-bottom: 4px; }
+.elim-list .item .nums {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.elim-list .item .amt { color: var(--accent); font-weight: 600; }
+
+.fx-impact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fx-impact .row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0;
+  font-size: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.fx-impact .row:last-child { border-bottom: none; }
+.fx-impact .row.tot { background: var(--rule-soft); margin: 0 -20px; padding: 10px 20px; font-weight: 700; }
+.fx-impact .v { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+.checklist { font-size: 12px; }
+.checklist .item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex; gap: 10px;
+  align-items: center;
+}
+.checklist .item:last-child { border-bottom: none; }
+.checklist .item .check {
+  width: 16px; height: 16px;
+  border: 1px solid var(--positive);
+  background: var(--positive);
+  color: white;
+  border-radius: 2px;
+  display: grid; place-items: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.checklist .item.warn .check { background: var(--gold); border-color: var(--gold); }
+.checklist .item .label { flex: 1; }
+.checklist .item .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-3);
+}
+
+.foot {
+  border-top: 1px solid var(--rule);
+  padding: 18px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  justify-content: space-between;
+}
+.foot a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.foot a:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 1100px) {
+  .body { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">FINK<span class="dot">.</span></div>
+  <div class="brand-sub">Sundaram Steels Group</div>
+  <nav class="tabs">
+    <a class="tab" href="dashboard.html">Dashboard</a>
+    <a class="tab" href="chat.html">Ask FINK</a>
+    <a class="tab" href="variance.html">Variance</a>
+    <a class="tab" href="pnl.html">Reports</a>
+    <a class="tab active" href="consolidation.html">Consolidation</a>
+    <a class="tab" href="admin.html">Admin</a>
+  </nav>
+  <div class="user-chip"><span class="avatar">RP</span><span>Rohan Parthasarathy</span></div>
+</header>
+
+<section class="hero">
+  <h1>Group Consolidation <em>· Q1 FY2025-26</em></h1>
+  <div class="meta">4 entities · 3 INR + 1 AED · Closing-rate FX translation · Inter-company eliminations applied · Schedule III · Ind AS 110</div>
+</section>
+
+<div class="fx-banner">
+  <div class="item"><span class="k">FX rate · AED/INR</span><span class="v">22.84</span></div>
+  <div class="item"><span class="k">Method</span><span class="v">Closing rate (B/S) · Average rate (P&amp;L)</span></div>
+  <div class="item"><span class="k">Avg rate Q1</span><span class="v">22.71</span></div>
+  <div class="item"><span class="k">FCTR (CTR)</span><span class="v" style="color:var(--gold)">+₹0.18 Cr</span></div>
+  <div class="source">RBI reference rates · Auto-fetched · Locked at period-end</div>
+</div>
+
+<div class="body">
+
+  <div class="consol-table-wrap">
+    <div class="consol-table-head">
+      <div class="title">Consolidated Profit and Loss</div>
+      <div class="period">Q1 FY26 · ₹ Cr · Ind AS</div>
+    </div>
+
+    <table class="consol-table">
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:bottom">Line item</th>
+          <th colspan="3" class="entity" style="text-align:center">India entities · Tally · INR</th>
+          <th class="entity" style="text-align:center">UAE · QBO · AED→INR</th>
+          <th rowspan="2" class="elim" style="vertical-align:bottom">Inter-co<br>eliminations</th>
+          <th rowspan="2" class="consol" style="vertical-align:bottom">Group<br>consolidated</th>
+        </tr>
+        <tr>
+          <th class="flag">Sundaram<br>Steels</th>
+          <th class="flag">Sundaram<br>Alloys</th>
+          <th class="flag">Sundaram<br>Logistics</th>
+          <th class="flag">Sundaram<br>Trading FZE</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="section"><td colspan="7">Income</td></tr>
+        <tr class="row-l3">
+          <td>Revenue from operations</td>
+          <td>34.20</td><td>14.50</td><td>6.85</td><td>8.42</td>
+          <td class="elim">(4.13)</td><td class="consol">59.84</td>
+        </tr>
+        <tr class="row-l4">
+          <td>— External revenue</td>
+          <td>32.10</td><td>12.85</td><td>3.62</td><td>7.14</td>
+          <td class="elim">—</td><td class="consol">55.71</td>
+        </tr>
+        <tr class="row-l4">
+          <td>— Inter-company sales</td>
+          <td>2.10</td><td>1.65</td><td>3.23</td><td>1.28</td>
+          <td class="elim">(8.26)</td><td class="consol">—</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Other income</td>
+          <td>0.62</td><td>0.18</td><td>0.04</td><td>0.34</td>
+          <td class="elim">—</td><td class="consol">1.18</td>
+        </tr>
+        <tr class="subtotal">
+          <td>Total income</td>
+          <td>34.82</td><td>14.68</td><td>6.89</td><td>8.76</td>
+          <td class="elim">(4.13)</td><td class="consol">61.02</td>
+        </tr>
+
+        <tr class="section"><td colspan="7">Expenses</td></tr>
+        <tr class="row-l3">
+          <td>Cost of materials consumed</td>
+          <td>18.40</td><td>5.20</td><td>—</td><td>4.81</td>
+          <td class="elim">—</td><td class="consol">28.41</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Changes in inventories</td>
+          <td>(0.94)</td><td>(0.32)</td><td>—</td><td>(0.16)</td>
+          <td class="elim">—</td><td class="consol">(1.42)</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Employee benefits expense</td>
+          <td>4.85</td><td>2.10</td><td>1.42</td><td>0.75</td>
+          <td class="elim">—</td><td class="consol">9.12</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Finance costs</td>
+          <td>0.74</td><td>0.22</td><td>0.18</td><td>0.04</td>
+          <td class="elim">—</td><td class="consol">1.18</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Depreciation &amp; amortization</td>
+          <td>1.62</td><td>0.71</td><td>0.32</td><td>0.12</td>
+          <td class="elim">—</td><td class="consol">2.77</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Logistics fees (intra-group)</td>
+          <td>0.85</td><td>0.42</td><td>—</td><td>0.18</td>
+          <td class="elim">(1.45)</td><td class="consol">—</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Other expenses</td>
+          <td>4.32</td><td>1.65</td><td>0.95</td><td>0.77</td>
+          <td class="elim">—</td><td class="consol">7.69</td>
+        </tr>
+        <tr class="subtotal">
+          <td>Total expenses</td>
+          <td>29.84</td><td>9.98</td><td>2.87</td><td>6.51</td>
+          <td class="elim">(1.45)</td><td class="consol">47.75</td>
+        </tr>
+
+        <tr class="section"><td colspan="7">Profit / Loss</td></tr>
+        <tr class="row-l3">
+          <td>Profit before tax (PBT)</td>
+          <td>4.98</td><td>4.70</td><td>4.02</td><td>2.25</td>
+          <td class="elim">(2.68)</td><td class="consol">13.27</td>
+        </tr>
+        <tr class="row-l3">
+          <td>Tax expense</td>
+          <td>1.05</td><td>0.96</td><td>0.85</td><td>—</td>
+          <td class="elim">(0.40)</td><td class="consol">2.46</td>
+        </tr>
+        <tr class="total">
+          <td>Profit after tax (PAT)</td>
+          <td>3.93</td><td>3.74</td><td>3.17</td><td>2.25</td>
+          <td class="elim">(2.28)</td><td class="consol">10.81</td>
+        </tr>
+
+        <tr class="section"><td colspan="7">Memo · Derived</td></tr>
+        <tr class="row-l3">
+          <td>EBITDA</td>
+          <td>8.42</td><td>3.15</td><td>1.82</td><td>1.23</td>
+          <td class="elim">—</td><td class="consol">14.62</td>
+        </tr>
+        <tr class="row-l3">
+          <td>EBITDA margin</td>
+          <td>24.6%</td><td>21.7%</td><td>26.6%</td><td>14.6%</td>
+          <td class="elim">—</td><td class="consol">24.4%</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="side">
+    <div class="panel">
+      <div class="panel-title">Group EBITDA</div>
+      <div style="font-family:'Fraunces',serif;font-weight:500;font-size:36px;letter-spacing:-0.02em;line-height:1">₹14.62 Cr</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);margin-top:4px">Q1 FY26 · Group consolidated</div>
+      <div style="margin-top:14px;font-size:12px;color:var(--ink-2);line-height:1.6">
+        Sum of entity EBITDAs ₹14.62 Cr matches consolidated ₹14.62 Cr exactly because EBITDA is pre-financing/pre-tax — no eliminations needed at this layer.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Inter-company eliminations</div>
+      <div class="elim-list">
+        <div class="item">
+          <div class="desc">Sundaram Steels → Alloys: alloy castings inter-co supply</div>
+          <div class="nums"><span>Revenue / Cost</span><span class="amt">(₹2.10 Cr)</span></div>
+        </div>
+        <div class="item">
+          <div class="desc">Sundaram Alloys → Trading FZE: export consignment</div>
+          <div class="nums"><span>Revenue / Cost</span><span class="amt">(₹1.65 Cr)</span></div>
+        </div>
+        <div class="item">
+          <div class="desc">Sundaram Logistics → all three: freight billing</div>
+          <div class="nums"><span>Logistics fee</span><span class="amt">(₹1.45 Cr)</span></div>
+        </div>
+        <div class="item">
+          <div class="desc">Trading FZE → Steels: re-export (intra-group)</div>
+          <div class="nums"><span>Revenue / Cost</span><span class="amt">(₹1.28 Cr)</span></div>
+        </div>
+        <div class="item">
+          <div class="desc">Tax on inter-co profits eliminated</div>
+          <div class="nums"><span>Tax expense</span><span class="amt">(₹0.40 Cr)</span></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--ink-3);font-family:'JetBrains Mono',monospace">
+        Total eliminations: ₹6.88 Cr revenue · ₹6.88 Cr expenses · net P&amp;L impact ₹0
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">FX translation</div>
+      <h3>Sundaram Trading FZE · UAE</h3>
+      <div class="fx-impact">
+        <div class="row"><span>Revenue (avg rate)</span><span class="v">@ 22.71</span></div>
+        <div class="row"><span>Expenses (avg rate)</span><span class="v">@ 22.71</span></div>
+        <div class="row"><span>B/S items (closing)</span><span class="v">@ 22.84</span></div>
+        <div class="row"><span>Equity (historical)</span><span class="v">@ 21.04</span></div>
+        <div class="row tot"><span>FCTR · OCI impact</span><span class="v" style="color:var(--gold)">+₹0.18 Cr</span></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--ink-3);line-height:1.5">
+        Closing-rate method per Ind AS 21. Cumulative translation reserve flows to OCI, not P&amp;L.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Consolidation checklist</div>
+      <div class="checklist">
+        <div class="item"><span class="check">✓</span><span class="label">All 4 entity TBs locked</span><span class="meta">Q1</span></div>
+        <div class="item"><span class="check">✓</span><span class="label">Inter-co reconciliations matched</span><span class="meta">5/5</span></div>
+        <div class="item"><span class="check">✓</span><span class="label">FX rates fetched (RBI)</span><span class="meta">28 Apr</span></div>
+        <div class="item"><span class="check">✓</span><span class="label">FCTR computed</span><span class="meta">auto</span></div>
+        <div class="item warn"><span class="check">!</span><span class="label">Audit confirmation pending — Trading FZE</span><span class="meta">EY · 4 May</span></div>
+        <div class="item"><span class="check">✓</span><span class="label">Schedule III mapping verified</span><span class="meta">100%</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+  <div>FINK · Group Consolidation · Q1 FY2025-26 · 4 entities · Ind AS 110 · Generated 09:42 IST</div>
+  <div><a href="../">← back to finkai.co</a></div>
+</footer>
+
+<script>
+if(typeof gtag==='function'){
+  gtag('event','demo_screen_viewed',{event_category:'demo',screen_name:'consolidation'});
+}
+</script>
+
+</body>
+</html>

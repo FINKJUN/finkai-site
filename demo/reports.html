@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Reports library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-card: #fbf8f0;
+  --bg-elev: #ffffff;
+  --ink: #1a1612;
+  --ink-2: #4a4036;
+  --ink-3: #8a7f6e;
+  --rule: #d9cfb8;
+  --rule-soft: #e8dfc9;
+  --accent: #7a1f1f;
+  --gold: #b8862b;
+  --positive: #0e4429;
+  --negative: #7a1f1f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--bg); color: var(--ink);
+  font-size: 13px; line-height: 1.5;
+  background-image:
+    radial-gradient(at 12% 4%, rgba(184,134,43,0.05) 0, transparent 45%),
+    radial-gradient(at 88% 96%, rgba(122,31,31,0.04) 0, transparent 50%);
+}
+.topbar { display: flex; align-items: center; padding: 14px 28px; border-bottom: 1px solid var(--rule); background: var(--bg-card); gap: 28px; }
+.brand { font-family: 'Fraunces', serif; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+.brand .dot { color: var(--accent); }
+.brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.15em; padding-left: 14px; margin-left: 4px; border-left: 1px solid var(--rule); }
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tab { padding: 8px 14px; font-size: 12px; color: var(--ink-2); cursor: pointer; text-decoration: none; border-radius: 2px; }
+.tab:hover { background: var(--rule-soft); }
+.tab.active { background: var(--ink); color: var(--bg); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border: 1px solid var(--rule); border-radius: 24px; background: var(--bg-elev); font-size: 12px; }
+.avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--gold)); color: white; display: grid; place-items: center; font-weight: 600; font-size: 11px; }
+
+.hero {
+  padding: 32px 32px 22px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500; font-size: 38px;
+  letter-spacing: -0.02em; line-height: 1.05;
+}
+.hero h1 em { font-style: italic; color: var(--ink-3); font-weight: 400; }
+.hero .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--ink-3);
+  margin-top: 10px; letter-spacing: 0.04em;
+}
+.btn-primary {
+  background: var(--ink); color: var(--bg);
+  border: none; padding: 11px 18px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px; font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.btn-primary:hover { background: var(--accent); }
+
+.body { padding: 28px 32px 60px; }
+
+.subnav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0;
+}
+.subnav a {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-weight: 500;
+}
+.subnav a:hover { color: var(--ink); }
+.subnav a.active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin: 28px 0 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.section-title .count {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.section-title:first-child { margin-top: 0; }
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.report-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.report-card:hover { border-color: var(--ink); }
+.report-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.report-icon {
+  width: 36px; height: 36px;
+  background: var(--ink); color: var(--bg);
+  border-radius: 2px;
+  display: grid; place-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 12px;
+}
+.report-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+.tag-statutory { background: rgba(122,31,31,0.1); color: var(--accent); }
+.tag-mgmt { background: rgba(184,134,43,0.15); color: var(--gold); }
+.tag-board { background: rgba(14,68,41,0.1); color: var(--positive); }
+.tag-ops { background: var(--rule-soft); color: var(--ink-2); }
+.report-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.report-desc {
+  font-size: 12px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.report-foot {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+  margin-top: auto;
+}
+
+/* Schedule table */
+.sched-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+}
+.sched-table th, .sched-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  font-size: 12px;
+}
+.sched-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  font-weight: 600;
+  background: var(--bg);
+}
+.sched-table tr:last-child td { border-bottom: none; }
+.sched-table .name { font-weight: 600; }
+.sched-table .freq { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.sched-table .recipients {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.sched-table tbody tr:hover { background: rgba(184,134,43,0.06); cursor: pointer; }
+.dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.dot-active { background: var(--positive); }
+.dot-paused { background: var(--gold); }
+
+/* History */
+.hist-list {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+}
+.hist-row {
+  padding: 12px 18px;
+  display: grid;
+  grid-template-columns: 90px 1fr auto auto;
+  gap: 18px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  font-size: 12px;
+}
+.hist-row:last-child { border-bottom: none; }
+.hist-row .when {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.hist-row .what {
+  display: flex; flex-direction: column;
+}
+.hist-row .what .title { font-weight: 600; }
+.hist-row .what .sub { font-size: 11px; color: var(--ink-3); }
+.hist-row .meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.hist-row .actions { display: flex; gap: 4px; }
+.hist-row .ico-btn {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  padding: 4px 8px;
+  font-size: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.hist-row .ico-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+.foot {
+  border-top: 1px solid var(--rule);
+  padding: 18px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  justify-content: space-between;
+}
+.foot a { color: var(--ink-3); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.foot a:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 1100px) {
+  .report-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .report-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">FINK<span class="dot">.</span></div>
+  <div class="brand-sub">Sundaram Steels Group</div>
+  <nav class="tabs">
+    <a class="tab" href="dashboard.html">Dashboard</a>
+    <a class="tab" href="chat.html">Ask FINK</a>
+    <a class="tab" href="variance.html">Variance</a>
+    <a class="tab active" href="pnl.html">Reports</a>
+    <a class="tab" href="consolidation.html">Consolidation</a>
+    <a class="tab" href="admin.html">Admin</a>
+  </nav>
+  <div class="user-chip"><span class="avatar">RP</span><span>Rohan Parthasarathy</span></div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Reports library <em>· board pack &amp; recurring schedules</em></h1>
+    <div class="meta">22 templates · 8 active schedules · last delivery 6 hours ago · auto-fetched from Q1 FY26 close</div>
+  </div>
+  <button class="btn-primary">⨁ New report</button>
+</section>
+
+<div class="body">
+
+  <nav class="subnav">
+    <a href="pnl.html">P&amp;L statement</a>
+    <a class="active" href="reports.html">All reports</a>
+    <a href="#">Statutory</a>
+    <a href="#">Management</a>
+    <a href="#">Board pack</a>
+    <a href="#">Schedules</a>
+    <a href="#">Export history</a>
+  </nav>
+
+  <div class="section-title">Featured · most-used<span class="count">6 templates</span></div>
+
+  <div class="report-grid">
+    <a class="report-card" href="pnl.html">
+      <div class="report-head"><div class="report-icon">P&amp;L</div><span class="report-tag tag-statutory">Statutory</span></div>
+      <div class="report-title">Profit &amp; Loss · Schedule III</div>
+      <div class="report-desc">Standalone or consolidated P&amp;L in Schedule III format. Q/H/Y periods. EBITDA bridge auto-attached.</div>
+      <div class="report-foot"><span>22 runs · last 09:42 IST</span><span>→ open</span></div>
+    </a>
+
+    <a class="report-card" href="consolidation.html">
+      <div class="report-head"><div class="report-icon">CON</div><span class="report-tag tag-statutory">Ind AS 110</span></div>
+      <div class="report-title">Group Consolidation</div>
+      <div class="report-desc">Multi-entity rollup with FX translation, inter-company eliminations, and CTR/FCTR. Auto-locked at period-end.</div>
+      <div class="report-foot"><span>14 runs · last 09:38 IST</span><span>→ open</span></div>
+    </a>
+
+    <a class="report-card" href="variance.html">
+      <div class="report-head"><div class="report-icon">VAR</div><span class="report-tag tag-mgmt">Management</span></div>
+      <div class="report-title">Variance · Actual vs Budget</div>
+      <div class="report-desc">Period-over-period and budget variance. AI-flagged drivers with voucher drill-down. EBITDA bridge included.</div>
+      <div class="report-foot"><span>38 runs · last 09:18 IST</span><span>→ open</span></div>
+    </a>
+
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">B/S</div><span class="report-tag tag-statutory">Statutory</span></div>
+      <div class="report-title">Balance Sheet · Schedule III</div>
+      <div class="report-desc">Standalone or consolidated B/S. Asset and liability classification. Notes &amp; schedules attached.</div>
+      <div class="report-foot"><span>18 runs · last 09:38 IST</span><span>→ open</span></div>
+    </a>
+
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">CF</div><span class="report-tag tag-statutory">Ind AS 7</span></div>
+      <div class="report-title">Cash Flow Statement</div>
+      <div class="report-desc">Indirect method. Operating, Investing, Financing splits. Reconciles to closing cash balance.</div>
+      <div class="report-foot"><span>16 runs · last yesterday</span><span>→ open</span></div>
+    </a>
+
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">BRD</div><span class="report-tag tag-board">Board pack</span></div>
+      <div class="report-title">Quarterly Board Pack</div>
+      <div class="report-desc">Auto-generated 24-page deck: P&amp;L, BS, CF, KPIs, variance, debtors, capex. CFO commentary editable.</div>
+      <div class="report-foot"><span>4 runs · last 22 Apr</span><span>→ open</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">All templates<span class="count">22 templates</span></div>
+
+  <div class="report-grid">
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">GST</div><span class="report-tag tag-statutory">Statutory · IN</span></div>
+      <div class="report-title">GSTR-1 / GSTR-3B</div>
+      <div class="report-desc">Outward supplies and summary GST returns, reconciled to books. JSON export for filing.</div>
+      <div class="report-foot"><span>monthly · auto-filed</span><span>→ open</span></div>
+    </a>
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">26AS</div><span class="report-tag tag-statutory">Statutory · IN</span></div>
+      <div class="report-title">TDS · Form 26AS Recon</div>
+      <div class="report-desc">Vendor and customer TDS reconciliation against Form 26AS. Mismatch flagged.</div>
+      <div class="report-foot"><span>quarterly</span><span>→ open</span></div>
+    </a>
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">DSO</div><span class="report-tag tag-mgmt">Management</span></div>
+      <div class="report-title">Debtors aging &amp; DSO</div>
+      <div class="report-desc">0–30 / 31–60 / 61–90 / 90+ buckets per entity. DSO trend by month.</div>
+      <div class="report-foot"><span>weekly</span><span>→ open</span></div>
+    </a>
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">DPO</div><span class="report-tag tag-mgmt">Management</span></div>
+      <div class="report-title">Creditors aging &amp; DPO</div>
+      <div class="report-desc">Vendor aging buckets, DPO trend, payment forecasting against expected receipts.</div>
+      <div class="report-foot"><span>weekly</span><span>→ open</span></div>
+    </a>
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">CAP</div><span class="report-tag tag-mgmt">Management</span></div>
+      <div class="report-title">Capex &amp; Asset Register</div>
+      <div class="report-desc">Capitalisation, WIP, depreciation by class &amp; entity. Schedule II compliant.</div>
+      <div class="report-foot"><span>monthly</span><span>→ open</span></div>
+    </a>
+    <a class="report-card" href="#">
+      <div class="report-head"><div class="report-icon">BNK</div><span class="report-tag tag-ops">Ops</span></div>
+      <div class="report-title">Bank Reconciliation</div>
+      <div class="report-desc">Auto-matched transactions across all bank accounts. Outstanding items aged.</div>
+      <div class="report-foot"><span>daily</span><span>→ open</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Active schedules<span class="count">8 active</span></div>
+
+  <table class="sched-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Report</th>
+        <th>Frequency</th>
+        <th>Recipients</th>
+        <th>Last sent</th>
+        <th>Next run</th>
+        <th>Format</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Daily cash position</td>
+        <td class="freq">Mon-Fri · 07:00</td>
+        <td class="recipients">CFO + 4 directors</td>
+        <td class="recipients">Today 07:00</td>
+        <td class="freq">Tomorrow 07:00</td>
+        <td class="freq">PDF + email</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Weekly debtors aging</td>
+        <td class="freq">Mon · 09:00</td>
+        <td class="recipients">CFO + Controller</td>
+        <td class="recipients">Mon 21 Apr</td>
+        <td class="freq">Mon 28 Apr 09:00</td>
+        <td class="freq">PDF + Excel</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Monthly P&amp;L · all entities</td>
+        <td class="freq">5th of month · 06:00</td>
+        <td class="recipients">CFO, CEO, Board (8)</td>
+        <td class="recipients">5 Apr 06:00</td>
+        <td class="freq">5 May 06:00</td>
+        <td class="freq">PDF · board layout</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Variance flags · weekly</td>
+        <td class="freq">Fri · 17:00</td>
+        <td class="recipients">CFO + 2 controllers</td>
+        <td class="recipients">Fri 25 Apr</td>
+        <td class="freq">Fri 2 May 17:00</td>
+        <td class="freq">In-app + email</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Bank reconciliation</td>
+        <td class="freq">Daily · 22:00</td>
+        <td class="recipients">3 finance team</td>
+        <td class="recipients">Today 22:00 (queued)</td>
+        <td class="freq">Today 22:00</td>
+        <td class="freq">Excel · email</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">GSTR-1 + 3B prep</td>
+        <td class="freq">11th of month</td>
+        <td class="recipients">Tax team (2)</td>
+        <td class="recipients">11 Apr</td>
+        <td class="freq">11 May</td>
+        <td class="freq">JSON + PDF</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-paused"></span>Paused</td>
+        <td class="name">FX exposure summary</td>
+        <td class="freq">Mon · 10:00</td>
+        <td class="recipients">CFO + Treasury</td>
+        <td class="recipients">7 Apr (paused)</td>
+        <td class="freq">Resume requested</td>
+        <td class="freq">PDF</td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-active"></span>Active</td>
+        <td class="name">Quarterly board pack</td>
+        <td class="freq">Quarterly · T+5</td>
+        <td class="recipients">Board (8)</td>
+        <td class="recipients">5 Apr 06:00</td>
+        <td class="freq">5 Jul</td>
+        <td class="freq">PDF · 24-page</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Recent runs<span class="count">last 24 hours</span></div>
+
+  <div class="hist-list">
+    <div class="hist-row">
+      <div class="when">09:42 IST</div>
+      <div class="what"><span class="title">P&amp;L · Q1 FY26 · Group consolidated</span><span class="sub">Manual run · Rohan Parthasarathy · 4 entities · INR Cr</span></div>
+      <div class="meta">2.4 MB · 18 pages</div>
+      <div class="actions"><button class="ico-btn">⤓ PDF</button><button class="ico-btn">⤓ Excel</button><button class="ico-btn">view</button></div>
+    </div>
+    <div class="hist-row">
+      <div class="when">09:18 IST</div>
+      <div class="what"><span class="title">Variance · Q1 vs Budget</span><span class="sub">Manual run · Rohan Parthasarathy · 12 flags surfaced</span></div>
+      <div class="meta">1.8 MB · 12 pages</div>
+      <div class="actions"><button class="ico-btn">⤓ PDF</button><button class="ico-btn">⤓ Excel</button><button class="ico-btn">view</button></div>
+    </div>
+    <div class="hist-row">
+      <div class="when">07:02 IST</div>
+      <div class="what"><span class="title">Daily cash position</span><span class="sub">Scheduled · sent to 5 recipients · ₹12.04 Cr group cash</span></div>
+      <div class="meta">320 KB · 1 page</div>
+      <div class="actions"><button class="ico-btn">⤓ PDF</button><button class="ico-btn">view</button></div>
+    </div>
+    <div class="hist-row">
+      <div class="when">22:00 yest</div>
+      <div class="what"><span class="title">Bank reconciliation · all banks</span><span class="sub">Scheduled · 4 entities · 0 unmatched items</span></div>
+      <div class="meta">680 KB · Excel</div>
+      <div class="actions"><button class="ico-btn">⤓ Excel</button><button class="ico-btn">view</button></div>
+    </div>
+    <div class="hist-row">
+      <div class="when">17:00 Fri</div>
+      <div class="what"><span class="title">Variance flags · weekly</span><span class="sub">Scheduled · 8 flags · 3 marked acknowledged</span></div>
+      <div class="meta">in-app + email</div>
+      <div class="actions"><button class="ico-btn">view</button></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+  <div>FINK · Reports library · 22 templates · 8 active schedules · last refresh 09:42 IST</div>
+  <div><a href="../">← back to finkai.co</a></div>
+</footer>
+
+<script>
+if(typeof gtag==='function'){
+  gtag('event','demo_screen_viewed',{event_category:'demo',screen_name:'reports'});
+}
+</script>
+
+</body>
+</html>

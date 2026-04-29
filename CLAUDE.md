@@ -43,7 +43,7 @@ This is the most important section. Getting entity relationships wrong creates l
 ## 3. File Structure
 
 ```
-FINKAI-V3/
+finkaiwebsite/
 ├── index.html          # Main site — all sections, all modals, all JS
 ├── tally.html          # TallyPrime integration page
 ├── sap.html            # SAP S/4HANA reporting page
@@ -53,6 +53,16 @@ FINKAI-V3/
 ├── sitemap.xml         # All 5 main pages listed
 ├── robots.txt          # Allow all, points to sitemap
 ├── CLAUDE.md           # This file
+└── demo/               # Clickable product demo at finkai.co/demo/
+    ├── index.html      # Launcher landing page — lists 8 screens
+    ├── login.html      # Step 00 — Sign in screen (entry to demo)
+    ├── dashboard.html  # Step 01 — CFO dashboard
+    ├── chat.html       # Step 02 — Ask FINK conversational interface
+    ├── variance.html   # Step 03 — Variance analysis with voucher drill-down
+    ├── pnl.html        # Step 04 — P&L statement + EBITDA bridge
+    ├── consolidation.html  # Step 05 — Group consolidation, FX, eliminations
+    ├── reports.html    # Step 06 — Reports library + scheduled deliveries
+    └── admin.html      # Step 07 — Workspace admin, users, integrations, audit
 ```
 
 All changes are made directly to HTML files. There is no build step, no framework, no npm. Pure HTML/CSS/JS.
@@ -458,5 +468,83 @@ git push origin master
 - [ ] **ERP sub-pages** (tally.html, sap.html, oracle.html, quickbooks.html) — need same Fink-style mockup redesign and deeper content as index.html
 - [ ] **Budget builder section** — deliberately excluded, revisit when ready
 - [x] **Analytics** — GA4 (`G-4M411B9D1H`) installed on all 6 pages on 2026-04-28, gated behind Consent Mode v2 (analytics_storage denied by default, granted on cookie Accept)
+- [x] **Clickable demo** — 8-screen product tour deployed at `finkai.co/demo/` on 2026-04-29. Hero CTA on main site links to it. See §16 for details.
 - [ ] **Data Processing Agreement** — currently routes to email, may need own modal
 - [ ] **sitemap.xml** — add `thank-you.html`? No — it's noindex, leave it out
+
+---
+
+## 16. Clickable demo at /demo/
+
+A separate 8-screen product walkthrough lives in `demo/` and serves at `finkai.co/demo/`. Built April 2026, originated from reference mockups at `Downloads/fink-netlify/`.
+
+### Purpose
+LinkedIn-shareable / customer-facing clickable demo of the FINK product. Each screen is standalone HTML — same constraint as the marketing site (no build step, no framework). Visitor clicks through the user journey: login → dashboard → chat → variance → P&L → consolidation → reports → admin.
+
+### Design language — DELIBERATELY DIFFERENT from marketing site
+The demo uses an **editorial finance-terminal aesthetic** (Bloomberg meets premium financial stationery), NOT the marketing site's blue-purple SaaS look. This contrast is intentional — the marketing site is consumer-friendly, the product looks high-credibility for CFO buyers.
+
+**Demo CSS variables** (do not change):
+```css
+--bg: #f5f1e8           /* warm cream */
+--bg-card: #fbf8f0
+--ink: #1a1612          /* deep brown-black */
+--ink-2: #4a4036
+--ink-3: #8a7f6e
+--rule: #d9cfb8
+--accent: #7a1f1f       /* oxblood */
+--gold: #b8862b
+--positive: #0e4429     /* deep green */
+--negative: #7a1f1f     /* oxblood */
+```
+
+**Fonts:**
+- Display: `Fraunces` (serif, italic for emphasis)
+- Body: `Inter Tight`
+- Numbers: `JetBrains Mono`
+
+### Sample data — Sundaram Steels Group (NOT Vega)
+The demo uses a fictional Indian conglomerate **Sundaram Steels Group** with 4 entities:
+
+| Entity | ERP | Currency |
+|---|---|---|
+| Sundaram Steels Pvt Ltd | TallyPrime | INR |
+| Sundaram Alloys LLP | TallyPrime | INR |
+| Sundaram Logistics | TallyPrime | INR |
+| Sundaram Trading FZE | QuickBooks Online | AED |
+
+**Why different from Vega Group:** Vega is for ERP-integration mockups on the marketing site (6 entities, multi-ERP showcase). Sundaram is for product-flow mockups in the demo (4 entities, focused multi-currency consolidation story). Both are deliberate. Do NOT cross-mix entity names.
+
+### Demo flow (the 90-second pitch)
+1. **`login.html`** — Sign in (any credentials redirect to dashboard)
+2. **`dashboard.html`** — Morning view: KPIs, AI alerts, entity scorecard
+3. **`chat.html`** — Ask FINK: "What's our EBITDA Q1?" → live tool calls → EBITDA bridge waterfall + commentary → follow-up: "Compare to budget"
+4. **`variance.html`** — "Why did legal costs jump 209%?" → AI explanation → drill-down → Tally voucher modal
+5. **`pnl.html`** — Schedule III P&L, EBITDA bridge, variance flags
+6. **`consolidation.html`** — 4 entities + group column + FX translation + inter-co eliminations
+7. **`reports.html`** — 22 templates, 8 scheduled deliveries, run history
+8. **`admin.html`** — 12 users, 7 roles, 6 integrations, audit log
+
+### Banned content (extends §5 rules to demo)
+- ❌ "Zero hallucination" → use "Reduced hallucination risk" or "Retrieval-grounded"
+- ❌ "A product of Ananta Technologies LLP" → use "An Ananta Group partnership"
+- ❌ "by FINAHQ" — never appears anywhere in demo
+
+### GA4 event tracking
+Each demo screen fires a `demo_screen_viewed` event with `screen_name` parameter when loaded:
+- `launcher`, `login`, `dashboard`, `chat`, `variance`, `pnl`, `consolidation`, `reports`, `admin`
+
+Use this in GA4 to see which screens visitors click through and where they drop off in the demo flow.
+
+### Linking convention
+- Every product screen has a **topbar with `<nav class="tabs">`** linking to all sibling screens (Dashboard / Ask FINK / Variance / Reports / Consolidation / Admin)
+- Every screen footer has a `← back to finkai.co` link
+- The launcher (`demo/index.html`) links into all 8 individual screens
+- Main site `index.html` hero CTA "See the product live →" links to `/demo/`
+
+### To add a new demo screen
+1. Copy structure from `demo/admin.html` (cleanest scaffold)
+2. Update topbar nav: add the new tab to ALL existing screens
+3. Add card to `demo/index.html` launcher grid
+4. Add GA4 event with new `screen_name`
+5. Update §16 file structure list above
