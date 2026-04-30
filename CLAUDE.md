@@ -548,3 +548,70 @@ Use this in GA4 to see which screens visitors click through and where they drop 
 3. Add card to `demo/index.html` launcher grid
 4. Add GA4 event with new `screen_name`
 5. Update §16 file structure list above
+
+---
+
+## 17. Guided product tour at /tour/
+
+A **Storylane-style guided walkthrough** lives at `tour/index.html` and serves at `finkai.co/tour/`. Built April 2026 to address the limitation that `/demo/` reads as a "reference document" rather than a product. The tour presents the same 8 screens but inside a single shell with browser-window chrome, pulsing hotspots, tooltips, and progress dots — feels like trying the product, not reading about it.
+
+### Relationship to /demo/
+- **`/tour/`** — guided 9-step linear tour. Best for LinkedIn / cold link sharing. The visitor lands and is walked through the product.
+- **`/demo/`** — open click-around reference. Best for sales calls where you want to demo specific features. The visitor can navigate freely.
+- Both load the same underlying screens. `/tour/` loads them inside an iframe with `?tour=1` and JS-injects CSS to hide the topbar nav and footer back-link.
+
+### Architecture
+Single self-contained file: **`tour/index.html`**. ~600 lines. Uses no external libraries.
+
+- Top bar: brand + 9 progress dots + step counter + Exit button
+- Stage area: either a "cover" (welcome / closing) or a "screen" (iframe inside a fake browser window)
+- Iframe loads existing demo HTML with `?tour=1` query param — same-origin CSS injection hides chrome
+- Hotspot + tooltip overlay positioned by percentage coordinates relative to the iframe
+
+### The STEPS array (line ~280 in tour/index.html)
+The whole tour is defined declaratively. To **edit copy or hotspot positions**, modify entries in `const STEPS = [...]`.
+
+Each step has either:
+- `type: 'cover'` — full-screen welcome / closing card with headline, body, CTA buttons
+- `type: 'screen'` — iframe with hotspot. Required fields: `src`, `fakeUrl` (shown in URL bar), `label`, `headline`, `body`, `hotspot: {top, left}`, `arrow` (left|right|top|bottom)
+
+**Hotspot positioning** uses CSS percentages relative to the iframe. `top: '38%'` means 38% down from the iframe top edge. To re-position, open the screen at `/demo/<screen>.html?tour=1` in a browser, find the element you want to highlight, and estimate its center as a percentage of the viewport.
+
+### Keyboard navigation (built in)
+- `→` / `Space` → next step
+- `←` → previous step
+- `Esc` → exit to homepage
+- Click any progress dot to jump to that step
+- URL hash `#3` deep-links to step 3 (shareable URL like `finkai.co/tour/#5`)
+
+### GA4 events
+- `tour_step_viewed` (fires on every step) with `step_index` + `step_name`
+- `tour_completed` (fires on closing step)
+- `tour_cta_book_clicked` (fires when user clicks the closing "Book a demo" button) with `from_step`
+- `tour_exited` (fires when user clicks Exit ✕) with `exit_at_step` + `exit_at_index`
+
+This gives full funnel visibility — see in GA4 which step has the highest drop-off.
+
+### How CSS injection works
+When the iframe loads, parent JS reaches into the iframe's `contentDocument` and appends a `<style>` block that hides:
+- `.tabs, nav.tabs` — the topbar nav of each demo screen
+- `.foot a, footer a` — the "← back to finkai.co" link
+- `.demo-banner` — the "Live demo · Click sign in" banner on `login.html`
+- `.nav-burger` — the mobile hamburger if any
+
+This works because both pages are on the same origin (finkai.co). Iframe gets `pointer-events: none` so the user can ONLY click the hotspot and tour controls — clicks on the underlying screen do nothing, like a screenshot.
+
+### Closing CTA goes to Cal.com
+The final step has a "Book a 30-min demo →" button that opens Cal.com with UTM params:
+`https://cal.com/arjun-parthasarathy-jscofn/finkai?utm_source=tour&utm_medium=tour_cta&utm_campaign=product_walkthrough`
+Bookings sourced from the tour will be tagged accordingly in Cal.com's tracking.
+
+### To add a new tour step
+1. Add a new entry to `STEPS` in `tour/index.html`
+2. Set `src` to the demo screen URL with `?tour=1`
+3. Pick `hotspot` coordinates (percentages) and `arrow` direction
+4. Write `headline` (max 6 words) and `body` (max 30 words — short)
+5. Optionally update progress-dot count math if you change the total
+
+### To restyle the tour
+All theme variables live at the top of `tour/index.html` in `:root`. The dark backdrop is intentional — makes the "product window" inside feel premium and screenshot-y. Don't change the dark backdrop without strong reason; the contrast against the warm cream `--bg` of the screens is what sells the "screenshot" illusion.

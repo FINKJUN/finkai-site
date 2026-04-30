@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINK — Interactive Product Tour</title>
+<meta name="description" content="A 90-second guided tour of FINK: financial intelligence for multi-entity teams. See the product end-to-end — chat, variance, P&L, consolidation, and more.">
+<meta name="robots" content="index, follow">
+
+<!-- OG / LinkedIn preview -->
+<meta property="og:title" content="FINK — Interactive Product Tour">
+<meta property="og:description" content="See the product end-to-end in 90 seconds. Multi-entity financial intelligence with voucher-traceable answers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://finkai.co/tour/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- GA4 (consistent with rest of site) -->
+<script>(function(){ var g=new URLSearchParams(location.search).get('gclid'); if(g) try{localStorage.setItem('fk_gclid',g);}catch(e){} })()</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  var savedConsent='denied';
+  try { if(localStorage.getItem('fk_cookie')==='accepted') savedConsent='granted'; } catch(e){}
+  gtag('consent', 'default', {
+    'ad_storage': savedConsent,
+    'ad_user_data': savedConsent,
+    'ad_personalization': savedConsent,
+    'analytics_storage': savedConsent,
+    'wait_for_update': 500
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16517553915"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'AW-16517553915');
+  gtag('config', 'G-4M411B9D1H');
+</script>
+
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg-2: #0f1424;
+  --panel: #14182b;
+  --ink: #f5f1e8;
+  --ink-2: rgba(245,241,232,0.7);
+  --ink-3: rgba(245,241,232,0.45);
+  --rule: rgba(245,241,232,0.12);
+  --accent: #d4a94a;
+  --accent-2: #ec4f60;
+  --positive: #4ade80;
+  --shadow: 0 30px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  background-image:
+    radial-gradient(at 8% 12%, rgba(212,169,74,0.06) 0, transparent 45%),
+    radial-gradient(at 92% 88%, rgba(236,79,96,0.06) 0, transparent 45%);
+}
+
+/* TOP BAR — minimal, dark, 'tour mode' */
+.tour-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(10,14,26,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 24px;
+  z-index: 50;
+}
+.tour-brand {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.tour-brand .dot { color: var(--accent-2); }
+.tour-brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  padding-left: 14px;
+  border-left: 1px solid var(--rule);
+  align-self: center;
+  margin-left: 4px;
+}
+
+/* PROGRESS DOTS */
+.progress {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+}
+.progress-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--rule);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.progress-dot:hover { background: var(--ink-3); transform: scale(1.3); }
+.progress-dot.done { background: var(--ink-3); }
+.progress-dot.active {
+  background: var(--accent);
+  width: 28px;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(212,169,74,0.5);
+}
+
+.tour-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+.tour-exit {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tour-exit:hover { color: var(--ink); border-color: var(--ink-3); }
+
+/* STAGE — the area where the screen / cover lives */
+.stage {
+  position: absolute;
+  top: 56px; left: 0; right: 0; bottom: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+/* COVER (welcome + closing screens) */
+.cover {
+  max-width: 760px;
+  text-align: center;
+  padding: 40px;
+  animation: fadeUp 0.6s ease-out;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+.cover-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.cover-eyebrow::before, .cover-eyebrow::after {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--rule);
+}
+.cover h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 64px;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.cover p {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 36px;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cover-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.btn {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 26px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { background: #e0bb6a; transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+}
+.btn-ghost:hover { color: var(--ink); border-color: var(--ink-3); }
+
+.cover-hint {
+  margin-top: 40px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+}
+.cover-hint kbd {
+  background: var(--rule);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 10px;
+  margin: 0 3px;
+  color: var(--ink);
+}
+
+/* SCREEN — the iframe inside a fake browser window */
+.screen-wrap {
+  width: 100%;
+  max-width: 1340px;
+  height: 100%;
+  max-height: 820px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }
+.window-chrome {
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--rule);
+  padding: 0 14px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.lights { display: flex; gap: 7px; }
+.light {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--rule);
+}
+.light.r { background: #ec5a52; }
+.light.y { background: #e0a83c; }
+.light.g { background: #5dba5b; }
+.url-bar {
+  flex: 1;
+  background: rgba(245,241,232,0.06);
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.url-bar .lock { color: var(--positive); font-size: 10px; }
+.url-bar .secure { color: var(--ink-3); }
+.window-actions {
+  display: flex;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.iframe-wrap {
+  flex: 1;
+  position: relative;
+  background: #f5f1e8;
+  overflow: hidden;
+}
+#screen-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+/* HOTSPOT (pulsing) */
+.hotspot {
+  position: absolute;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 0 rgba(236,79,96,0.7);
+  animation: pulse 2s infinite;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: opacity 0.3s, top 0.5s ease, left 0.5s ease;
+}
+.hotspot::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  background: white;
+  border-radius: 50%;
+  z-index: 1;
+}
+.hotspot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(236,79,96,0.55); transform: translate(-50%, -50%) scale(1); }
+  70% { box-shadow: 0 0 0 22px rgba(236,79,96,0); transform: translate(-50%, -50%) scale(1.08); }
+  100% { box-shadow: 0 0 0 0 rgba(236,79,96,0); transform: translate(-50%, -50%) scale(1); }
+}
+.hotspot.hidden { opacity: 0; pointer-events: none; }
+
+/* TOOLTIP */
+.tooltip {
+  position: absolute;
+  background: var(--bg-2);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 18px 22px 16px;
+  width: 320px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,169,74,0.15);
+  z-index: 11;
+  transition: opacity 0.3s, top 0.5s ease, left 0.5s ease;
+  animation: tooltipIn 0.35s ease-out;
+}
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.tooltip.hidden { opacity: 0; pointer-events: none; }
+.tooltip .step-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.tooltip h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.tooltip p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin-bottom: 14px;
+}
+.tooltip .tooltip-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--rule);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+.tooltip .step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+}
+.tooltip-btns { display: flex; gap: 6px; }
+.tooltip .tt-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tooltip .tt-btn:hover { color: var(--ink); border-color: var(--ink-3); }
+.tooltip .tt-btn.primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+.tooltip .tt-btn.primary:hover { background: #e0bb6a; }
+.tooltip .tt-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Tooltip arrow */
+.tooltip::before {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--rule);
+  transform: rotate(45deg);
+}
+.tooltip.arrow-left::before {
+  left: -8px;
+  top: calc(50% - 7px);
+  border-right: none;
+  border-top: none;
+}
+.tooltip.arrow-right::before {
+  right: -8px;
+  top: calc(50% - 7px);
+  border-left: none;
+  border-bottom: none;
+}
+.tooltip.arrow-top::before {
+  top: -8px;
+  left: calc(50% - 7px);
+  border-right: none;
+  border-bottom: none;
+}
+.tooltip.arrow-bottom::before {
+  bottom: -8px;
+  left: calc(50% - 7px);
+  border-left: none;
+  border-top: none;
+}
+
+/* LOADING SHIMMER while iframe loads */
+.shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, var(--bg-card,#fbf8f0) 30%, #f5f1e8 50%, var(--bg-card,#fbf8f0) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.shimmer.gone { opacity: 0; pointer-events: none; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* RESPONSIVE — mobile fallback (informational, not optimised) */
+@media (max-width: 760px) {
+  .tour-brand-sub { display: none; }
+  .progress { display: none; }
+  .stage { padding: 12px; }
+  .cover h1 { font-size: 38px; }
+  .cover p { font-size: 16px; }
+  .screen-wrap { max-height: none; }
+  .tooltip { width: calc(100vw - 32px); max-width: 360px; }
+  .url-bar { font-size: 9px; padding: 5px 10px; }
+}
+</style>
+</head>
+<body>
+
+<header class="tour-bar">
+  <span class="tour-brand">FINK<span class="dot">.</span></span>
+  <span class="tour-brand-sub">Interactive product tour</span>
+  <div class="progress" id="progress"></div>
+  <span class="tour-meta" id="step-meta">Step 1 of 9</span>
+  <button class="tour-exit" onclick="exitTour()">Exit tour ✕</button>
+</header>
+
+<main class="stage" id="stage">
+  <!-- content rendered by JS -->
+</main>
+
+<script>
+// ───────────────────────────────────────────────────────────────────────────
+// TOUR DEFINITION — 9 steps
+// ───────────────────────────────────────────────────────────────────────────
+const STEPS = [
+  {
+    name: 'welcome',
+    type: 'cover',
+    eyebrow: 'A 90-second tour',
+    headline: 'Welcome to <em>FINK.</em>',
+    body: 'Multi-entity financial intelligence built for CFOs and Controllers. Ask in English. Compute from live ledger data. Trace every figure to its source voucher. This walkthrough takes you through the full product in nine steps.',
+    primaryLabel: 'Start the tour →',
+    primaryAction: 'next',
+    showHint: true
+  },
+  {
+    name: 'dashboard',
+    type: 'screen',
+    src: '/demo/dashboard.html?tour=1',
+    fakeUrl: 'app.finkai.co/dashboard',
+    label: 'Step 02 · Dashboard',
+    headline: 'Your morning view',
+    body: 'KPIs across the top, AI-flagged anomalies surfaced proactively, four entities at a glance. Every figure traces to a Tally voucher or QBO transaction.',
+    hotspot: { top: '34%', left: '28%' },
+    arrow: 'left'
+  },
+  {
+    name: 'chat',
+    type: 'screen',
+    src: '/demo/chat.html?tour=1',
+    fakeUrl: 'app.finkai.co/chat/ebitda-q1-fy26',
+    label: 'Step 03 · Ask FINK',
+    headline: 'Ask in plain English',
+    body: 'The AI translates your question into structured queries. Calls the right tools (P&L, ratios, drill-downs). Returns numbers — not invented prose. Watch the EBITDA bridge build from PAT plus add-backs.',
+    hotspot: { top: '62%', left: '40%' },
+    arrow: 'top'
+  },
+  {
+    name: 'variance',
+    type: 'screen',
+    src: '/demo/variance.html?tour=1',
+    fakeUrl: 'app.finkai.co/variance/q4-fy25',
+    label: 'Step 04 · Variance',
+    headline: 'AI-explained variances',
+    body: 'Period-over-period flags that name their drivers. Click any line to drill into the underlying journal vouchers — debits, credits, narration, attached PDFs.',
+    hotspot: { top: '50%', left: '70%' },
+    arrow: 'right'
+  },
+  {
+    name: 'pnl',
+    type: 'screen',
+    src: '/demo/pnl.html?tour=1',
+    fakeUrl: 'app.finkai.co/reports/profit-loss/q1-fy26',
+    label: 'Step 05 · P&L + EBITDA bridge',
+    headline: 'Schedule III statements',
+    body: 'Standard format P&L with EBITDA waterfall reconstructed from PAT. Every line drills to GL. YoY comparison built in. Export to PDF or Excel in one click.',
+    hotspot: { top: '32%', left: '46%' },
+    arrow: 'top'
+  },
+  {
+    name: 'consolidation',
+    type: 'screen',
+    src: '/demo/consolidation.html?tour=1',
+    fakeUrl: 'app.finkai.co/consolidation/q1-fy26',
+    label: 'Step 06 · Consolidation',
+    headline: 'Multi-entity, multi-currency',
+    body: 'Four entities consolidated. Closing-rate FX translation for the AED books. Inter-company eliminations applied. CTR/FCTR computed. Ind AS 110 compliant.',
+    hotspot: { top: '40%', left: '78%' },
+    arrow: 'right'
+  },
+  {
+    name: 'reports',
+    type: 'screen',
+    src: '/demo/reports.html?tour=1',
+    fakeUrl: 'app.finkai.co/reports',
+    label: 'Step 07 · Reports library',
+    headline: 'Twenty-two templates, eight schedules',
+    body: 'Statutory (Schedule III, GST, TDS). Management (DSO, DPO, capex). Board pack auto-generated quarterly. Recurring email delivery to your team and the board.',
+    hotspot: { top: '36%', left: '20%' },
+    arrow: 'left'
+  },
+  {
+    name: 'admin',
+    type: 'screen',
+    src: '/demo/admin.html?tour=1',
+    fakeUrl: 'app.finkai.co/admin/integrations',
+    label: 'Step 08 · Admin & integrations',
+    headline: 'Built for finance teams',
+    body: 'Twelve users across seven roles. Six connected data sources — four Tally instances, QBO, banking. Real-time audit log. Auditor read-only access via SSO. SOC 2 in progress.',
+    hotspot: { top: '54%', left: '22%' },
+    arrow: 'left'
+  },
+  {
+    name: 'closing',
+    type: 'cover',
+    eyebrow: 'That\'s FINK',
+    headline: 'Want to see this on <em>your</em> books?',
+    body: 'A 30-minute call with our team. We\'ll connect to your Tally / QBO / SAP read-only and show you the same flow on your numbers. No deck, just live data.',
+    primaryLabel: 'Book a 30-min demo →',
+    primaryHref: 'https://cal.com/arjun-parthasarathy-jscofn/finkai?utm_source=tour&utm_medium=tour_cta&utm_campaign=product_walkthrough',
+    secondaryLabel: '↺ Replay the tour',
+    secondaryAction: 'restart'
+  }
+];
+
+// ───────────────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────────────
+let currentStep = 0;
+
+function render() {
+  const stage = document.getElementById('stage');
+  const step = STEPS[currentStep];
+  document.getElementById('step-meta').textContent = `Step ${currentStep + 1} of ${STEPS.length}`;
+  renderProgress();
+  fireGA();
+  location.hash = '#' + (currentStep + 1);
+
+  if (step.type === 'cover') {
+    stage.innerHTML = renderCover(step);
+  } else {
+    stage.innerHTML = renderScreen(step);
+    // Iframe is already in DOM, attach load handler
+    const iframe = document.getElementById('screen-iframe');
+    iframe.addEventListener('load', () => onIframeLoad(step), { once: true });
+  }
+}
+
+function renderProgress() {
+  const wrap = document.getElementById('progress');
+  wrap.innerHTML = STEPS.map((s, i) => {
+    const cls = i === currentStep ? 'active' : (i < currentStep ? 'done' : '');
+    return `<span class="progress-dot ${cls}" data-step="${i}" title="${s.label || s.name}"></span>`;
+  }).join('');
+  wrap.querySelectorAll('.progress-dot').forEach(d => {
+    d.addEventListener('click', () => goTo(Number(d.dataset.step)));
+  });
+}
+
+function renderCover(step) {
+  const primaryBtn = step.primaryHref
+    ? `<a class="btn btn-primary" href="${step.primaryHref}" target="_blank" rel="noopener" onclick="trackBookFromTour()">${step.primaryLabel}</a>`
+    : `<button class="btn btn-primary" onclick="${step.primaryAction === 'next' ? 'next()' : ''}">${step.primaryLabel}</button>`;
+  const secondaryBtn = step.secondaryLabel
+    ? `<button class="btn btn-ghost" onclick="${step.secondaryAction === 'restart' ? 'goTo(0)' : ''}">${step.secondaryLabel}</button>`
+    : '';
+  const hint = step.showHint
+    ? `<div class="cover-hint">Use <kbd>→</kbd> and <kbd>←</kbd> to navigate · <kbd>Esc</kbd> to exit</div>`
+    : '';
+  return `
+    <div class="cover">
+      ${step.eyebrow ? `<div class="cover-eyebrow">${step.eyebrow}</div>` : ''}
+      <h1>${step.headline}</h1>
+      <p>${step.body}</p>
+      <div class="cover-actions">${primaryBtn}${secondaryBtn}</div>
+      ${hint}
+    </div>`;
+}
+
+function renderScreen(step) {
+  return `
+    <div class="screen-wrap">
+      <div class="window-chrome">
+        <div class="lights"><div class="light r"></div><div class="light y"></div><div class="light g"></div></div>
+        <div class="url-bar"><span class="lock">🔒</span><span class="secure">https://</span>${step.fakeUrl}</div>
+        <div class="window-actions">⤓ ↻ ⋯</div>
+      </div>
+      <div class="iframe-wrap" id="iframe-wrap">
+        <div class="shimmer" id="shimmer"></div>
+        <iframe id="screen-iframe" src="${step.src}" title="${step.label}"></iframe>
+        <div class="hotspot hidden" id="hotspot" onclick="next()"></div>
+        <div class="tooltip hidden" id="tooltip">
+          <div class="step-label">${step.label}</div>
+          <h3>${step.headline}</h3>
+          <p>${step.body}</p>
+          <div class="tooltip-actions">
+            <span class="step-num">${currentStep + 1} / ${STEPS.length}</span>
+            <div class="tooltip-btns">
+              <button class="tt-btn" onclick="prev()" ${currentStep === 0 ? 'disabled' : ''}>← Prev</button>
+              <button class="tt-btn primary" onclick="next()">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function onIframeLoad(step) {
+  const iframe = document.getElementById('screen-iframe');
+  const shimmer = document.getElementById('shimmer');
+  const hotspot = document.getElementById('hotspot');
+  const tooltip = document.getElementById('tooltip');
+
+  // Inject CSS into iframe to hide demo chrome (same-origin so this is safe)
+  try {
+    const doc = iframe.contentDocument;
+    const style = doc.createElement('style');
+    style.textContent = `
+      /* tour mode — hide chrome that shouldn't be visible during the guided tour */
+      .tabs, nav.tabs { visibility: hidden !important; pointer-events: none !important; }
+      .foot a, footer a, .demo-banner { display: none !important; }
+      .nav-burger { display: none !important; }
+      /* prevent flash of unstyled content from breaking the screenshot illusion */
+      html { background: #f5f1e8 !important; }
+    `;
+    doc.head.appendChild(style);
+  } catch (e) {
+    // cross-origin or other restriction — fail silently
+  }
+
+  // Reveal the iframe
+  setTimeout(() => shimmer.classList.add('gone'), 80);
+
+  // Position the hotspot + tooltip
+  if (step.hotspot) {
+    hotspot.style.top = step.hotspot.top;
+    hotspot.style.left = step.hotspot.left;
+    positionTooltip(step);
+    setTimeout(() => {
+      hotspot.classList.remove('hidden');
+      tooltip.classList.remove('hidden');
+    }, 250);
+  }
+}
+
+function positionTooltip(step) {
+  const tooltip = document.getElementById('tooltip');
+  if (!tooltip) return;
+  const arrow = step.arrow || 'left';
+  tooltip.classList.remove('arrow-left', 'arrow-right', 'arrow-top', 'arrow-bottom');
+  tooltip.classList.add('arrow-' + arrow);
+
+  // Coordinate math: place tooltip relative to hotspot
+  const hsTop = parseFloat(step.hotspot.top);
+  const hsLeft = parseFloat(step.hotspot.left);
+
+  let top, left;
+  if (arrow === 'left') {
+    // tooltip is to the right of the hotspot
+    left = `calc(${hsLeft}% + 30px)`;
+    top = `${hsTop}%`;
+    tooltip.style.transform = 'translateY(-50%)';
+  } else if (arrow === 'right') {
+    // tooltip is to the left of the hotspot
+    left = `calc(${hsLeft}% - 350px)`;
+    top = `${hsTop}%`;
+    tooltip.style.transform = 'translateY(-50%)';
+  } else if (arrow === 'top') {
+    // tooltip is below
+    left = `${hsLeft}%`;
+    top = `calc(${hsTop}% + 30px)`;
+    tooltip.style.transform = 'translateX(-50%)';
+  } else {
+    // tooltip is above
+    left = `${hsLeft}%`;
+    top = `calc(${hsTop}% - 30px)`;
+    tooltip.style.transform = 'translate(-50%, -100%)';
+  }
+  tooltip.style.top = top;
+  tooltip.style.left = left;
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// NAVIGATION
+// ───────────────────────────────────────────────────────────────────────────
+function next() {
+  if (currentStep < STEPS.length - 1) { currentStep++; render(); }
+}
+function prev() {
+  if (currentStep > 0) { currentStep--; render(); }
+}
+function goTo(i) {
+  if (i >= 0 && i < STEPS.length) { currentStep = i; render(); }
+}
+function exitTour() {
+  if (typeof gtag === 'function') {
+    gtag('event','tour_exited',{event_category:'tour',exit_at_step:STEPS[currentStep].name,exit_at_index:currentStep});
+  }
+  window.location.href = '/';
+}
+
+// Keyboard nav
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  else if (e.key === 'Escape') exitTour();
+});
+
+// Deep link via hash (#3 = step 3)
+function readHashStep() {
+  const h = location.hash.replace('#', '');
+  const n = parseInt(h, 10);
+  if (!isNaN(n) && n >= 1 && n <= STEPS.length) return n - 1;
+  return 0;
+}
+
+// GA4 tracking
+function fireGA() {
+  if (typeof gtag !== 'function') return;
+  const step = STEPS[currentStep];
+  gtag('event','tour_step_viewed',{
+    event_category:'tour',
+    step_index: currentStep,
+    step_name: step.name
+  });
+  if (currentStep === STEPS.length - 1) {
+    gtag('event','tour_completed',{event_category:'tour'});
+  }
+}
+function trackBookFromTour() {
+  if (typeof gtag === 'function') {
+    gtag('event','tour_cta_book_clicked',{event_category:'tour',from_step:STEPS[currentStep].name});
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// BOOT
+// ───────────────────────────────────────────────────────────────────────────
+currentStep = readHashStep();
+render();
+window.addEventListener('hashchange', () => {
+  const n = readHashStep();
+  if (n !== currentStep) { currentStep = n; render(); }
+});
+</script>
+
+</body>
+</html>
