@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a1628">
+<title>Privacy Policy — FINKAI</title>
+<meta name="description" content="FINKAI privacy policy. How we collect, use, and protect data submitted via finkai.co.">
+<link rel="canonical" href="https://finkai.co/privacy">
+
+<!-- GCLID capture — must run before any other script -->
+<script>
+(function(){
+  try{
+    var p=new URLSearchParams(window.location.search);
+    var g=p.get('gclid');
+    if(g) localStorage.setItem('fk_gclid',g);
+  }catch(e){}
+})();
+</script>
+
+<!-- Google tag (gtag.js) — Consent Mode v2: denied by default, granted on Accept -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16517553915"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16517553915');
+  gtag('config', 'G-4M411B9D1H');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"></noscript>
+
+<style>
+:root{--bg:#f7f8fc;--surface:#ffffff;--border:#d4dbe8;--accent:#1a56db;--accent2:#5a3fc0;--accent-dim:rgba(26,86,219,0.08);--accent-border:rgba(26,86,219,0.25);--text:#0d1b2a;--muted:#4b5e76;--dim:#9ca3af;--dimmer:#b0bec5;--nav:#0a1628;--green:#0a7c59}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:18px;line-height:1.8;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:#0a1628;padding:0 2.5rem;display:flex;align-items:center;height:80px;gap:2.5rem;box-shadow:0 2px 12px rgba(10,22,40,0.15)}
+.nav-logo{font-size:24px;font-weight:800;color:#ffffff;font-family:'Syne',sans-serif;letter-spacing:-0.5px;text-decoration:none}
+.nav-logo span{color:#60a5fa}
+.nav-links{display:flex;gap:2rem;margin-left:auto;align-items:center}
+.nav-links a{font-size:15px;font-weight:500;color:rgba(255,255,255,0.8);transition:color 0.2s}
+.nav-links a:hover{color:#ffffff;text-decoration:none}
+.nav-cta{font-size:15px;font-weight:700;background:#1a56db;color:#ffffff;padding:11px 24px;border-radius:8px;letter-spacing:0.02em;transition:all 0.2s;white-space:nowrap}
+.nav-cta:hover{background:#1447c0;text-decoration:none}
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;background:none;border:none;padding:8px;margin-left:auto}
+.nav-burger span{width:22px;height:2px;background:rgba(255,255,255,0.9);border-radius:2px;display:block}
+
+/* LAYOUT */
+.wrap{max-width:880px;margin:0 auto;padding:0 2rem}
+main{flex:1;padding:5rem 0 5rem}
+
+/* LEGAL CARD */
+.legal-card{background:#ffffff;border:1px solid var(--border);border-radius:20px;padding:3.5rem;box-shadow:0 4px 32px rgba(13,27,42,0.08)}
+.legal-eyebrow{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+.legal-card h1{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:800;color:var(--text);line-height:1.15;letter-spacing:-1px;margin-bottom:.75rem}
+.legal-meta{font-size:14px;color:var(--muted);margin-bottom:2rem}
+.legal-body p{font-size:15px;color:#374151;line-height:1.85;margin-bottom:1.1rem}
+.legal-body p strong{color:var(--text);font-weight:700}
+.legal-body a{color:var(--accent);text-decoration:underline}
+.legal-back{display:inline-flex;align-items:center;gap:8px;margin-top:2rem;font-size:15px;font-weight:600;color:var(--muted);transition:color 0.2s}
+.legal-back:hover{color:var(--accent);text-decoration:none}
+.legal-back::before{content:'←';font-size:16px}
+
+/* FOOTER */
+footer{background:#0a1628;color:rgba(255,255,255,0.8);padding:48px 48px 36px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:white;letter-spacing:-0.5px;margin-bottom:8px}
+.footer-logo .kai{color:#60a5fa}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;max-width:320px}
+.footer-links{display:flex;gap:2.5rem;flex-wrap:wrap}
+.footer-links a{font-size:14px;color:rgba(255,255,255,0.6);transition:color 0.2s}
+.footer-links a:hover{color:#ffffff;text-decoration:none}
+.footer-copy{border-top:1px solid rgba(255,255,255,0.08);margin-top:32px;padding-top:24px;max-width:1100px;margin-left:auto;margin-right:auto}
+.footer-copy p{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.7}
+
+/* MOBILE */
+@media(max-width:768px){
+  nav{padding:0 1.25rem;height:64px}
+  .nav-burger{display:flex}
+  .nav-links{position:fixed;top:64px;left:0;right:0;background:#0a1628;flex-direction:column;padding:0;gap:0;display:none;border-top:1px solid rgba(255,255,255,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.4);z-index:98}
+  .nav-links.mob-open{display:flex}
+  .nav-links a{padding:15px 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);font-size:16px}
+  .nav-cta{font-size:13px;padding:9px 16px}
+  main{padding:3rem 0 4rem}
+  .wrap{padding:0 1.25rem}
+  .legal-card{padding:2rem 1.5rem;border-radius:14px}
+  footer{padding:36px 1.25rem 28px}
+  .footer-inner{flex-direction:column;gap:16px}
+  .footer-links{gap:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">FIN<span>KAI</span></a>
+  <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
+    <a href="tally.html">Tally</a>
+    <a href="sap.html">SAP</a>
+    <a href="oracle.html">Oracle</a>
+    <a href="quickbooks.html">QuickBooks</a>
+    <a href="index.html#how">How it works</a>
+    <a href="index.html#stories">Customers</a>
+    <a href="index.html#faq">FAQ</a>
+  </div>
+  <a href="index.html#demo" class="nav-cta">Book a demo</a>
+</nav>
+
+<main>
+<div class="wrap">
+  <article class="legal-card">
+    <div class="legal-eyebrow">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="legal-meta">FINKAI — An Ananta Group partnership — Effective: January 2024</p>
+    <div class="legal-body">
+      <p><strong>1. Who we are</strong><br>FINKAI is an independent partnership within Ananta Group. This policy applies to finkai.co and any services offered under the FINKAI brand. For enquiries: <a href="mailto:support@finahq.com">support@finahq.com</a>.</p>
+      <p><strong>2. What data we collect</strong><br>When you submit a demo request, contact form, press enquiry, or partnership enquiry on this website, we collect: your name, work email address, company name, role, and any message you provide. We do not collect payment information on this site.</p>
+      <p><strong>3. How we use your data</strong><br>Your data is used solely to respond to your enquiry and, if you consent, to send you relevant product updates about FINKAI. We do not use your data for advertising or share it with third parties for marketing purposes.</p>
+      <p><strong>4. Data storage</strong><br>Form submissions are processed via Netlify Forms and stored securely. We retain enquiry data for up to 24 months unless you request deletion earlier.</p>
+      <p><strong>5. Your rights</strong><br>You may request access to, correction of, or deletion of your personal data at any time by emailing <a href="mailto:support@finahq.com">support@finahq.com</a>. We will respond within 30 days.</p>
+      <p><strong>6. Cookies</strong><br>finkai.co uses a single analytics cookie to understand aggregate visitor behaviour. No personal data is attached to this cookie. See our Cookie Policy for details.</p>
+      <p><strong>7. Third-party links</strong><br>This site links to finahq.com, which is operated by a separate Ananta Group entity. FINKAI is not responsible for the privacy practices of finahq.com.</p>
+      <p><strong>8. Changes</strong><br>We may update this policy periodically. The effective date above will be updated accordingly. Continued use of finkai.co constitutes acceptance of the updated policy.</p>
+      <p><strong>9. Contact</strong><br>For any privacy-related query: <a href="mailto:support@finahq.com">support@finahq.com</a></p>
+    </div>
+    <a href="index.html" class="legal-back">Back to finkai.co</a>
+  </article>
+</div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">FIN<span class="kai">KAI</span></div>
+      <p>AI financial intelligence for CFOs and multi-entity finance teams. An independent partnership within Ananta Group.</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="tally.html">Tally</a>
+      <a href="sap.html">SAP</a>
+      <a href="oracle.html">Oracle</a>
+      <a href="quickbooks.html">QuickBooks</a>
+      <a href="mailto:support@finahq.com">support@finahq.com</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>© 2026 FINKAI. All rights reserved. FINKAI is an independent partnership within the Ananta Group. FINKAI and FINAHQ are separate and independent entities. Certain administrative resources including email support (support@finahq.com) are shared between Ananta Group entities for operational purposes only.</p>
+  </div>
+</footer>
+
+<script>
+// Hamburger nav
+(function(){
+  var btn=document.getElementById('nav-burger');
+  var links=document.getElementById('nav-links');
+  if(!btn||!links)return;
+  btn.addEventListener('click',function(){
+    var open=links.classList.toggle('mob-open');
+    btn.setAttribute('aria-expanded',String(open));
+  });
+  links.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      links.classList.remove('mob-open');
+      btn.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+
+// Restore Google Ads consent for returning visitors who previously accepted
+(function(){
+  var v;
+  try{v=localStorage.getItem('fk_cookie');}catch(e){}
+  if(v==='accepted'&&typeof gtag==='function'){
+    gtag('consent','update',{
+      'ad_storage':'granted',
+      'ad_user_data':'granted',
+      'ad_personalization':'granted',
+      'analytics_storage':'granted'
+    });
+  }
+})();
+</script>
+
+<!-- LinkedIn Insight Tag — partner ID 9293812 -->
+<script type="text/javascript">
+_linkedin_partner_id = "9293812";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script><script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=9293812&fmt=gif" />
+</noscript>
+
+</body>
+</html>
