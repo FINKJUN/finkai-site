@@ -306,6 +306,7 @@ Note: the FINAHQV15 connector "needs authorising in your claude.ai connector set
 - **Order of work** (11:43): "1) Swelect first reconcile with audited FS June and March 2) Acko next 3) TVS build in parallel-- deloy step by step and match with audited financials and then confirm"
 
 **Cross-cutting working rules**
+- **Never add before you measure** (2026-10-05): check what already exists (schema, source maps, containers, main, FINAHQ) before adding anything; say what is there first.
 - "show me a mock up and then once i confirm implement"; "do not build till you have 100% clarifty".
 - "every button / every screen has to be focussed and cannot carry bloat".
 - "think always first principles"; "ANy developmwnt ask does it follow Arjun first principles and explain"; "why create workflows for problems which already is supported by workflows"; "dont create new structures try and reuse existing ones".
