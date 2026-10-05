@@ -202,6 +202,20 @@ Both answers are recorded in the spec on the TVS branch.
 
 ---
 
+### Update 2026-10-05 (TVS Munshi session): measured live on tenant 186
+- Tenant 186 is **not empty**: it has 36 GDTs. The "empty" reading came from the Acko agent's page, not from FINAHQ.
+- Open item 1 is resolved by measurement. Values below are for entity 4122, FY25-26:
+
+  | Disclosure | GDT | Key(s) | Value |
+  |---|---|---|---|
+  | EPS diluted shares | `f82a33a06b` "TVSEL EPS Diluted Shares FY25-26" | `eps_diluted_shares` | 255,443,333 |
+  | SOCIE round-off | `361caa65ee` "TVSEL SOCIE Round Off" | `socie_round_off` … `_5` | B1 −50,000; B2 1,000 |
+  | MSMED s22 | `d532c6345a` "TVSEL Consol Disclosure Gap Inputs FY25-26", rows A11–A15 | `msme_a_principal_due`, `msme_b_interest_due`, `msme_c_paid_beyond_day`, `msme_d_interest_paid`, `msme_e_interest_accrued_unpaid` | all 0 |
+
+- Open item 2 is closed. Arjun: the HDFC Benz loan is "not there in GDT", so no terms are needed.
+- **Arjun's design (2026-10-05):** "add a container and add filter by entity just like ICO map the filter to disclosure step and it will work downstream".
+- MCP note: firing FINAHQ reads in parallel races the token refresh and returns 401. Run them one after another.
+
 ## 4. Shared Munshi architecture and rules that apply to TVS
 
 **Spec.** `mcp/munshi/STANDARDISATION_LAYER.md` in FINKJUN/finahq-ap-onboarding is the agreed spec. Every agent reads it before building.
