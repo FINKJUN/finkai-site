@@ -12,6 +12,37 @@ Source: Claude Code Remote session `session_01TpxKws5raMmhANp3zAA1Gc`, renamed "
 
 ---
 
+## Status 2026-10-06 (TVS Munshi session) — START HERE
+
+**Code:** FINKJUN/finahq-ap-onboarding PR #81 (branch `claude/blissful-euler-ixsre6`), unmerged, which supersedes #61. Merging releases to live Munshi, so merge only on Arjun's "merge #81". Contents:
+- **Standard disclosure steps** (`disc_defs.STANDARD`, 13 steps). A SOP row reads `Disclosures` · Settings `Disclosure: <name> · Period: current`.
+- **Current period only.** One `Period: prior year (measure only)` row reads FINAHQ and never writes. Prior-year disclosures are a separate project.
+- **Ageing basis:** on GL lines (Tally/TVS: TB plus ledger only, no bill-wise) it is FIFO. Bill-wise is a pick only when AR/AP items are loaded.
+- **Step 0, `disc_link`:** proposes standard step → template data table and standard rows → row keys; confirm saves the link. Proven on TVS's 36 tables offline.
+- **Disclosure SOP:** `tools/munshi_tvs_disclosures.py --disclosure-sop`.
+- **TVSEL Tally database:** `tools/tvs_build_db.py`.
+- **Merged:** #80 "never add before you measure" (standardisation layer).
+
+**Pages:**
+- Standard steps (input / filter / output / actions): https://claude.ai/artifact/GNMuQVVAG1uVzpLiXANaRS
+- Every disclosure step with TVSEL figures: https://claude.ai/artifact/3sgizde36KHsQWRUG7CPR6
+
+**Next, needs the FINAHQV15 connector (tenant 186 only; never touch another tenant's login):**
+1. `finastart` on 186, then `gdt_audit(template 200)` to get which tables the notes reference.
+2. Run step 0 live; Arjun confirms the links.
+3. Re-run the offline comparison against FINAHQ's TB in place of Tally's.
+4. Measure the prior year.
+
+**Decisions (2026-10-05/06):**
+- Comparative = prior year, same period.
+- The voucher type is a filter, already in the schema as `doc_type`.
+- MSME and MSMED are loads.
+- RPT runs on the ICO engine, entity side, no recon. Still open: label by L4 like ICO, or keep the nature rules?
+- PPE opens from TB L3; SOCIE opens from the equity GLs on the TB.
+- Zero-net ledgers get no L4 ("bloat").
+
+---
+
 ## 1. Summary
 
 **What TVS Munshi is.** It closes TVS Emerald's group in Munshi, the month-end close tool in FINKJUN/finahq-ap-onboarding, `mcp/munshi/backend`.
