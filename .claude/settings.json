@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__FINAHQV15__export_template",
+      "mcp__Google_Drive__search_files",
+      "mcp__Gmail__get_message",
+      "mcp__FINAHQV15__get_gdt",
+      "mcp__FINAHQV15__list_templates",
+      "mcp__FINAHQV15__get_section_content"
+    ]
+  }
+}
