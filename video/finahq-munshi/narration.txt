@@ -1,0 +1,13 @@
+[0:00] Meet FINAHQ and Munshi: the end-to-end close platform for multi-entity groups.
+[0:08] Fifty entities. Five ERPs. One deadline. FINAHQ runs the whole close.
+[0:15] It starts by pulling trial balances, general ledgers and subledgers from every ERP, on schedule, and checking each one against the source.
+[0:26] Munshi, your AI finance agent, reconciles intercompany balances, flags every difference, and drafts the elimination journal for your approval.
+[0:37] FINAHQ consolidates every level, entity to region to group, and drills from the group number down to a single GL account.
+[0:48] Slice any number by location, cost centre, product line, segment, or any dimension you define.
+[0:57] Standard reports are ready on day one: balance sheet, P&L, cash flow, notes and board packs.
+[1:06] Need your own format? Build a custom report in a minute, then schedule it to run on its own.
+[1:15] Munshi prepares your audit working papers too: ageing, expected credit loss, journals and the PBC list, all tied to the trial balance.
+[1:26] And with the FINAHQ connector for Claude, your team can simply ask, and get answers computed from your books. Never guessed.
+[1:38] Self-hostable, with a full audit trail. SOC 2 is in progress, expected March 2027.
+[1:46] Pull. Reconcile. Consolidate. Analyse. Report. Audit. One integrated platform.
+[1:54] FINAHQ and Munshi. Book your demo at finahq.com.

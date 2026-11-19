@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FINAHQ + Munshi — 2 min overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0d1a; --blue:#1a3cff; --blue2:#4d6bff; --indigo:#4f46e5; --violet:#7c3aed;
+  --teal:#14b8a6; --green:#34d399; --amber:#fbbf24; --rose:#fb7185;
+  --line:rgba(255,255,255,.12); --card:rgba(255,255,255,.05); --muted:rgba(255,255,255,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#05060d;height:100%;overflow:hidden}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;
+  background:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.syne{font-family:'Syne',sans-serif}
+
+/* background */
+#bg{position:absolute;inset:0;overflow:hidden}
+.glow{position:absolute;width:1300px;height:1300px;border-radius:50%;filter:blur(40px)}
+#g1{background:radial-gradient(circle,rgba(26,60,255,.42) 0%,transparent 62%)}
+#g2{background:radial-gradient(circle,rgba(124,58,237,.34) 0%,transparent 62%)}
+#grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%)}
+
+/* chrome */
+#chrome{position:absolute;inset:0;pointer-events:none;z-index:5}
+.mini-logo{position:absolute;left:120px;top:46px;display:flex;align-items:center;gap:12px}
+.mark{background:var(--blue);display:grid;place-items:center;border-radius:8px}
+.mark svg{fill:#fff}
+.mini-logo .mark{width:34px;height:34px}.mini-logo .mark svg{width:18px;height:18px}
+.mini-logo b{font:800 22px 'Syne';letter-spacing:-.5px}
+.mini-logo span{font:600 13px 'Plus Jakarta Sans';letter-spacing:.12em;color:rgba(255,255,255,.5);text-transform:uppercase;margin-left:4px}
+#steps{position:absolute;right:120px;top:44px;display:flex;align-items:center;gap:8px}
+.stp{display:flex;align-items:center;gap:8px;font:600 16px 'Plus Jakarta Sans';color:rgba(255,255,255,.38);padding:8px 14px;border-radius:100px;border:1px solid transparent}
+.stp i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25)}
+.stp.done{color:rgba(255,255,255,.7)}.stp.done i{background:var(--green)}
+.stp.now{color:#fff;background:rgba(26,60,255,.35);border-color:rgba(125,147,255,.6)}.stp.now i{background:#fff;box-shadow:0 0 10px #fff}
+.stpsep{width:16px;height:1px;background:rgba(255,255,255,.2)}
+/* recap */
+.stage{position:absolute;top:430px;width:218px;height:300px;border-radius:20px;background:#15183a;border:1px solid var(--line);padding:26px 22px;text-align:left}
+.stage .sn{font:700 15px 'Plus Jakarta Sans';letter-spacing:.14em;color:rgba(255,255,255,.4)}
+.stage b{display:block;font:800 27px 'Plus Jakarta Sans';margin-top:10px;letter-spacing:-.5px}
+.stage span{display:block;font:400 18px/1.4 'Plus Jakarta Sans';color:rgba(255,255,255,.58);margin-top:10px}
+.stage .tick{position:absolute;left:22px;bottom:24px;width:40px;height:40px;font-size:21px;margin:0;display:grid;place-items:center;color:var(--green)}
+.stage.lit{border-color:rgba(52,211,153,.5);background:#10262f}
+.recap-foot{position:absolute;left:0;right:0;top:800px;text-align:center;font:300 32px 'Plus Jakarta Sans';color:rgba(255,255,255,.75)}
+.recap-foot b{font-weight:700;color:#fff}
+#bar{position:absolute;left:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--violet));width:0}
+#note{position:absolute;right:120px;bottom:30px;font:500 15px 'Plus Jakarta Sans';color:rgba(255,255,255,.32);letter-spacing:.04em}
+
+/* scenes */
+.scene{position:absolute;inset:0;display:none}
+.tw{position:absolute;left:120px;top:126px;max-width:1700px}
+.eyebrow{font:700 20px 'Plus Jakarta Sans';letter-spacing:.16em;text-transform:uppercase;color:#8ea2ff}
+.h2{font:800 58px/1.06 'Syne';letter-spacing:-1.5px;margin-top:14px}
+.h2 em{font-style:normal;background:linear-gradient(90deg,#7d93ff,#b18cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font:300 27px/1.45 'Plus Jakarta Sans';color:var(--muted);margin-top:16px;max-width:1150px}
+.card{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(4px)}
+.abs{position:absolute}
+.ok{color:var(--green)} .warn{color:var(--amber)}
+.tick{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(52,211,153,.16);color:var(--green);font:800 17px 'Plus Jakarta Sans'}
+
+/* intro */
+.center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.bigmark{width:120px;height:120px;border-radius:26px;box-shadow:0 30px 90px rgba(26,60,255,.55)}
+.bigmark svg{width:62px;height:62px}
+.wordmark{font:800 150px/1 'Syne';letter-spacing:-6px;margin-top:34px}
+.with{display:flex;align-items:center;gap:22px;margin-top:18px}
+.with .plus{font:300 64px 'Plus Jakarta Sans';color:rgba(255,255,255,.4)}
+.with .mun{font:800 72px 'Syne';letter-spacing:-2px;background:linear-gradient(90deg,#34d399,#14b8a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.with .mtag{font:500 24px 'Plus Jakarta Sans';color:rgba(255,255,255,.55);text-align:left;line-height:1.3}
+.tagline{font:300 34px/1.4 'Plus Jakarta Sans';color:rgba(255,255,255,.72);margin-top:40px;max-width:1200px}
+.pills{display:flex;gap:16px;margin-top:44px}
+.pill{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);border-radius:100px;padding:12px 26px;font:500 21px 'Plus Jakarta Sans';color:rgba(255,255,255,.75)}
+.pill b{color:var(--green);margin-right:8px}
+
+/* problem */
+.ent{position:absolute;width:262px;height:96px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid var(--line);padding:16px 18px}
+.ent .n{font:600 19px 'Plus Jakarta Sans';white-space:nowrap}
+.ent .e{font:500 15px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-top:6px;letter-spacing:.05em}
+.ent .bad{position:absolute;right:12px;bottom:12px;font:700 13px 'Plus Jakarta Sans';color:#fff;background:rgba(251,113,133,.85);padding:4px 10px;border-radius:100px}
+.ent.hot{border-color:rgba(251,113,133,.6);background:rgba(251,113,133,.08)}
+.punch{position:absolute;left:0;right:0;bottom:110px;text-align:center;font:800 44px 'Syne';letter-spacing:-1px}
+
+/* pulls */
+.erp{position:absolute;left:160px;width:340px;height:84px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:0 24px}
+.erp .dot{width:14px;height:14px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+.erp b{font:700 26px 'Syne'}
+.erp span{font:400 17px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-left:auto}
+.hub{position:absolute;left:870px;top:530px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a5bff,#1a3cff 55%,#1328b8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 0 0 14px rgba(26,60,255,.15),0 0 80px rgba(26,60,255,.6)}
+.hub svg{width:44px;height:44px;fill:#fff}
+.hub b{font:800 22px 'Syne'}
+.sched{position:absolute;left:785px;top:444px;width:350px;text-align:center;font:600 19px 'Plus Jakarta Sans';color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:10px 0;border-radius:100px}
+.ds{position:absolute;left:1380px;width:400px;height:130px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:20px 26px}
+.ds .k{font:700 16px 'Plus Jakarta Sans';letter-spacing:.14em;text-transform:uppercase;color:#8ea2ff}
+.ds .v{font:800 40px 'Syne';margin-top:6px;letter-spacing:-1px}
+.ds .v small{font:500 18px 'Plus Jakarta Sans';color:rgba(255,255,255,.5);letter-spacing:0;margin-left:8px}
+.ds .tk{position:absolute;right:22px;top:22px}
+.ticker{position:absolute;left:0;right:0;top:930px;text-align:center;font:500 22px 'Plus Jakarta Sans';color:rgba(255,255,255,.78)}
+.ticker .ok{font-weight:800;margin-right:10px}
+
+/* multilevel */
+.node{position:absolute;width:250px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:16px 18px;text-align:center}
+.node .n{font:600 19px 'Plus Jakarta Sans';white-space:nowrap}
+.node .v{font:800 32px 'Syne';margin-top:4px;letter-spacing:-.5px}
+.node.r{border-color:rgba(125,147,255,.5);background:rgba(77,107,255,.12)}
+.node.g{width:330px;border-color:rgba(177,140,255,.6);background:linear-gradient(135deg,rgba(26,60,255,.35),rgba(124,58,237,.35))}
+.node.g .v{font-size:44px}
+.lvl{position:absolute;font:700 14px 'Plus Jakarta Sans';letter-spacing:.14em;color:rgba(255,255,255,.4);text-transform:uppercase}
+.crumbs{position:absolute;left:120px;right:120px;top:880px;display:flex;align-items:center;gap:14px;flex-wrap:nowrap}
+.crumbs .lab{font:700 16px 'Plus Jakarta Sans';letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-right:6px}
+.crumb{font:500 20px 'Plus Jakarta Sans';padding:10px 18px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);white-space:nowrap}
+.crumb i{font-style:normal;color:#8ea2ff;font-weight:700;margin-right:6px}
+.sep{color:rgba(255,255,255,.35);font-size:22px}
+
+/* dims */
+.dim{position:absolute;left:120px;width:400px;height:78px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);display:flex;align-items:center;padding:0 26px;font:600 25px 'Plus Jakarta Sans';gap:16px}
+.dim .sw{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.3)}
+.dim.on{background:var(--blue);border-color:var(--blue);box-shadow:0 14px 40px rgba(26,60,255,.45)}
+.dim.on .sw{background:#fff}
+.chart{left:600px;top:360px;width:1200px;height:600px;padding:36px 44px}
+.chart .ct{font:700 26px 'Syne'}
+.chart .cs{font:400 18px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-top:4px}
+.row{position:absolute;left:44px;right:44px;height:64px;display:flex;align-items:center}
+.row .rl{width:220px;font:500 22px 'Plus Jakarta Sans'}
+.row .tr{flex:1;height:36px;border-radius:8px;background:rgba(255,255,255,.05);position:relative;overflow:hidden}
+.row .fill{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,#1a3cff,#7c3aed)}
+.row .rv{width:110px;text-align:right;font:700 24px 'Syne'}
+
+/* standard reports */
+.rep{position:absolute;width:540px;height:262px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:28px 30px;overflow:hidden}
+.rep .rt{font:700 28px 'Syne';letter-spacing:-.5px}
+.rep .rs{font:400 18px 'Plus Jakarta Sans';color:rgba(255,255,255,.5);margin-top:4px}
+.rep .ln{height:10px;border-radius:5px;background:rgba(255,255,255,.1);margin-top:14px}
+.rep .ln.s{background:rgba(125,147,255,.35)}
+.rep .stamp{position:absolute;right:24px;top:26px;font:700 15px 'Plus Jakarta Sans';color:var(--green);border:1.5px solid rgba(52,211,153,.6);padding:5px 12px;border-radius:100px}
+.rep .ic{position:absolute;right:30px;bottom:26px;font:700 15px 'Plus Jakarta Sans';color:rgba(255,255,255,.4);letter-spacing:.08em}
+
+/* custom */
+.pal{left:120px;top:360px;width:380px;height:560px;padding:22px}
+.pal .pt,.cv .pt{font:700 16px 'Plus Jakarta Sans';letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.fld{position:absolute;left:22px;width:334px;height:60px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;gap:14px;padding:0 18px;font:600 21px 'Plus Jakarta Sans'}
+.fld .ty{margin-left:auto;font:600 13px 'Plus Jakarta Sans';letter-spacing:.1em;color:rgba(255,255,255,.4);text-transform:uppercase}
+.fld.used{opacity:.4}
+.cv{left:600px;top:360px;width:1200px;height:560px;padding:22px 0}
+.cv .pt{padding-left:40px}
+.colh{position:absolute;top:58px;height:56px;border-radius:10px;background:rgba(77,107,255,.22);border:1px solid rgba(125,147,255,.5);display:flex;align-items:center;padding:0 18px;font:700 20px 'Plus Jakarta Sans'}
+.drop{position:absolute;top:58px;height:56px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.18)}
+.crow{position:absolute;left:40px;right:40px;height:62px;border-bottom:1px solid rgba(255,255,255,.08)}
+.crow div{position:absolute;top:0;height:62px;display:flex;align-items:center;font:500 22px 'Plus Jakarta Sans'}
+.crow .num{justify-content:flex-end;font:700 22px 'Syne'}
+.saved{position:absolute;left:40px;bottom:26px;font:600 20px 'Plus Jakarta Sans';color:#fff;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.5);padding:12px 22px;border-radius:12px}
+#cursor{position:absolute;width:34px;height:34px;z-index:4;pointer-events:none}
+#ghost{position:absolute;z-index:3;height:52px;border-radius:12px;background:var(--blue);padding:0 18px;display:flex;align-items:center;font:600 20px 'Plus Jakarta Sans';box-shadow:0 18px 40px rgba(0,0,0,.45);white-space:nowrap}
+
+/* munshi badge */
+.mb{display:inline-flex;align-items:center;gap:12px;padding:8px 18px 8px 8px;border-radius:100px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);font:700 18px 'Plus Jakarta Sans';color:#a7f3d0;letter-spacing:.04em;margin-bottom:14px}
+.mb .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#34d399,#14b8a6);display:grid;place-items:center;font:800 20px 'Syne';color:#06261d}
+
+/* ico */
+.tbl{left:120px;top:420px;width:1180px;height:520px;padding:16px 30px}
+.th,.tr2{position:absolute;left:30px;right:30px;display:flex;align-items:center}
+.th{top:16px;height:54px;font:700 15px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);border-bottom:1px solid var(--line)}
+.tr2{height:86px;border-bottom:1px solid rgba(255,255,255,.07);font:500 21px 'Plus Jakarta Sans'}
+.c1{width:450px}.c2,.c3,.c4{width:140px;text-align:right;font-family:'Syne';font-weight:700}.c5{flex:1;padding-left:26px}
+.th .c2,.th .c3,.th .c4{font:700 15px 'Plus Jakarta Sans'}
+.pairsub{display:block;font:400 15px 'Plus Jakarta Sans';color:rgba(255,255,255,.4);margin-top:2px}
+.st{display:inline-flex;align-items:center;gap:8px;font:700 17px 'Plus Jakarta Sans';padding:7px 14px;border-radius:100px;white-space:nowrap}
+.st.m{background:rgba(52,211,153,.14);color:var(--green)}
+.st.f{background:rgba(251,191,36,.14);color:var(--amber)}
+.st.w{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6)}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff}
+.je{left:1360px;top:420px;width:440px;height:520px;padding:30px}
+.je .jt{font:700 26px 'Syne'}
+.je .js{font:400 17px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-top:4px}
+.jl{display:flex;justify-content:space-between;font:500 19px 'Plus Jakarta Sans';padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.jl b{font:700 20px 'Syne'}
+.jl .dc{color:#8ea2ff;font-weight:700;width:36px;display:inline-block}
+.jnote{font:500 18px 'Plus Jakarta Sans';margin-top:18px;line-height:1.5}
+.approve{position:absolute;left:30px;right:30px;bottom:30px;height:62px;border-radius:14px;background:linear-gradient(135deg,#1a3cff,#7c3aed);display:grid;place-items:center;font:700 21px 'Syne'}
+
+/* wp */
+.wb{left:120px;top:400px;width:1140px;height:540px;padding:0;overflow:hidden}
+.tabs{display:flex;gap:6px;padding:16px 20px 0;border-bottom:1px solid var(--line);background:rgba(255,255,255,.03)}
+.tab{font:600 17px 'Plus Jakarta Sans';padding:12px 18px;border-radius:10px 10px 0 0;color:rgba(255,255,255,.55)}
+.tab.on{background:rgba(77,107,255,.22);color:#fff;box-shadow:inset 0 -3px 0 #4d6bff}
+.wph{padding:24px 34px 8px;font:700 24px 'Syne'}
+.wph small{display:block;font:400 17px 'Plus Jakarta Sans';color:rgba(255,255,255,.45);margin-top:4px}
+.ag{position:absolute;left:34px;right:34px;height:52px;display:flex;align-items:center}
+.ag .al{width:170px;font:500 20px 'Plus Jakarta Sans'}
+.ag .at{flex:1;height:26px;position:relative}
+.ag .af{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#14b8a6,#34d399)}
+.ag .av2{width:150px;text-align:right;font:700 22px 'Syne'}
+.ag .tk2{width:60px;display:flex;justify-content:flex-end}
+.tot{position:absolute;left:34px;right:34px;bottom:24px;height:64px;border-radius:12px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.4);display:flex;align-items:center;padding:0 22px;font:600 21px 'Plus Jakarta Sans'}
+.tot b{font:800 24px 'Syne';margin-left:12px}
+.tot .rt2{margin-left:auto;color:var(--green);font-weight:700}
+.cl{position:absolute;left:1320px;width:480px;display:flex;gap:18px;align-items:flex-start}
+.cl .tick{flex:none;width:40px;height:40px;font-size:21px;display:grid;place-items:center;color:var(--green);margin:0}
+.cl b{display:block;font:700 23px 'Syne'}
+.cl span{display:block;font:400 18px/1.4 'Plus Jakarta Sans';color:rgba(255,255,255,.55);margin-top:4px}
+
+/* mcp */
+.mleft{position:absolute;left:120px;top:0;bottom:0;width:560px;display:flex;flex-direction:column;justify-content:center}
+.mleft .h2{font-size:62px}
+.guar{display:flex;align-items:center;gap:14px;font:600 22px 'Plus Jakarta Sans';margin-top:18px}
+.chat{left:760px;top:150px;width:1040px;height:800px;padding:0;overflow:hidden;background:rgba(14,16,32,.82)}
+.chat .bar{height:68px;display:flex;align-items:center;gap:14px;padding:0 28px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.03)}
+.chat .bar .d{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.2)}
+.chat .bar b{font:700 21px 'Syne';margin-left:10px}
+.chat .bar .conn{margin-left:auto;font:600 16px 'Plus Jakarta Sans';color:var(--green);background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);padding:6px 14px;border-radius:100px}
+.ub{position:absolute;right:32px;top:100px;max-width:700px;background:rgba(77,107,255,.25);border:1px solid rgba(125,147,255,.4);border-radius:20px 20px 4px 20px;padding:20px 26px;font:500 23px/1.45 'Plus Jakarta Sans';min-height:70px}
+.tool{position:absolute;left:32px;display:flex;align-items:center;gap:12px;font:600 18px 'Plus Jakarta Sans';color:rgba(255,255,255,.75);background:rgba(255,255,255,.06);border:1px solid var(--line);padding:10px 16px;border-radius:12px}
+.tool code{font:600 17px ui-monospace,Menlo,monospace;color:#b9c6ff}
+.ans{position:absolute;left:32px;right:60px;top:380px;font:400 24px/1.55 'Plus Jakarta Sans';white-space:pre-line;color:rgba(255,255,255,.92)}
+.src{position:absolute;left:32px;right:32px;bottom:28px;font:500 17px 'Plus Jakarta Sans';color:rgba(255,255,255,.5);border-top:1px solid var(--line);padding-top:16px}
+.src b{color:var(--green)}
+
+/* security */
+.sec{position:absolute;top:430px;width:390px;height:330px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:34px 32px}
+.sec .si{width:60px;height:60px;border-radius:16px;background:rgba(77,107,255,.2);display:grid;place-items:center;font-size:30px}
+.sec b{display:block;font:700 30px 'Syne';margin-top:26px;letter-spacing:-.5px}
+.sec span{display:block;font:400 20px/1.45 'Plus Jakarta Sans';color:rgba(255,255,255,.58);margin-top:10px}
+.sec.soc{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.06)}
+.sec.soc .si{background:rgba(251,191,36,.18)}
+.badge{display:inline-block;margin-top:16px;font:700 16px 'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--amber);border:1.5px solid rgba(251,191,36,.6);padding:6px 14px;border-radius:100px}
+
+/* cta */
+.cta-line{font:800 92px/1 'Syne';letter-spacing:-3px;margin-top:36px}
+.cta-line span{background:linear-gradient(90deg,#34d399,#14b8a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta-sub{font:300 32px 'Plus Jakarta Sans';color:rgba(255,255,255,.7);margin-top:26px}
+.btn{margin-top:50px;font:700 30px 'Syne';padding:24px 60px;border-radius:14px;background:linear-gradient(135deg,#1a3cff,#7c3aed);box-shadow:0 20px 60px rgba(26,60,255,.5)}
+.url{font:600 26px 'Plus Jakarta Sans';color:rgba(255,255,255,.6);margin-top:28px;letter-spacing:.06em}
+
+/* numbers: legible face */
+.node .v,.ds .v,.row .rv,.tr2 .c2,.tr2 .c3,.tr2 .c4,.jl b,.crow .num,.ag .av2,.tot b{font-family:'Plus Jakarta Sans',sans-serif !important;font-weight:800 !important;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.ds .v{font-size:42px}
+/* preview controls */
+#ctl{position:fixed;left:0;right:0;bottom:0;height:56px;background:#11131f;display:flex;align-items:center;gap:14px;padding:0 18px;font:500 14px system-ui;color:#ccd}
+#ctl button{background:#1a3cff;color:#fff;border:0;border-radius:6px;padding:8px 16px;font:600 14px system-ui;cursor:pointer}
+#ctl input{flex:1}
+body.render #ctl{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"><div class="glow" id="g1"></div><div class="glow" id="g2"></div><div id="grid"></div></div>
+
+  <!-- 1 · INTRO -->
+  <section class="scene" id="intro">
+    <div class="center">
+      <div class="mark bigmark" data-in="0.3" data-fx="pop" data-d="0.9"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zM14 3h7v7h-7zm0 11h7v7h-7z"/></svg></div>
+      <div class="wordmark" data-in="0.9" data-d="0.9">FINAHQ</div>
+      <div class="with" data-in="2.0">
+        <div class="plus">+</div><div class="mun">Munshi</div>
+        <div class="mtag">your AI<br>finance agent</div>
+      </div>
+      <div class="tagline" data-in="3.2"><b style="font-weight:700;color:#fff">The end-to-end close platform for multi-entity groups.</b><br>ERP pulls, intercompany, consolidation, reporting and audit working papers — one integrated platform.</div>
+      <div class="pills">
+        <div class="pill" data-in="5.0"><b>✓</b>SAP · Oracle · Dynamics · QuickBooks · Tally</div>
+        <div class="pill" data-in="5.3"><b>✓</b>IFRS · US GAAP · local GAAP</div>
+        <div class="pill" data-in="5.6"><b>✓</b>Works inside Claude</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · PROBLEM -->
+  <section class="scene" id="problem">
+    <div class="tw">
+      <div class="h2" data-in="0.2">50 entities. 5 ERPs.<br><em>One close deadline.</em></div>
+    </div>
+    <div id="entgrid"></div>
+    <div class="punch" data-in="4.2" data-d="0.8">Spreadsheets don't scale. <em style="font-style:normal;color:#7d93ff">FINAHQ runs the whole close.</em></div>
+  </section>
+
+  <!-- 3 · SCHEDULED PULLS -->
+  <section class="scene" id="pulls">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">01 · Pull</div>
+      <div class="h2" data-in="0.3">TB, GL and subledgers, <em>on schedule</em></div>
+      <div class="sub" data-in="0.7">Straight from every ERP, checked against the source before anything is written.</div>
+    </div>
+    <svg class="abs" style="inset:0" width="1920" height="1080" id="pullsvg">
+      <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#4d6bff" stop-opacity=".15"/><stop offset="1" stop-color="#7c3aed" stop-opacity=".7"/></linearGradient></defs>
+      <g fill="none" stroke="url(#lg)" stroke-width="2.5">
+        <path id="pi0" data-draw="1.6" d="M500,400 C690,400 700,620 870,620"/>
+        <path id="pi1" data-draw="1.7" d="M500,510 C690,510 700,620 870,620"/>
+        <path id="pi2" data-draw="1.8" d="M500,620 C690,620 700,620 870,620"/>
+        <path id="pi3" data-draw="1.9" d="M500,730 C690,730 700,620 870,620"/>
+        <path id="pi4" data-draw="2.0" d="M500,840 C690,840 700,620 870,620"/>
+        <path id="po0" data-draw="3.0" d="M1050,620 C1220,620 1210,470 1380,470"/>
+        <path id="po1" data-draw="3.1" d="M1050,620 C1220,620 1210,620 1380,620"/>
+        <path id="po2" data-draw="3.2" d="M1050,620 C1220,620 1210,770 1380,770"/>
+      </g>
+      <g id="dots"></g>
+    </svg>
+    <div class="erp" style="top:358px" data-in="1.0" data-fx="left"><i class="dot"></i><b>SAP</b><span>S/4HANA</span></div>
+    <div class="erp" style="top:468px" data-in="1.1" data-fx="left"><i class="dot"></i><b>Oracle</b><span>Fusion · EBS</span></div>
+    <div class="erp" style="top:578px" data-in="1.2" data-fx="left"><i class="dot"></i><b>Tally</b><span>Prime · ERP 9</span></div>
+    <div class="erp" style="top:688px" data-in="1.3" data-fx="left"><i class="dot"></i><b>Dynamics</b><span>365</span></div>
+    <div class="erp" style="top:798px" data-in="1.4" data-fx="left"><i class="dot"></i><b>QuickBooks</b><span>Online</span></div>
+    <div class="sched" data-in="2.2">⏱ Every day · 02:00 local time</div>
+    <div class="hub" data-in="1.8" data-fx="pop"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zM14 3h7v7h-7zm0 11h7v7h-7z"/></svg><b>FINAHQ</b></div>
+    <div class="ds" style="top:405px" data-in="3.2" data-fx="right"><div class="k">Trial balance</div><div class="v"><span data-count="18406" data-at="3.4" data-cd="2">0</span><small>lines</small></div><span class="tk tick" data-in="5.4" data-fx="pop">✓</span></div>
+    <div class="ds" style="top:555px" data-in="3.4" data-fx="right"><div class="k">General ledger</div><div class="v"><span data-count="192340" data-at="3.6" data-cd="2.2">0</span><small>line items</small></div><span class="tk tick" data-in="5.8" data-fx="pop">✓</span></div>
+    <div class="ds" style="top:705px" data-in="3.6" data-fx="right"><div class="k">Subledgers · AR / AP</div><div class="v"><span data-count="26715" data-at="3.8" data-cd="2">0</span><small>open items</small></div><span class="tk tick" data-in="6.2" data-fx="pop">✓</span></div>
+    <div class="ticker" id="ticker"></div>
+  </section>
+
+  <!-- 4 · MULTILEVEL -->
+  <section class="scene" id="multi">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">03 · Consolidate · Multilevel reporting</div>
+      <div class="h2" data-in="0.3">Entity to group, <em>every level</em></div>
+    </div>
+    <svg class="abs" style="inset:0" width="1920" height="1080">
+      <g fill="none" stroke="rgba(125,147,255,.55)" stroke-width="2.5">
+        <path data-draw="2.5" data-dd="0.5" d="M260,670 V640 H400 V610"/>
+        <path data-draw="2.5" data-dd="0.5" d="M540,670 V640 H400 V610"/>
+        <path data-draw="2.6" data-dd="0.5" d="M820,670 V640 H960 V610"/>
+        <path data-draw="2.6" data-dd="0.5" d="M1100,670 V640 H960 V610"/>
+        <path data-draw="2.7" data-dd="0.5" d="M1380,670 V640 H1520 V610"/>
+        <path data-draw="2.7" data-dd="0.5" d="M1660,670 V640 H1520 V610"/>
+        <path data-draw="4.2" data-dd="0.5" d="M400,500 V470 H960 V445"/>
+        <path data-draw="4.2" data-dd="0.5" d="M1520,500 V470 H960 V445"/>
+        <path data-draw="4.2" data-dd="0.5" d="M960,500 V445"/>
+      </g>
+    </svg>
+    <div class="node g" style="left:795px;top:322px" data-in="4.5" data-fx="pop"><div class="n">Happy Group · consolidated</div><div class="v">$<span data-count="863.4" data-dec="1" data-at="4.7" data-cd="1.2">0</span>M</div></div>
+    <div class="node r" style="left:275px;top:500px" data-in="2.9" data-fx="pop"><div class="n">Americas</div><div class="v">$<span data-count="601.0" data-dec="1" data-at="3.0" data-cd="1">0</span>M</div></div>
+    <div class="node r" style="left:835px;top:500px" data-in="3.0" data-fx="pop"><div class="n">Europe</div><div class="v">$<span data-count="150.5" data-dec="1" data-at="3.1" data-cd="1">0</span>M</div></div>
+    <div class="node r" style="left:1395px;top:500px" data-in="3.1" data-fx="pop"><div class="n">Asia-Pacific</div><div class="v">$<span data-count="111.9" data-dec="1" data-at="3.2" data-cd="1">0</span>M</div></div>
+    <div class="node" style="left:135px;top:670px" data-in="0.8"><div class="n">Happy Inc · US</div><div class="v">$<span data-count="412.6" data-dec="1" data-at="1.0" data-cd="1.3">0</span>M</div></div>
+    <div class="node" style="left:415px;top:670px" data-in="0.9"><div class="n">Happy Canada</div><div class="v">$<span data-count="188.4" data-dec="1" data-at="1.1" data-cd="1.3">0</span>M</div></div>
+    <div class="node" style="left:695px;top:670px" data-in="1.0"><div class="n">Happy UK Ltd</div><div class="v">$<span data-count="96.2" data-dec="1" data-at="1.2" data-cd="1.3">0</span>M</div></div>
+    <div class="node" style="left:975px;top:670px" data-in="1.1"><div class="n">Happy GmbH</div><div class="v">$<span data-count="54.3" data-dec="1" data-at="1.3" data-cd="1.3">0</span>M</div></div>
+    <div class="node" style="left:1255px;top:670px" data-in="1.2"><div class="n">Happy Singapore</div><div class="v">$<span data-count="72.8" data-dec="1" data-at="1.4" data-cd="1.3">0</span>M</div></div>
+    <div class="node" style="left:1535px;top:670px" data-in="1.3"><div class="n">Happy India</div><div class="v">$<span data-count="39.1" data-dec="1" data-at="1.5" data-cd="1.3">0</span>M</div></div>
+    <div class="lvl" style="left:120px;top:290px" data-in="0.6" data-fx="fade">Revenue · H1 2026 · $M</div>
+    <div class="crumbs">
+      <span class="lab" data-in="6.3" data-fx="fade">Drill down</span>
+      <span class="crumb" data-in="6.5" data-fx="left">Happy Group</span><span class="sep" data-in="6.7" data-fx="fade">›</span>
+      <span class="crumb" data-in="6.9" data-fx="left"><i>L1</i>Revenue</span><span class="sep" data-in="7.1" data-fx="fade">›</span>
+      <span class="crumb" data-in="7.3" data-fx="left"><i>L2</i>From operations</span><span class="sep" data-in="7.5" data-fx="fade">›</span>
+      <span class="crumb" data-in="7.7" data-fx="left"><i>L3</i>Sale of products</span><span class="sep" data-in="7.9" data-fx="fade">›</span>
+      <span class="crumb" data-in="8.1" data-fx="left"><i>L4</i>Domestic</span><span class="sep" data-in="8.3" data-fx="fade">›</span>
+      <span class="crumb" data-in="8.5" data-fx="left" style="border-color:rgba(52,211,153,.5)"><i style="color:var(--green)">GL</i>410100</span>
+    </div>
+  </section>
+
+  <!-- 5 · DIMENSIONS -->
+  <section class="scene" id="dims">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">04 · Analyse · Dimensions</div>
+      <div class="h2" data-in="0.3">Slice any number by <em>any dimension</em></div>
+    </div>
+    <div class="dim" style="top:360px" data-in="0.8" data-fx="left"><i class="sw"></i>Location</div>
+    <div class="dim" style="top:456px" data-in="0.9" data-fx="left"><i class="sw"></i>Cost centre</div>
+    <div class="dim" style="top:552px" data-in="1.0" data-fx="left"><i class="sw"></i>Product line</div>
+    <div class="dim" style="top:648px" data-in="1.1" data-fx="left"><i class="sw"></i>Segment</div>
+    <div class="dim" style="top:744px;color:rgba(255,255,255,.5)" data-in="1.2" data-fx="left"><i class="sw"></i>+ your own</div>
+    <div class="card chart" data-in="1.2" data-fx="right">
+      <div class="ct">Revenue by <span id="dimname">Location</span></div>
+      <div class="cs">Happy Group · H1 2026 · $M</div>
+    </div>
+  </section>
+
+  <!-- 6 · STANDARD REPORTS -->
+  <section class="scene" id="std">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">05 · Report · Standard reports</div>
+      <div class="h2" data-in="0.3">Standard reports, <em>out of the box</em></div>
+    </div>
+    <div id="repgrid"></div>
+  </section>
+
+  <!-- 7 · CUSTOM REPORTS -->
+  <section class="scene" id="custom">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">06 · Report · Custom reports</div>
+      <div class="h2" data-in="0.3">Your format. <em>Built in a minute.</em></div>
+    </div>
+    <div class="card pal" data-in="0.5" data-fx="left">
+      <div class="pt">Fields</div>
+    </div>
+    <div class="card cv" data-in="0.6" data-fx="right">
+      <div class="pt">Report · Monthly entity review</div>
+    </div>
+    <div id="ghost"></div>
+    <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15.5 L12.5 22 L15.5 20.6 L12 14 L19 14 Z" fill="#fff" stroke="#0b0d1a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </section>
+
+  <!-- 8 · MUNSHI ICO -->
+  <section class="scene" id="ico">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">02 · Reconcile · Munshi ICO</div>
+      <div class="h2" data-in="0.3">Intercompany, <em>reconciled monthly</em></div>
+      <div class="sub" data-in="0.7">Munshi, your AI finance agent, matches every pair and drafts the eliminations.</div>
+    </div>
+    <div class="card tbl" data-in="1.0">
+      <div class="th"><div class="c1">Intercompany pair · $M</div><div class="c2">Receivable</div><div class="c3">Payable</div><div class="c4">Difference</div><div class="c5">Munshi</div></div>
+    </div>
+    <div class="card je" data-in="5.6" data-fx="right">
+      <div class="jt">Elimination journal</div>
+      <div class="js">Sep-2026 · $M · drafted by Munshi</div>
+      <div style="margin-top:18px">
+        <div class="jl" data-in="6.2" data-fx="fade"><span><span class="dc">Dr</span>IC payables</span><b>42.77</b></div>
+        <div class="jl" data-in="6.5" data-fx="fade"><span><span class="dc">Cr</span>IC receivables</span><b>42.77</b></div>
+      </div>
+      <div class="jnote" data-in="7.0" data-fx="fade"><span class="ok">✓</span> 3 pairs eliminated</div>
+      <div class="jnote" style="margin-top:6px" data-in="7.4" data-fx="fade"><span class="warn">⚠</span> 2 differences sent for review</div>
+      <div class="approve" data-in="8.2" data-fx="pop" id="apbtn">Awaiting your approval</div>
+    </div>
+  </section>
+
+  <!-- 9 · MUNSHI WP -->
+  <section class="scene" id="wp">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">07 · Audit · Munshi WP</div>
+      <div class="h2" data-in="0.3">Audit working papers, <em>done for you</em></div>
+    </div>
+    <div class="card wb" data-in="0.8">
+      <div class="tabs">
+        <div class="tab">Lead schedule</div><div class="tab on">AR ageing</div><div class="tab">AP ageing</div><div class="tab">ECL</div><div class="tab">Journals</div><div class="tab">PBC list</div>
+      </div>
+      <div class="wph">Trade receivables ageing<small>Happy Inc · as at 30-Sep-2026 · $M</small></div>
+    </div>
+    <div class="cl" style="top:400px" data-in="5.2" data-fx="right"><span class="tick">✓</span><div><b>Pulled from the ERP</b><span>TB, GL and open items for every entity</span></div></div>
+    <div class="cl" style="top:538px" data-in="5.8" data-fx="right"><span class="tick">✓</span><div><b>Every pull versioned</b><span>Re-run any month, see what changed</span></div></div>
+    <div class="cl" style="top:676px" data-in="6.4" data-fx="right"><span class="tick">✓</span><div><b>Ageing, ECL and JEs computed</b><span>Tagged by party, tied to the TB</span></div></div>
+    <div class="cl" style="top:814px" data-in="7.0" data-fx="right"><span class="tick">✓</span><div><b>PBC list for auditors</b><span>Every document, linked and ready</span></div></div>
+  </section>
+
+  <!-- 10 · CLAUDE MCP -->
+  <section class="scene" id="mcp">
+    <div class="mleft">
+      <div class="eyebrow" data-in="0.1">08 · Ask · FINAHQ × Claude</div>
+      <div class="h2" data-in="0.3">Ask Claude.<br><em>Answered from your books.</em></div>
+      <div class="sub" data-in="0.7" style="font-size:25px">The FINAHQ MCP connector lets Claude read your TB, reports and Munshi — with your permissions.</div>
+      <div class="guar" data-in="9.6"><span class="tick">✓</span>Never fabricates a figure</div>
+      <div class="guar" data-in="10.0"><span class="tick">✓</span>Never changes a record without your OK</div>
+    </div>
+    <div class="card chat" data-in="0.6" data-fx="right">
+      <div class="bar"><i class="d"></i><i class="d"></i><i class="d"></i><b>Claude</b><span class="conn">● FINAHQ connected</span></div>
+      <div class="ub" data-in="1.1" data-fx="fade" data-d="0.3"><span data-type data-at="1.2" data-cps="42">What drove the change in EBITDA for Happy Inc, Q3 vs Q2?</span></div>
+      <div class="tool" style="top:262px" data-in="3.9" data-fx="left"><span class="spin" id="sp1"></span><span class="tick" id="tk1" style="display:none;width:26px;height:26px;font-size:15px">✓</span><code>finahq · fetch_tb</code><span>Q2 &amp; Q3 trial balances</span></div>
+      <div class="tool" style="top:318px" data-in="4.5" data-fx="left"><span class="spin" id="sp2"></span><span class="tick" id="tk2" style="display:none;width:26px;height:26px;font-size:15px">✓</span><code>finahq · get_report_data</code><span>EBITDA bridge</span></div>
+      <div class="ans"><span data-type data-at="5.7" data-cps="62">EBITDA rose $18.4M (+12.6%) to $164.3M in Q3.
+
+• Revenue  +$31.2M — Pumps, led by North America
+• Employee cost  −$7.9M
+• Energy  −$4.9M</span></div>
+      <div class="src" data-in="9.3" data-fx="fade"><b>✓</b> Source: TB 30-Jun-2026 &amp; 30-Sep-2026 · computed from the GL, not predicted</div>
+    </div>
+  </section>
+
+  <!-- 11 · SECURITY -->
+  <section class="scene" id="sec">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">09 · Trust</div>
+      <div class="h2" data-in="0.3">Built for <em>listed companies</em></div><div class="sub" data-in="0.6">…and the auditors who sign off on them.</div>
+    </div>
+    <div class="sec" style="left:120px" data-in="0.8"><div class="si">🏢</div><b>Self-hostable</b><span>On-premise or private cloud. Meets data-residency rules.</span></div>
+    <div class="sec" style="left:540px" data-in="1.0"><div class="si">🔐</div><b>Role-based access</b><span>Entity, GL and report-level permissions for every user.</span></div>
+    <div class="sec" style="left:960px" data-in="1.2"><div class="si">🧾</div><b>Full audit trail</b><span>Every pull, version, approval and journal logged.</span></div>
+    <div class="sec soc" style="left:1380px" data-in="1.6" data-fx="pop"><div class="si">🛡️</div><b>SOC 2</b><span>Audit in progress.</span><div class="badge">Expected March 2027</div></div>
+  </section>
+
+  <!-- 12 · RECAP -->
+  <section class="scene" id="recap">
+    <div class="tw">
+      <div class="eyebrow" data-in="0.1">The integrated close</div>
+      <div class="h2" data-in="0.3">One platform. <em>Every close task.</em></div>
+    </div>
+    <svg class="abs" style="inset:0" width="1920" height="1080"><path data-draw="0.9" data-dd="3.2" d="M229,580 H1687" fill="none" stroke="rgba(52,211,153,.5)" stroke-width="3"/></svg>
+    <div id="stagerow"></div>
+    <div class="recap-foot" data-in="4.6">From ERP to board pack — <b>no spreadsheets in between.</b></div>
+  </section>
+
+  <!-- 13 · CTA -->
+  <section class="scene" id="cta">
+    <div class="center">
+      <div class="mark bigmark" data-in="0.2" data-fx="pop" style="width:96px;height:96px"><svg viewBox="0 0 24 24" style="width:50px;height:50px"><path d="M3 3h7v7H3zm0 11h7v7H3zM14 3h7v7h-7zm0 11h7v7h-7z"/></svg></div>
+      <div class="cta-line" data-in="0.5">FINAHQ <span style="background:none;-webkit-text-fill-color:rgba(255,255,255,.4);font-weight:300">+</span> <span>Munshi</span></div>
+      <div class="cta-sub" data-in="1.1">The integrated close platform. Close faster, report with confidence.</div>
+      <div class="btn" data-in="1.7" data-fx="pop">Book a demo</div>
+      <div class="url" data-in="2.2" data-fx="fade">finahq.com</div>
+    </div>
+  </section>
+
+  <div id="chrome">
+    <div class="mini-logo" id="minilogo"><div class="mark"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zM14 3h7v7h-7zm0 11h7v7h-7z"/></svg></div><b>FINAHQ</b><span>+ Munshi</span></div>
+    <div id="steps"></div>
+    <div id="note">Illustrative data · fictional companies</div>
+    <div id="bar"></div>
+  </div>
+</div>
+
+<div id="ctl"><button id="pp">Pause</button><span id="tm">0.0s</span><input id="scrub" type="range" min="0" max="120" step="0.05" value="0"></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ease=x=>1-Math.pow(1-x,3);
+const easeIO=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.6;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2);};
+const lerp=(a,b,p)=>a+(b-a)*p;
+const el=(tag,cls,html,parent,attrs={})=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;};
+
+/* ---------- build dynamic markup ---------- */
+// problem grid
+(()=>{
+  const names=[['Happy Inc · US','SAP'],['Happy Canada','QuickBooks'],['Happy UK Ltd','Oracle'],['Happy GmbH','SAP'],['Happy France','Dynamics'],['Happy Singapore','Oracle'],
+    ['Happy India','Tally'],['Happy Japan','SAP'],['Happy Australia','QuickBooks'],['Happy Brazil','Dynamics'],['Happy Mexico','Oracle'],['Happy UAE','Dynamics'],
+    ['Happy Netherlands','SAP'],['Happy Spain','Oracle'],['Happy Ireland','QuickBooks'],['Happy Italy','SAP'],['Happy Korea','Oracle'],['Happy Vietnam','Tally'],
+    ['Happy Saudi','Dynamics'],['Happy South Africa','SAP'],['Happy Sweden','QuickBooks'],['Happy Poland','Dynamics'],['Happy China','SAP'],['Happy Chile','Oracle']];
+  const bad={3:'TB doesn\'t tie',8:'Waiting on file',13:'IC mismatch',17:'Late',20:'v7_FINAL.xlsx',22:'Waiting on file',1:'Mapping error',10:'IC mismatch'};
+  const g=$('#entgrid');
+  names.forEach(([n,e],i)=>{
+    const c=i%6,r=Math.floor(i/6);
+    const d=el('div','ent',`<div class="n">${n}</div><div class="e">${e.toUpperCase()}</div>`,g);
+    d.style.left=(120+c*282)+'px';d.style.top=(360+r*114)+'px';
+    d.dataset.in=(0.5+i*0.05).toFixed(2);d.dataset.fx='pop';d.dataset.d='0.5';
+    if(bad[i]){const b=el('span','bad',bad[i],d);b.dataset.in=(1.8+Object.keys(bad).indexOf(String(i))*0.22).toFixed(2);b.dataset.fx='pop';b.dataset.d='0.4';d.dataset.hot=b.dataset.in;}
+  });
+})();
+// dims chart rows
+const DIMS=[
+  ['Location',  [['New York',142],['London',118],['Toronto',96],['Singapore',74],['Frankfurt',41]]],
+  ['Cost centre',[['Sales',128],['Operations',112],['R&D',86],['Admin',64],['IT',52]]],
+  ['Product line',[['Pumps',156],['Valves',104],['Motors',88],['Spares',70],['Services',49]]],
+  ['Segment',   [['Industrial',171],['Retail',113],['Export',92],['Government',57],['Others',34]]]];
+const DIMT=[1.6,3.6,5.4,7.0];
+(()=>{const c=$('.chart');for(let i=0;i<5;i++){const r=el('div','row',`<div class="rl"></div><div class="tr"><div class="fill"></div></div><div class="rv"></div>`,c);r.style.top=(150+i*84)+'px';}})();
+// standard reports
+(()=>{
+  const reps=[['Balance Sheet','IFRS · US GAAP · local GAAP','BS'],['Profit &amp; Loss','With OCI · segment-wise','P&L'],['Cash Flow','Direct &amp; indirect','CFS'],
+    ['Notes to Accounts','Cross-referenced to the TB','NOTES'],['Entity &amp; Segment MIS','Monthly · quarterly · YTD','MIS'],['Board Pack','PDF &amp; Excel, one click','BOARD']];
+  const g=$('#repgrid');
+  reps.forEach(([t,s,ic],i)=>{
+    const c=i%3,r=Math.floor(i/3);
+    const lines=[78,52,64,40].map((w,k)=>`<div class="ln${k==0?' s':''}" style="width:${w}%"></div>`).join('');
+    const d=el('div','rep',`<div class="rt">${t}</div><div class="rs">${s}</div><div style="margin-top:16px">${lines}</div><div class="ic">${ic}</div>`,g);
+    d.style.left=(120+c*580)+'px';d.style.top=(360+r*296)+'px';
+    d.dataset.in=(0.8+i*0.35).toFixed(2);
+    const st=el('div','stamp','✓ Ties to TB',d);st.dataset.in=(3.4+i*0.3).toFixed(2);st.dataset.fx='pop';
+  });
+  const s=el('div','sub','IFRS · US GAAP · Ind AS and more — rendered straight from the trial balance, every period.',$('#std .tw'));s.dataset.in='0.6';
+})();
+// custom builder
+const FIELDS=[['Entity','dim'],['Revenue','measure'],['Budget','measure'],['Variance %','calc'],['Location','dim'],['Period','time']];
+const COLS=[{x:40,w:440,label:'Entity'},{x:500,w:200,label:'Revenue $M'},{x:720,w:200,label:'Budget $M'},{x:940,w:220,label:'Variance %'}];
+const CROWS=[['Happy Inc · US',412.6,398.0,3.7],['Happy Canada',188.4,195.0,-3.4],['Happy UK Ltd',96.2,90.0,6.9],['Happy Singapore',72.8,70.5,3.3]];
+const DRAG0=1.3, DSTEP=1.25;
+(()=>{
+  const p=$('.pal');
+  FIELDS.forEach(([n,t],i)=>{const f=el('div','fld',`${n}<span class="ty">${t}</span>`,p);f.style.top=(60+i*76)+'px';f.id='fld'+i;});
+  const cv=$('.cv');
+  COLS.forEach((c,i)=>{const d=el('div','drop','',cv);d.style.left=c.x+'px';d.style.width=c.w+'px';
+    const h=el('div','colh',c.label,cv);h.style.left=c.x+'px';h.style.width=c.w+'px';h.id='colh'+i;if(i>0)h.style.justifyContent='flex-end';});
+  CROWS.forEach((r,i)=>{
+    const row=el('div','crow','',cv);row.style.top=(130+i*64)+'px';row.dataset.in=(6.6+i*0.22).toFixed(2);row.dataset.fx='fade';
+    const cells=[r[0],r[1].toFixed(1),r[2].toFixed(1),(r[3]>0?'+':'−')+Math.abs(r[3]).toFixed(1)+'%'];
+    cells.forEach((v,k)=>{const d=el('div',k?'num':'',v,row);d.style.left=(COLS[k].x-40+(k?0:18))+'px';d.style.width=(COLS[k].w-(k?18:18))+'px';if(k==3)d.style.color=r[3]>0?'var(--green)':'var(--rose)';});
+  });
+  const sv=el('div','saved','✓ Saved · runs every Monday 09:00 · sent to the CFO',cv);sv.dataset.in='7.6';sv.dataset.fx='up';
+})();
+// ICO table
+const PAIRS=[['Happy Inc','Happy UK Ltd','USD ↔ GBP',24.60,24.60,'m','Matched'],
+  ['Happy Inc','Happy Singapore','USD ↔ SGD',11.32,11.32,'m','Matched'],
+  ['Happy Canada','Happy Inc','CAD ↔ USD',6.85,6.85,'m','Matched'],
+  ['Happy UK Ltd','Happy GmbH','GBP ↔ EUR',4.12,3.88,'f','FX difference'],
+  ['Happy Singapore','Happy India','SGD ↔ INR',2.07,1.62,'f','Invoice in transit']];
+const ICO0=1.9, ISTEP=0.65;
+(()=>{
+  const t=$('.tbl');
+  PAIRS.forEach((p,i)=>{
+    const r=el('div','tr2',`<div class="c1">${p[0]} ↔ ${p[1]}<span class="pairsub">${p[2]}</span></div><div class="c2">${p[3].toFixed(2)}</div><div class="c3">${p[4].toFixed(2)}</div><div class="c4" style="color:${p[3]-p[4]>0.001?'var(--amber)':'rgba(255,255,255,.5)'}">${(p[3]-p[4]).toFixed(2)}</div><div class="c5"><span class="st w" id="stw${i}"><i class="spin"></i>Matching…</span><span class="st ${p[5]}" id="std${i}" style="display:none">${p[5]=='m'?'✓':'⚠'} ${p[6]}</span></div>`,t);
+    r.style.top=(70+i*86)+'px';r.dataset.in=(1.3+i*0.12).toFixed(2);r.dataset.fx='fade';
+  });
+})();
+// WP ageing
+const AGE=[['0–30 days',41.20],['31–60 days',22.65],['61–90 days',11.08],['91–180 days',7.34],['> 180 days',4.15]];
+(()=>{
+  const w=$('.wb');
+  AGE.forEach((a,i)=>{
+    const r=el('div','ag',`<div class="al">${a[0]}</div><div class="at"><div class="af" data-grow="${(a[1]/41.2*100).toFixed(1)}" data-at="${(1.5+i*0.25).toFixed(2)}" data-cd="0.9"></div></div><div class="av2"><span data-count="${a[1]}" data-dec="2" data-at="${(1.5+i*0.25).toFixed(2)}" data-cd="0.9">0</span></div><div class="tk2"><span class="tick" data-in="${(3.0+i*0.25).toFixed(2)}" data-fx="pop">✓</span></div>`,w);
+    r.style.top=(170+i*58)+'px';r.dataset.in=(1.3+i*0.2).toFixed(2);r.dataset.fx='left';
+  });
+  const tot=el('div','tot','Total<b>86.42</b><span style="margin-left:26px;color:rgba(255,255,255,.55)">TB · GL 130100</span><b>86.42</b><span class="rt2">✓ Ties to TB</span>',w);
+  tot.dataset.in='4.4';tot.dataset.fx='pop';
+})();
+
+// stepper + recap
+(()=>{
+  const names=['Pull','Reconcile','Consolidate','Analyse','Report','Audit','Ask'];
+  const st=$('#steps');names.forEach((n,i)=>{if(i)el('span','stpsep','',st);el('span','stp',`<i></i>${n}`,st);});
+  const desc=['TB, GL and subledgers from every ERP','Munshi ICO matches pairs, drafts eliminations','Multilevel roll-ups, entity to group','Any dimension, any number','Standard and custom reports','Munshi WP working papers and PBC','Claude answers from your books'];
+  const row=$('#stagerow');
+  names.forEach((n,i)=>{const d=el('div','stage',`<div class="sn">0${i+1}</div><b>${n}</b><span>${desc[i]}</span><span class="tick" data-in="${(1.2+i*0.45).toFixed(2)}" data-fx="pop">✓</span>`,row);
+    d.style.left=(120+i*243)+'px';d.style.top='430px';d.dataset.in=(0.6+i*0.12).toFixed(2);d.dataset.lit=(1.2+i*0.45).toFixed(2);});
+})();
+
+/* ---------- timeline ---------- */
+const SC=[['intro',8,-1],['problem',7,-1],['pulls',11,0],['ico',11,1],['multi',11,2],['dims',9,3],
+  ['std',9,4],['custom',9,4],['wp',11,5],['mcp',12,6],['sec',8,7],['recap',8,-1],['cta',6,-1]];
+const DATA_SCENES=new Set(['pulls','multi','dims','custom','ico','wp','mcp']);
+let acc=0;
+const scenes=SC.map(([id,dur,stage])=>{const s={id,dur,stage,start:acc,el:document.getElementById(id)};acc+=dur;return s;});
+const TOTAL=acc;
+
+scenes.forEach(s=>{
+  s.ins=$$('[data-in]',s.el);
+  s.counts=$$('[data-count]',s.el);
+  s.types=$$('[data-type]',s.el);
+  s.types.forEach(e=>{e.dataset.full=e.textContent;e.textContent='';});
+  s.grows=$$('[data-grow]',s.el);
+  s.draws=$$('[data-draw]',s.el);
+  s.hots=$$('[data-hot]',s.el);
+});
+function prepDraws(){scenes.forEach(s=>s.draws.forEach(p=>{const l=p.getTotalLength();p.dataset.len=l;p.style.strokeDasharray=l+' '+l;}));}
+
+function applyIn(e,L){
+  const at=+e.dataset.in, d=+(e.dataset.d||0.7), fx=e.dataset.fx||'up';
+  const raw=cl((L-at)/d), p=ease(raw);
+  let tr='';
+  if(fx==='up')tr=`translateY(${(1-p)*34}px)`;
+  else if(fx==='left')tr=`translateX(${(1-p)*-50}px)`;
+  else if(fx==='right')tr=`translateX(${(1-p)*50}px)`;
+  else if(fx==='pop')tr=`scale(${raw<=0?0.6:lerp(0.6,1,back(raw))})`;
+  e.style.opacity=p;
+  e.style.transform=tr;
+}
+const fmt=(v,dec)=>v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+
+const hooks={
+  recap(L){$$('#recap .stage').forEach(d=>d.classList.toggle('lit',L>=+d.dataset.lit));},
+  problem(L){
+    scenes[1].hots.forEach(d=>d.classList.toggle('hot',L>=+d.dataset.hot));
+  },
+  pulls(L){
+    const g=$('#dots');
+    if(!g.childElementCount){for(const id of ['pi0','pi1','pi2','pi3','pi4','po0','po1','po2'])for(let k=0;k<2;k++){const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','5');c.setAttribute('fill',id[1]=='i'?'#9fb0ff':'#c4a8ff');c.dataset.p=id;c.dataset.k=k;g.appendChild(c);}}
+    [...g.children].forEach((c,i)=>{
+      const path=document.getElementById(c.dataset.p), len=path.getTotalLength(), isOut=c.dataset.p[1]=='o';
+      const start=isOut?3.6:2.4, f=((L-start)*0.5+(+c.dataset.k)*0.5+i*0.11)%1;
+      const pt=path.getPointAtLength(cl(f)*len);
+      c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y);
+      c.setAttribute('opacity',L<start?0:cl((L-start)/0.5)*Math.sin(Math.PI*cl(f)));
+    });
+    const logs=['Happy Inc · TB · 1,284 lines · ties to ERP','Happy UK Ltd · GL · 48,920 line items · Sep-2026','Happy Singapore · AR/AP · 3,117 open items','Happy Canada · TB · 612 lines · ties to ERP','Happy India · GL · 9,406 line items · Sep-2026'];
+    const tk=$('#ticker'), base=4.2, step=1.2;
+    if(L<base){tk.style.opacity=0;return;}
+    const idx=Math.min(logs.length-1,Math.floor((L-base)/step)), loc=(L-base)-idx*step;
+    tk.innerHTML=`<span class="ok">✓</span>${logs[idx]}`;
+    tk.style.opacity=cl(loc/0.3)*(idx==logs.length-1?1:cl((step-loc)/0.25));
+  },
+  dims(L){
+    let k=0;for(let i=0;i<DIMT.length;i++)if(L>=DIMT[i])k=i;
+    const prev=Math.max(0,k-1), p=L<DIMT[0]?0:easeIO(cl((L-DIMT[k])/0.7));
+    $$('#dims .dim').forEach((d,i)=>d.classList.toggle('on',L>=DIMT[0]&&i===k));
+    $('#dimname').textContent=DIMS[k][0];
+    const lab=cl(Math.abs(L-DIMT[k])/0.25);
+    $$('#dims .row').forEach((r,i)=>{
+      const a=k===0?0:DIMS[prev][1][i][1], b=DIMS[k][1][i][1];
+      const grow=k===0?ease(cl((L-DIMT[0])/0.9)):p;
+      const v=lerp(a,b,grow);
+      r.querySelector('.fill').style.width=(v/180*100)+'%';
+      r.querySelector('.rv').textContent=Math.round(v);
+      const rl=r.querySelector('.rl');rl.textContent=DIMS[k][1][i][0];rl.style.opacity=k===0?1:lab;
+    });
+  },
+  custom(L){
+    const cur=$('#cursor'), gh=$('#ghost');
+    const chip=i=>[310+120,360+60+i*76+30];
+    const col=i=>[600+COLS[i].x+COLS[i].w/2,360+58+28];
+    const kf=[[0.6,1100,1000]];
+    for(let i=0;i<4;i++){const t0=DRAG0+i*DSTEP;const[a,b]=chip(i),[c,d]=col(i);kf.push([t0,a,b],[t0+0.1,a,b],[t0+0.75,c,d],[t0+0.85,c,d]);}
+    kf.push([6.4,1500,960],[11,1500,960]);
+    let x=kf[0][1],y=kf[0][2];
+    for(let i=0;i<kf.length-1;i++){const[t1,x1,y1]=kf[i],[t2,x2,y2]=kf[i+1];if(L>=t1&&L<=t2){const p=easeIO((L-t1)/(t2-t1));x=lerp(x1,x2,p);y=lerp(y1,y2,p);break;}if(L>t2){x=x2;y=y2;}}
+    cur.style.left=x+'px';cur.style.top=y+'px';cur.style.opacity=cl((L-0.6)/0.3)*(1-cl((L-6.4)/0.4));
+    let dragging=-1;
+    for(let i=0;i<4;i++){const t0=DRAG0+i*DSTEP;if(L>=t0+0.1&&L<t0+0.75)dragging=i;
+      $('#fld'+i).classList.toggle('used',L>=t0+0.1);
+      const h=$('#colh'+i),q=ease(cl((L-(t0+0.75))/0.3));h.style.opacity=q;h.style.transform=`scale(${lerp(.92,1,q)})`;}
+    if(dragging>=0){gh.style.display='flex';gh.textContent=FIELDS[dragging][0];gh.style.left=(x-40)+'px';gh.style.top=(y-22)+'px';}else gh.style.display='none';
+  },
+  ico(L){
+    PAIRS.forEach((p,i)=>{const t=ICO0+i*ISTEP, done=L>=t+0.55;
+      const w=$('#stw'+i),d=$('#std'+i);
+      w.style.display=done?'none':'inline-flex';w.style.opacity=L<t?0:1;
+      d.style.display=done?'inline-flex':'none';
+      if(!done)w.querySelector('.spin').style.transform=`rotate(${L*540}deg)`;
+    });
+    const b=$('#apbtn');if(L>9)b.style.boxShadow=`0 0 0 ${6+6*Math.sin((L-9)*4)}px rgba(124,58,237,.25)`;
+  },
+  mcp(L){
+    [['sp1','tk1',3.9],['sp2','tk2',4.5]].forEach(([s,k,t])=>{const done=L>=t+0.7;$('#'+s).style.display=done?'none':'block';$('#'+k).style.display=done?'inline-grid':'none';$('#'+s).style.transform=`rotate(${L*540}deg)`;});
+  }
+};
+
+function bg(t){
+  $('#g1').style.transform=`translate(${-300+220*Math.sin(t/9)}px,${-500+160*Math.cos(t/11)}px)`;
+  $('#g2').style.transform=`translate(${1100+200*Math.cos(t/10)}px,${200+180*Math.sin(t/8)}px)`;
+}
+
+function seek(t){
+  t=cl(t,0,TOTAL-0.0001);
+  bg(t);
+  let cur=null;
+  for(const s of scenes){
+    const L=t-s.start;
+    if(L<0||L>=s.dur){s.el.style.display='none';continue;}
+    cur=s;
+    s.el.style.display='block';
+    const op=Math.min(cl(L/0.5),cl((s.dur-L)/0.45));
+    s.el.style.opacity=op;
+    s.el.style.transform=`scale(${lerp(1.015,1,ease(cl(L/1.2)))})`;
+    s.ins.forEach(e=>applyIn(e,L));
+    s.counts.forEach(e=>{const at=+e.dataset.at,cd=+(e.dataset.cd||1.2),dec=+(e.dataset.dec||0);e.textContent=fmt(+e.dataset.count*ease(cl((L-at)/cd)),dec);});
+    s.types.forEach(e=>{const full=e.dataset.full,n=Math.floor(cl((L-+e.dataset.at)*+(e.dataset.cps||40),0,full.length));e.textContent=full.slice(0,n)+(n>0&&n<full.length?'▍':'');});
+    s.grows.forEach(e=>{e.style.width=(+e.dataset.grow*ease(cl((L-+e.dataset.at)/+(e.dataset.cd||1))))+'%';});
+    s.draws.forEach(p=>{const len=+p.dataset.len,pr=easeIO(cl((L-+p.dataset.draw)/+(p.dataset.dd||0.8)));p.style.strokeDashoffset=len*(1-pr);});
+    hooks[s.id]?.(L,s);
+  }
+  // chrome
+  const L=t-cur.start, chromeOn=cur.id!=='intro'&&cur.id!=='cta';
+  const cop=Math.min(cl(L/0.5),cl((cur.dur-L)/0.45));
+  $('#minilogo').style.opacity=chromeOn?1:0;
+  const stp=$('#steps');stp.style.opacity=cur.stage>=0?1:0;
+  $$('.stp',stp).forEach((e,i)=>{e.classList.toggle('done',i<cur.stage);e.classList.toggle('now',i===cur.stage);});
+  $('#note').style.opacity=DATA_SCENES.has(cur.id)?cop:0;
+  $('#bar').style.width=(t/TOTAL*100)+'%';
+}
+
+/* ---------- preview / render ---------- */
+const RENDER=location.search.includes('render');
+if(RENDER)document.body.classList.add('render');
+function fit(){if(RENDER)return;const s=Math.min(innerWidth/1920,(innerHeight-56)/1080);const st=$('#stage');st.style.transform=`scale(${s})`;st.style.left=((innerWidth-1920*s)/2)+'px';}
+addEventListener('resize',fit);fit();
+window.TOTAL=TOTAL;window.seek=seek;
+window.ready=document.fonts.ready.then(()=>{prepDraws();seek(0);return true;});
+if(!RENDER){
+  let playing=true,t0=performance.now(),tt=0;
+  const sc=$('#scrub');sc.max=TOTAL;
+  $('#pp').onclick=()=>{playing=!playing;$('#pp').textContent=playing?'Pause':'Play';t0=performance.now()-tt*1000;};
+  sc.oninput=()=>{tt=+sc.value;t0=performance.now()-tt*1000;seek(tt);};
+  window.ready.then(()=>{t0=performance.now();(function loop(){if(playing){tt=(performance.now()-t0)/1000;if(tt>=TOTAL){tt=0;t0=performance.now();}sc.value=tt;}$('#tm').textContent=tt.toFixed(1)+'s / '+TOTAL+'s';seek(tt);requestAnimationFrame(loop);})();});
+}
+</script>
+</body>
+</html>
