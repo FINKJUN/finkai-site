@@ -16,42 +16,52 @@ import soundfile as sf
 SR = 24000
 TOTAL = 120.0
 
-# (scene, start s, duration s, on-screen text, spoken text)
+# (scene, start s, duration s, caption text, spoken text)
+# Spoken text: "Finna H Q" = FIN-ah, H, Q (as in "finance"); "Moonshee" = Munshi.
 LINES = [
-    ("intro", 0, 8, "Meet FINAHQ and Munshi: the end-to-end close platform for multi-entity groups.",
-     "Meet Fina H Q, and Moonshee. The end-to-end close platform, for multi-entity groups."),
-    ("problem", 8, 7, "Fifty entities. Five ERPs. One deadline. FINAHQ runs the whole close.",
-     "Fifty entities. Five E R Ps. One deadline. Fina H Q runs the whole close."),
-    ("pulls", 15, 11, "It starts by pulling trial balances, general ledgers and subledgers from every ERP, on schedule, and checking each one against the source.",
-     "It starts by pulling trial balances, general ledgers and subledgers from every E R P, on schedule, and checking each one against the source."),
-    ("ico", 26, 11, "Munshi, your AI finance agent, reconciles intercompany balances, flags every difference, and drafts the elimination journal for your approval.",
-     "Moonshee, your A I finance agent, reconciles intercompany balances, flags every difference, and drafts the elimination journal for your approval."),
-    ("multi", 37, 11, "FINAHQ consolidates every level, entity to region to group, and drills from the group number down to a single GL account.",
-     "Fina H Q consolidates every level, entity to region to group, and drills from the group number down to a single G L account."),
-    ("dims", 48, 9, "Slice any number by location, cost centre, product line, segment, or any dimension you define.",
-     "Slice any number by location, cost center, product line, segment, or any dimension you define."),
-    ("std", 57, 9, "Standard reports are ready on day one: balance sheet, P&L, cash flow, notes and board packs.",
-     "Standard reports are ready on day one. Balance sheet, P and L, cash flow, notes, and board packs."),
-    ("custom", 66, 9, "Need your own format? Build a custom report in a minute, then schedule it to run on its own.",
-     "Need your own format? Build a custom report in a minute, then schedule it to run on its own."),
-    ("wp", 75, 11, "Munshi prepares your audit working papers too: ageing, expected credit loss, journals and the PBC list, all tied to the trial balance.",
-     "Moonshee prepares your audit working papers too. Aging, expected credit loss, journals, and the P B C list, all tied to the trial balance."),
-    ("mcp", 86, 12, "And with the FINAHQ connector for Claude, your team can simply ask, and get answers computed from your books. Never guessed.",
-     "And with the Fina H Q connector for Claude, your team can simply ask, and get answers computed from your books. Never guessed."),
-    ("sec", 98, 8, "Self-hostable, with a full audit trail. SOC 2 is in progress, expected March 2027.",
-     "Self-hostable, with a full audit trail. Sock two is in progress, expected March, twenty twenty-seven."),
-    ("recap", 106, 8, "Pull. Reconcile. Consolidate. Analyse. Report. Audit. One integrated platform.",
-     "Pull. Reconcile. Consolidate. Analyze. Report. Audit. One integrated platform."),
-    ("cta", 114, 6, "FINAHQ and Munshi. Book your demo at finahq.com.",
-     "Fina H Q, and Moonshee. Book your demo at Fina H Q dot com."),
+    ("intro", 0, 7, "This is FINAHQ, with Munshi. One platform that runs your entire close.",
+     "This is Finna H Q, with Moonshee. One platform that runs your entire close."),
+    ("problem", 7, 6, "Fifty entities. Five different ledgers. And a deadline that doesn't move.",
+     "Fifty entities. Five different ledgers. And a deadline that doesn't move."),
+    ("pulls", 13, 10, "Every night, FINAHQ pulls trial balances, ledgers and subledgers from SAP, Oracle, Dynamics and Tally, and checks each one against source.",
+     "Every night, Finna H Q pulls trial balances, ledgers and subledgers from S A P, Oracle, Dynamics and Tally, and checks each one against source."),
+    ("ico", 23, 11, "Munshi, your AI finance agent, reconciles intercompany balances, explains every difference, and drafts the eliminations for your approval.",
+     "Moonshee, your AI finance agent, reconciles intercompany balances, explains every difference, and drafts the eliminations for your approval."),
+    ("lease", 34, 11, "Leases are covered too. Under IFRS 16 or US GAAP, FINAHQ builds every schedule, posts the journals, and feeds the disclosures.",
+     "Leases are covered too. Under I F R S sixteen, or U S gap, Finna H Q builds every schedule, posts the journals, and feeds the disclosures."),
+    ("multi", 45, 10, "Then it consolidates every level, from entity to region to group, and you can drill from any number straight to the account behind it.",
+     "Then it consolidates every level, from entity, to region, to group. And you can drill from any number straight to the account behind it."),
+    ("dims", 55, 7, "Slice any figure by location, cost centre, product or segment.",
+     "Slice any figure by location, cost center, product, or segment."),
+    ("std", 62, 8, "Standard statements and board packs are ready from day one.",
+     "Standard statements and board packs are ready from day one."),
+    ("custom", 70, 11, "And with custom templates, you get your complete financial statements, every note and every disclosure, in exactly the format your auditors expect.",
+     "And with custom templates, you get your complete financial statements, every note and every disclosure, in exactly the format your auditors expect."),
+    ("wp", 81, 10, "Munshi also prepares your audit working papers, each one tied back to the trial balance.",
+     "Moonshee also prepares your audit working papers, each one tied back to the trial balance."),
+    ("mcp", 91, 10, "And through the FINAHQ connector for Claude, your team can just ask, and get answers computed from your own books.",
+     "And through the Finna H Q connector for Claude, your team can just ask, and get answers computed from your own books."),
+    ("sec", 101, 7, "Run it in your own cloud if you prefer. SOC 2 is expected by March 2027.",
+     "Run it in your own cloud, if you prefer. Sock two is expected by March, twenty twenty-seven."),
+    ("recap", 108, 7, "Pull, reconcile, consolidate, report and audit. All in one platform.",
+     "Pull, reconcile, consolidate, report, and audit. All in one platform."),
+    ("cta", 115, 5, "FINAHQ and Munshi. Book a demo today.",
+     "Finna H Q, and Moonshee. Book a demo today."),
 ]
-LEAD = 0.35   # voice starts this long after the cut
-TAIL = 0.35   # and must finish this long before the next cut
+LEAD = 0.35    # voice starts this long after the cut
+TAIL = 0.35    # and must finish this long before the next cut
+GAP = 0.30     # breath between sentences
+BASE_SPEED = 0.95
 
 
 def trim(x, thr=0.004):
     idx = np.where(np.abs(x) > thr)[0]
     return x[idx[0]: idx[-1] + 1] if len(idx) else x
+
+
+def sentences(t):
+    import re
+    return [p.strip() for p in re.split(r'(?<=[.?!])\s+', t) if p.strip()]
 
 
 def voice_track(models, voice):
@@ -61,14 +71,17 @@ def voice_track(models, voice):
     report = []
     for scene, start, dur, text, say in LINES:
         avail = dur - LEAD - TAIL
-        speed = 1.0
+        speed = BASE_SPEED
         for _ in range(6):
-            a, sr = k.create(say, voice=voice, speed=speed, lang="en-us")
-            assert sr == SR
-            a = trim(a.astype(np.float32))
-            if len(a) / SR <= avail or speed >= 1.2:
+            parts = []
+            for sent in sentences(say):
+                a, sr = k.create(sent, voice=voice, speed=speed, lang="en-us")
+                assert sr == SR
+                parts += [trim(a.astype(np.float32)), np.zeros(int(GAP * SR), np.float32)]
+            a = np.concatenate(parts[:-1])
+            if len(a) / SR <= avail or speed >= 1.1:
                 break
-            speed = min(1.2, speed * (len(a) / SR) / avail + 0.01)
+            speed = min(1.1, speed * (len(a) / SR) / avail + 0.01)
         i = int((start + LEAD) * SR)
         out[i: i + len(a)] += a[: len(out) - i]
         report.append({"scene": scene, "start": start, "spoken_s": round(len(a) / SR, 2), "available_s": round(avail, 2),

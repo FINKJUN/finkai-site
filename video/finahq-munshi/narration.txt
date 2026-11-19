@@ -1,13 +1,14 @@
-[0:00] Meet FINAHQ and Munshi: the end-to-end close platform for multi-entity groups.
-[0:08] Fifty entities. Five ERPs. One deadline. FINAHQ runs the whole close.
-[0:15] It starts by pulling trial balances, general ledgers and subledgers from every ERP, on schedule, and checking each one against the source.
-[0:26] Munshi, your AI finance agent, reconciles intercompany balances, flags every difference, and drafts the elimination journal for your approval.
-[0:37] FINAHQ consolidates every level, entity to region to group, and drills from the group number down to a single GL account.
-[0:48] Slice any number by location, cost centre, product line, segment, or any dimension you define.
-[0:57] Standard reports are ready on day one: balance sheet, P&L, cash flow, notes and board packs.
-[1:06] Need your own format? Build a custom report in a minute, then schedule it to run on its own.
-[1:15] Munshi prepares your audit working papers too: ageing, expected credit loss, journals and the PBC list, all tied to the trial balance.
-[1:26] And with the FINAHQ connector for Claude, your team can simply ask, and get answers computed from your books. Never guessed.
-[1:38] Self-hostable, with a full audit trail. SOC 2 is in progress, expected March 2027.
-[1:46] Pull. Reconcile. Consolidate. Analyse. Report. Audit. One integrated platform.
-[1:54] FINAHQ and Munshi. Book your demo at finahq.com.
+[0:00] This is FINAHQ, with Munshi. One platform that runs your entire close.
+[0:07] Fifty entities. Five different ledgers. And a deadline that doesn't move.
+[0:13] Every night, FINAHQ pulls trial balances, ledgers and subledgers from SAP, Oracle, Dynamics and Tally, and checks each one against source.
+[0:23] Munshi, your AI finance agent, reconciles intercompany balances, explains every difference, and drafts the eliminations for your approval.
+[0:34] Leases are covered too. Under IFRS 16 or US GAAP, FINAHQ builds every schedule, posts the journals, and feeds the disclosures.
+[0:45] Then it consolidates every level, from entity to region to group, and you can drill from any number straight to the account behind it.
+[0:55] Slice any figure by location, cost centre, product or segment.
+[1:02] Standard statements and board packs are ready from day one.
+[1:10] And with custom templates, you get your complete financial statements, every note and every disclosure, in exactly the format your auditors expect.
+[1:21] Munshi also prepares your audit working papers, each one tied back to the trial balance.
+[1:31] And through the FINAHQ connector for Claude, your team can just ask, and get answers computed from your own books.
+[1:41] Run it in your own cloud if you prefer. SOC 2 is expected by March 2027.
+[1:48] Pull, reconcile, consolidate, report and audit. All in one platform.
+[1:55] FINAHQ and Munshi. Book a demo today.
