@@ -3,3 +3,4 @@ stills/
 .segs.txt
 *.silent.mp4
 audio/
+__pycache__/
